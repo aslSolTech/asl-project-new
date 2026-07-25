@@ -7,6 +7,8 @@ import cors from 'cors';
 import { CORS_OPTIONS } from '../config/dotenv/dotenv.js';
 import { httpLogger } from '../middlewares/logger/httpLogger.js';
 import { globalLimiter } from '../middlewares/ratelimiter/rateLimiter.js';
+import { connectMongoDB } from '../config/mongodb/mongodb.js';
+import { startAllWorkers } from '../config/workers/workers.js';
 import { errorHandler } from '../middlewares/errorhandler/errorHandler.js';
 import { notFoundHandler } from '../middlewares/errorhandler/notFoundHandler.js';
 import { ApiResponse } from '../utils/apiResponse.js';
@@ -45,6 +47,12 @@ app.use(cors(CORS_OPTIONS));
 // Body Parsing Middleware
 app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+
+// Connect MongoDB
+await connectMongoDB();
+
+// Start bullmq workers
+startAllWorkers();
 
 // Health Check / Root route
 app.get('/', (_req: Request, res: Response) => {

@@ -1,7 +1,12 @@
-import { UAParser } from "ua-parser-js";
+import { UAParser, type IResult } from "ua-parser-js";
 
-export const parseUserAgent = (userAgentString?: string) => {
-    const parser = new UAParser(userAgentString);
-    const { ua, device, os, cpu, engine } = parser.getResult();
-    return { ua, device, os, cpu, engine };
+interface parseUserAgentProps {
+  userAgentString?: string;
+}
+
+export type parseUserAgentResult = IResult;
+
+export const parseUserAgent = ({ userAgentString }: parseUserAgentProps = {}): parseUserAgentResult => {
+  const parser = new UAParser(userAgentString);
+  return parser.getResult();
 };

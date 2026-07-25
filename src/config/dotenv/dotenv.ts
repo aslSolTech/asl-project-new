@@ -36,6 +36,14 @@ const envSchema = z.object({
       return val;
     }, z.boolean())
     .default(true),
+  GMAIL_ID: z.email(),
+  GMAIL_APP_PASSWORD: z.string(),
+  S3_ENDPOINT: z.string().default('https://nyc3.digitaloceanspaces.com'),
+  S3_REGION: z.string().default('nyc3'),
+  S3_BUCKET: z.string().default('my-storage-bucket'),
+  S3_ACCESS_KEY_ID: z.string().default(''),
+  S3_SECRET_ACCESS_KEY: z.string().default(''),
+  S3_CDN_URL: z.string().default(''),
 });
 
 export const env = envSchema.parse(process.env);
@@ -64,6 +72,14 @@ export const AES_ALGO = env.AES_ALGO;
 export const API_VERSION = env.API_VERSION;
 export const API_PREFIX = env.API_PREFIX;
 export const API_BASE_URL = API_PREFIX + '/v' + API_VERSION;
+export const GMAIL_ID = env.GMAIL_ID;
+export const GMAIL_APP_PASSWORD = env.GMAIL_APP_PASSWORD;
+export const S3_ENDPOINT = env.S3_ENDPOINT;
+export const S3_REGION = env.S3_REGION;
+export const S3_BUCKET = env.S3_BUCKET;
+export const S3_ACCESS_KEY_ID = env.S3_ACCESS_KEY_ID;
+export const S3_SECRET_ACCESS_KEY = env.S3_SECRET_ACCESS_KEY;
+export const S3_CDN_URL = env.S3_CDN_URL;
 
 export const CORS_OPTIONS = {
   origin: env.HTTP_ORIGIN?.split(',') || ['*'],

@@ -1,7 +1,7 @@
 import { API_PORT, IP_BINDING } from './config/dotenv/dotenv.js';
 import { server, io } from './app/app.js';
 import { logger } from './config/logger/logger.js';
-import { connectMongoDB } from './config/mongodb/mongodb.js';
+import { closeAllWorkers } from './config/workers/workers.js';
 
 io.on('connection', (socket) => {
   logger.info({ socketId: socket.id }, 'Socket user connected');
@@ -10,15 +10,14 @@ io.on('connection', (socket) => {
   });
 });
 
-// Connect Database & Start server
-await connectMongoDB();
 server.listen(API_PORT, () => {
   logger.info(`Server is running on http://localhost:${API_PORT}`);
 });
 
 // Graceful shutdown helper
-const gracefulShutdown = (signal: string) => {
-  logger.info(`${signal} signal received. Closing HTTP server...`);
+const gracefulShutdown = async (signal: string) => {
+  logger.info(`${signal} signal received. Closing HTTP server and BullMQ workers...`);
+  await closeAllWorkers();
   server.close(() => {
     logger.info('HTTP server closed. Exiting process.');
     process.exit(0);
