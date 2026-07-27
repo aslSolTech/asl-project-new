@@ -1,70 +1,86 @@
 import multer from "multer";
-import path from "path";
-import fs from "fs";
-import type { Request } from "express";
 
-// Ensure local fallback storage directory exists
-const uploadDir = path.join(process.cwd(), "storage");
-if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
-
-// In-Memory Storage (Zero Local Disk Usage — ideal for Cloud Storage / Watermarking)
+// 100% In-Memory Storage (Zero Disk Usage — ideal for Worker Threads & MongoDB GridFS)
 const memoryStorage = multer.memoryStorage();
 
+// 1. Single Image / GIF Upload (Memory - 1 MB Max Limit)
 export const uploadMemorySingle = multer({
   storage: memoryStorage,
-  limits: { fileSize: 2 * 1024 * 1024 }, // 2MB max
+  limits: { fileSize: 1 * 1024 * 1024 }, // 1 MB max limit for single image / GIF
   fileFilter: (_req, file, cb) => {
     if (file.mimetype.startsWith("image/")) cb(null, true);
-    else cb(new Error("Only images are allowed"));
+    else cb(new Error("Only image files (PNG, JPG, WEBP, GIF) are allowed!"));
   },
 }).single("image");
 
+// 2. Multiple Images / GIFs Upload (Memory - 1 MB Max Per File, Max 5 Files)
 export const uploadMemoryMultiple = multer({
   storage: memoryStorage,
-  limits: { fileSize: 10 * 1024 * 1024, files: 10 }, // 10MB, 10 files max
+  limits: { fileSize: 1 * 1024 * 1024, files: 5 }, // 1 MB per file, 5 files max
   fileFilter: (_req, file, cb) => {
     if (file.mimetype.startsWith("image/")) cb(null, true);
-    else cb(new Error("Only images are allowed"));
+    else cb(new Error("Only image files (PNG, JPG, WEBP, GIF) are allowed!"));
   },
-}).array("images", 10);
+}).array("images", 5);
 
-// 2. Disk Storage Fallback
-const diskStorage = multer.diskStorage({
-  destination: (_req: Request, _file: Express.Multer.File, cb) => cb(null, uploadDir),
-  filename: (_req: Request, file: Express.Multer.File, cb) => {
-    const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-    const ext = path.extname(file.originalname);
-    cb(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
+// 3. Banner Video Upload (Memory - 12 MB Max Limit for MP4/WEBM/MOV)
+export const uploadVideoSingle = multer({
+  storage: memoryStorage,
+  limits: { fileSize: 12 * 1024 * 1024 }, // 12 MB max for banner videos
+  fileFilter: (_req, file, cb) => {
+    if (file.mimetype.startsWith("video/")) cb(null, true);
+    else cb(new Error("Only video files (MP4, WEBM, MOV) are allowed!"));
   },
-});
+}).single("video");
 
-const fileFilter = (_req: Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
-  cb(null, true);
-};
+// 4. Document & Banking KYC Upload (Memory - 15 MB Max Limit for PDF, DOCX, DOC, XLSX, CSV & Images)
+export const uploadDocumentSingle = multer({
+  storage: memoryStorage,
+  limits: { fileSize: 15 * 1024 * 1024 }, // 15 MB max for documents
+  fileFilter: (_req, file, cb) => {
+    if (file.mimetype.startsWith("audio/") || file.mimetype === "text/plain") {
+      return cb(new Error("Audio files and plain text files are strictly not allowed!"));
+    }
+    const isAllowedDoc =
+      file.mimetype === "application/pdf" ||
+      file.mimetype === "application/msword" ||
+      file.mimetype === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+      file.mimetype === "application/vnd.ms-excel" ||
+      file.mimetype === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+      file.mimetype === "text/csv" ||
+      file.mimetype === "application/csv" ||
+      file.mimetype.startsWith("image/");
 
-export const uploadSingle = multer({
-  storage: diskStorage,
-  fileFilter,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB max
-}).single("file");
-
-export const uploadMultiple = multer({
-  storage: diskStorage,
-  fileFilter,
-  limits: {
-    fileSize: 20 * 1024 * 1024,
-    files: 5,
+    if (isAllowedDoc) cb(null, true);
+    else cb(new Error("Only document files (PDF, DOCX, DOC, XLSX, CSV, Images) are allowed!"));
   },
-}).array("files", 5);
+}).single("document");
 
 // Helper to get media type from mimetype
 export const getMediaType = (
   mimetype: string
-): "IMAGE" | "VIDEO" | "PDF" | "FILE" | "TEXT" | "AUDIO" => {
+): "IMAGE" | "VIDEO" | "PDF" | "DOC" | "EXCEL" | "CSV" | "FILE" => {
   if (mimetype.startsWith("image/")) return "IMAGE";
   if (mimetype.startsWith("video/")) return "VIDEO";
-  if (mimetype.startsWith("audio/")) return "AUDIO";
   if (mimetype === "application/pdf") return "PDF";
-  if (mimetype === "text/plain") return "TEXT";
+  if (
+    mimetype === "application/msword" ||
+    mimetype === "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+  ) {
+    return "DOC";
+  }
+  if (
+    mimetype === "application/vnd.ms-excel" ||
+    mimetype === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+  ) {
+    return "EXCEL";
+  }
+  if (
+    mimetype === "text/csv" ||
+    mimetype === "application/csv" ||
+    mimetype === "text/x-csv"
+  ) {
+    return "CSV";
+  }
   return "FILE";
 };

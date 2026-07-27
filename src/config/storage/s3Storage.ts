@@ -33,17 +33,17 @@ export interface UserDocumentUploadOptions {
   buffer: Buffer;
   userId: string; // e.g. "usr_10024"
   docType:
-    | "PAN"
-    | "AADHAR"
-    | "VOTER_ID"
-    | "PASSPORT"
-    | "DRIVING_LICENSE"
-    | "BANK_STATEMENT"
-    | "CHEQUE"
-    | "GST"
-    | "AVATAR"
-    | "LOGO"
-    | "BANNER";
+  | "PAN"
+  | "AADHAR"
+  | "VOTER_ID"
+  | "PASSPORT"
+  | "DRIVING_LICENSE"
+  | "BANK_STATEMENT"
+  | "CHEQUE"
+  | "GST"
+  | "AVATAR"
+  | "LOGO"
+  | "BANNER";
   contentType?: string | undefined; // Default: "image/png"
   existingKey?: string | undefined; // Pass old key when updating/re-uploading to delete old file first!
 }
@@ -54,7 +54,7 @@ export const uploadToCloudStorage = async ({
   buffer,
   fileName,
   contentType,
-  folder = "uploads",
+  folder = "storage",
   isPublic = true,
 }: CloudUploadOptions): Promise<string> => {
   try {

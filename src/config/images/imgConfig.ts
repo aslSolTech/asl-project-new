@@ -168,16 +168,16 @@ export const addWatermarkToImage = async ({
  * Smart Image Processor:
  * - AADHAR, PAN, VOTER_ID, PASSPORT, BANK_STATEMENT, LOGO, BANNER, AVATAR:
  *   Watermark IS SKIPPED to preserve document verification & OCR readability.
- * - PRODUCT, GALLERY: Watermark IS APPLIED with date-fns timestamp, userId, and location.
+ * - GALLERY: Watermark IS APPLIED with date-fns timestamp, userId, and location.
  */
 export const processImageForUpload = async ({
   imageBuffer,
-  category = "PRODUCT",
+  category = "GALLERY",
   userId,
   location,
   timestamp,
   skipWatermark,
-  watermarkText = "© My App",
+  watermarkText = "©aslwallets",
   watermarkBuffer,
   outputFormat = "png",
   quality = 80,

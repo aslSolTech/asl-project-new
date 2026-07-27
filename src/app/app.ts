@@ -2,7 +2,6 @@ import http from 'http';
 import express, { type Request, type Response } from 'express';
 import morgan from 'morgan';
 import helmet from 'helmet';
-import { Server } from 'socket.io';
 import cors from 'cors';
 import { CORS_OPTIONS } from '../config/dotenv/dotenv.js';
 import { httpLogger } from '../middlewares/logger/httpLogger.js';
@@ -15,19 +14,22 @@ import { startAllWorkers, getWorkersHealth } from '../config/workers/workers.js'
 import { errorHandler } from '../middlewares/errorhandler/errorHandler.js';
 import { notFoundHandler } from '../middlewares/errorhandler/notFoundHandler.js';
 import { ApiResponse } from '../utils/apiResponse.js';
+import { getStatusMonitorMiddleware } from '../monitoring/monitor_expressapi.js';
+import { initSocketIO } from '../config/socketio/socketio.js';
 
 // Express app
 const app = express();
 
 // Http server
-const server = http.createServer(app);
+const httpServer = http.createServer(app);
 
 // Socket.io server
-const io = new Server(server, {
-  cors: CORS_OPTIONS,
-});
+const io = initSocketIO(httpServer);
 
 // Middlewares
+
+// Express Status Monitor (connected with Socket.io server)
+app.use(getStatusMonitorMiddleware(io));
 
 // Enable trust proxy for rate limiting & IP tracking
 app.set('trust proxy', 1);
@@ -52,8 +54,8 @@ app.use(express.json({ limit: '10kb' }));
 app.use(express.urlencoded({ extended: true, limit: '10kb' }));
 
 // Connect MongoDB/MySQL
-await connectMongoDB();
 await connectMySQL();
+await connectMongoDB();
 
 // Start bullmq workers
 startAllWorkers();
@@ -88,11 +90,15 @@ app.get('/', async (_req: Request, res: Response) => {
     };
   }
 
+  const socketStatus = io.sockets ? 'CONNECTED' : 'DISCONNECTED';
+  const activeSocketConnections = io.engine ? io.engine.clientsCount : 0;
+
   const isHealthy =
     redisStatus === 'CONNECTED' &&
     mysqlStatus === 'CONNECTED' &&
     mongodbStatus === 'CONNECTED' &&
-    bullmqStatus.status === 'RUNNING';
+    bullmqStatus.status === 'RUNNING' &&
+    socketStatus === 'CONNECTED';
 
   ApiResponse.success(res, {
     message: 'Backend Services Health Check',
@@ -102,6 +108,11 @@ app.get('/', async (_req: Request, res: Response) => {
       mysql: mysqlStatus,
       mongodb: mongodbStatus,
       bullmq: bullmqStatus,
+      socketio: {
+        status: socketStatus,
+        activeConnections: activeSocketConnections,
+      },
+      statusMonitor: '/status',
     },
   });
 });
@@ -112,4 +123,4 @@ app.use(notFoundHandler);
 // Global Error Handler Middleware
 app.use(errorHandler);
 
-export { app, server, io };
+export { app, httpServer };

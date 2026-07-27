@@ -38,7 +38,7 @@ export const mediaWorker = new Worker<MediaJobPayload>(
         } = job.data as WatermarkAndUploadPayload;
 
         const rawBuffer = Buffer.from(imageBufferBase64, "base64");
-        const currentCategory = category || "PRODUCT";
+        const currentCategory = category || "GALLERY";
 
         // 1. Offload heavy Sharp watermarking & PNG conversion to node:worker_threads OS Thread!
         const processedPngBuffer = await processImageInWorkerThread({
@@ -55,7 +55,7 @@ export const mediaWorker = new Worker<MediaJobPayload>(
 
         // 2. If userId is provided, use User Onboarding Folder Hierarchy with Auto-Delete of Old Version
         if (userId) {
-          const docType = (currentCategory === "PRODUCT" || currentCategory === "GALLERY" ? "AVATAR" : currentCategory) as any;
+          const docType = currentCategory as any;
 
           const result = await uploadUserDocument({
             buffer: processedPngBuffer,
