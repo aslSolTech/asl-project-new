@@ -14,20 +14,20 @@ try {
 export const connectMongoDB = async (): Promise<void> => {
   try {
     mongoose.connection.on('connected', () => {
-      logger.info('MongoDB connection established successfully.');
+      logger.info('MongoDB connection established successfully!');
     });
 
     mongoose.connection.on('error', (err) => {
-      logger.error({ err }, 'MongoDB connection error encountered');
+      logger.error({ err }, 'MongoDB connection error encountered!');
     });
 
     mongoose.connection.on('disconnected', () => {
-      logger.warn('MongoDB connection disconnected');
+      logger.warn('MongoDB connection disconnected!');
     });
 
     await mongoose.connect(MONGODB_URI);
   } catch (error) {
-    logger.error({ message: (error as Error).message }, 'Failed to connect to MongoDB database');
+    logger.error({ message: (error as Error).message }, 'Failed to connect to MongoDB database!');
   }
 };
 

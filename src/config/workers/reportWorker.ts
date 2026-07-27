@@ -15,7 +15,7 @@ export const reportWorker = new Worker<ReportJobPayload>(
       case "excelReport": {
         const { fileName, data, columns } = job.data as ExcelReportPayload;
         const buffer = await excelReportGenerator({ fileName, data, columns });
-        logger.info({ jobId: job.id, fileName, bufferLength: buffer.length }, "Excel report generated successfully");
+        logger.info({ jobId: job.id, fileName, bufferLength: buffer.length }, "Excel report generated successfully.");
         break;
       }
       case "pdfReport": {

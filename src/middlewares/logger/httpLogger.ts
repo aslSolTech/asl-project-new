@@ -1,6 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
 import { randomUUID } from 'crypto';
 import { logger } from '../../config/logger/logger.js';
+import { FINTECH_SENSITIVE_KEY, MAX_PAYLOAD_BYTES } from '../../config/dotenv/dotenv.js';
 
 export interface RequestWithUser extends Request {
   id?: string;
@@ -13,34 +14,8 @@ export interface RequestWithUser extends Request {
   };
 }
 
-const FINTECH_SENSITIVE_KEYS = new Set([
-  'password',
-  'token',
-  'accesstoken',
-  'refreshtoken',
-  'secret',
-  'creditcard',
-  'authorization',
-  'cookie',
-  'cvv',
-  'cvc',
-  'pin',
-  'upipin',
-  'otp',
-  'cardnumber',
-  'pan',
-  'accountnumber',
-  'aadhaar',
-  'ssn',
-  'passcode',
-  'privatekey',
-  'secretkey',
-  'expiry',
-  'exp_month',
-  'exp_year',
-]);
-
-const MAX_PAYLOAD_BYTES = 5000;
+const FINTECH_SENSITIVE_KEYS = new Set(FINTECH_SENSITIVE_KEY);
+const TOTAL_PAYLOAD_BYTES = (MAX_PAYLOAD_BYTES * MAX_PAYLOAD_BYTES); // 1 MB max payload
 
 // PCI-DSS Compliant Credit/Debit Card Number Masking
 const maskCardNumbers = (str: string): string => {
@@ -56,17 +31,17 @@ const maskCardNumbers = (str: string): string => {
 const truncatePayload = (data: unknown): unknown => {
   if (typeof data === 'string') {
     const masked = maskCardNumbers(data);
-    if (masked.length > MAX_PAYLOAD_BYTES) {
-      return masked.slice(0, MAX_PAYLOAD_BYTES) + '... [TRUNCATED]';
+    if (masked.length > TOTAL_PAYLOAD_BYTES) {
+      return masked.slice(0, TOTAL_PAYLOAD_BYTES) + '... [TRUNCATED]';
     }
     return masked;
   }
 
   const str = JSON.stringify(data);
-  if (str && str.length > MAX_PAYLOAD_BYTES) {
+  if (str && str.length > TOTAL_PAYLOAD_BYTES) {
     return {
       _truncated: true,
-      preview: str.slice(0, MAX_PAYLOAD_BYTES) + '... [TRUNCATED]',
+      preview: str.slice(0, TOTAL_PAYLOAD_BYTES) + '... [TRUNCATED]',
     };
   }
   return data;

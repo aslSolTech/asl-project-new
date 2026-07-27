@@ -1,21 +1,28 @@
-import { Worker, type WorkerOptions } from "node:worker_threads";
+import { Worker } from "node:worker_threads";
+import os from "node:os";
 import { logger } from "../../config/logger/logger.js";
+import { MAX_WORKER_THREADS } from "../../config/dotenv/dotenv.js";
 
 export interface ThreadRunnerOptions {
   workerCode?: string;
   scriptPath?: string;
-  workerData?: any;
+  workerData?: Record<string, unknown> | unknown;
   timeoutMs?: number; // Default: 60,000ms (1 min)
+  threadCount?: number; // Default: 1
 }
+
+// Auto-detect CPU Cores: Leaves 1 core free for Main Event Loop (Min: 1)
+const DEFAULT_THREAD_COUNT = Math.max(1, MAX_WORKER_THREADS > 0 ? MAX_WORKER_THREADS : os.cpus().length - 1);
 
 // Executes a CPU-heavy task in an isolated OS Worker Thread (node:worker_threads).
 // Prevents blocking the main Node.js Event Loop during heavy processing.
 
-export const runInWorkerThread = <T = any>({
+export const runInWorkerThread = <T = unknown>({
   workerCode,
   scriptPath,
   workerData,
   timeoutMs = 60000,
+  threadCount = DEFAULT_THREAD_COUNT,
 }: ThreadRunnerOptions): Promise<T> => {
   return new Promise((resolve, reject) => {
     let timer: NodeJS.Timeout | null = null;
@@ -23,9 +30,9 @@ export const runInWorkerThread = <T = any>({
 
     try {
       if (scriptPath) {
-        worker = new Worker(scriptPath, { workerData });
+        worker = new Worker(scriptPath, { workerData: typeof workerData === 'object' && workerData !== null ? { ...workerData, thread_count: threadCount } : { thread_count: threadCount } });
       } else if (workerCode) {
-        worker = new Worker(workerCode, { eval: true, workerData });
+        worker = new Worker(workerCode, { eval: true, workerData: typeof workerData === 'object' && workerData !== null ? { ...workerData, thread_count: threadCount } : { thread_count: threadCount } });
       } else {
         return reject(new Error("Either workerCode or scriptPath must be provided to runInWorkerThread"));
       }
@@ -40,11 +47,12 @@ export const runInWorkerThread = <T = any>({
       }, timeoutMs);
     }
 
-    worker.on("message", (message: any) => {
+    worker.on("message", (message: unknown) => {
       if (timer) clearTimeout(timer);
 
       if (message && typeof message === "object" && "error" in message) {
-        reject(new Error(message.error));
+        const errMsg = String((message as Record<string, unknown>).error || "Worker Thread Error");
+        reject(new Error(errMsg));
       } else {
         resolve(message as T);
       }

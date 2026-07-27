@@ -93,7 +93,7 @@ export const addMediaJob = async <T extends MediaJobType>(
 };
 
 // Backward-compatible addJob wrapper
-export const addJob = async (type: string, data: any): Promise<void> => {
+export const addJob = async (type: string, data: unknown): Promise<void> => {
   if (type in ({ sendEmail: true } as Record<string, boolean>)) {
     await addEmailJob("sendEmail", data as any);
   } else {

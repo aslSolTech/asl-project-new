@@ -22,7 +22,7 @@ export type ImageCategory =
 export interface WatermarkOptions {
   imageBuffer: Buffer;
   watermarkBuffer?: Buffer | undefined; // Logo watermark image buffer
-  watermarkText?: string | undefined;   // Branding title text (e.g. "© My App")
+  watermarkText?: string | undefined;   // Branding title text
   userId?: string | undefined;          // Uploading user ID
   location?: string | undefined;        // Geolocation / IP / City
   timestamp?: Date | string | number | undefined; // Timestamp formatted via date-fns
@@ -45,7 +45,13 @@ export interface ProcessImageOptions {
   quality?: number | undefined;
 }
 
-// 1. Convert any image Buffer to WebP in memory (No Watermark)
+// 1. Convert any image Buffer to PNG in memory (No Watermark)
+export const convertToPng = async (
+  inputBuffer: Buffer
+): Promise<Buffer> => {
+  return await sharp(inputBuffer).png().toBuffer();
+};
+
 export const convertToWebp = async (
   inputBuffer: Buffer,
   quality = 80
@@ -61,7 +67,7 @@ export const createThumbnail = async (
 ): Promise<Buffer> => {
   return await sharp(inputBuffer)
     .resize(width, height, { fit: "cover" })
-    .webp({ quality: 80 })
+    .png()
     .toBuffer();
 };
 
@@ -75,7 +81,7 @@ export const addWatermarkToImage = async ({
   timestamp,
   gravity = "southeast", // Bottom-Right corner
   opacity = 0.7,
-  outputFormat = "webp",
+  outputFormat = "png",
   quality = 80,
 }: WatermarkOptions): Promise<Buffer> => {
   const image = sharp(imageBuffer);
@@ -97,7 +103,7 @@ export const addWatermarkToImage = async ({
         tile: true,
         blend: "dest-in",
       }])
-      .webp()
+      .png()
       .toBuffer();
   } else {
     // Format timestamp using date-fns
@@ -151,10 +157,10 @@ export const addWatermarkToImage = async ({
 
   if (outputFormat === "jpeg") {
     return await resultImage.jpeg({ quality }).toBuffer();
-  } else if (outputFormat === "png") {
-    return await resultImage.png().toBuffer();
-  } else {
+  } else if (outputFormat === "webp") {
     return await resultImage.webp({ quality }).toBuffer();
+  } else {
+    return await resultImage.png().toBuffer();
   }
 };
 
@@ -173,7 +179,7 @@ export const processImageForUpload = async ({
   skipWatermark,
   watermarkText = "© My App",
   watermarkBuffer,
-  outputFormat = "webp",
+  outputFormat = "png",
   quality = 80,
 }: ProcessImageOptions): Promise<Buffer> => {
   const isKycOrBrandDoc = [
@@ -209,14 +215,13 @@ export const processImageForUpload = async ({
     });
   }
 
-  // KYC Docs, Logos, Banners, Avatars (No Watermark — direct optimize & WebP conversion)
-  return await convertToWebp(imageBuffer, quality);
+  // KYC Docs, Logos, Banners, Avatars (No Watermark — direct optimize & PNG conversion)
+  return await convertToPng(imageBuffer);
 };
 
-/**
- * Offloads heavy Sharp Image Processing / Watermarking to a separate OS Worker Thread (node:worker_threads)
- * WITHOUT ANY CODE DUPLICATION — reusing processImageForUpload directly in the worker task.
- */
+// Offloads heavy Sharp Image Processing / Watermarking to a separate OS Worker Thread (node:worker_threads)
+// WITHOUT ANY CODE DUPLICATION — reusing processImageForUpload directly in the worker task.
+
 export const processImageInWorkerThread = async (
   options: ProcessImageOptions
 ): Promise<Buffer> => {

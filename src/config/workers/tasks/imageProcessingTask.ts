@@ -1,5 +1,5 @@
 import { parentPort, workerData } from "node:worker_threads";
-import { processImageForUpload, type ProcessImageOptions } from "../../images/imgConfig.js";
+import { processImageForUpload } from "../../images/imgConfig.js";
 
 async function runTask() {
   if (!parentPort || !workerData) return;

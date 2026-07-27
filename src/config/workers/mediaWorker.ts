@@ -40,8 +40,8 @@ export const mediaWorker = new Worker<MediaJobPayload>(
         const rawBuffer = Buffer.from(imageBufferBase64, "base64");
         const currentCategory = category || "PRODUCT";
 
-        // 1. Offload heavy Sharp watermarking & WebP conversion to node:worker_threads OS Thread!
-        const processedWebpBuffer = await processImageInWorkerThread({
+        // 1. Offload heavy Sharp watermarking & PNG conversion to node:worker_threads OS Thread!
+        const processedPngBuffer = await processImageInWorkerThread({
           imageBuffer: rawBuffer,
           category: currentCategory,
           userId,
@@ -49,7 +49,7 @@ export const mediaWorker = new Worker<MediaJobPayload>(
           timestamp,
           skipWatermark,
           watermarkText: watermarkText || "© My App",
-          outputFormat: "webp",
+          outputFormat: "png",
           quality: 80,
         });
 
@@ -58,10 +58,10 @@ export const mediaWorker = new Worker<MediaJobPayload>(
           const docType = (currentCategory === "PRODUCT" || currentCategory === "GALLERY" ? "AVATAR" : currentCategory) as any;
 
           const result = await uploadUserDocument({
-            buffer: processedWebpBuffer,
+            buffer: processedPngBuffer,
             userId,
             docType,
-            contentType: "image/webp",
+            contentType: "image/png",
             existingKey, // Automatically deletes old file version on re-upload/update!
           });
 
@@ -71,9 +71,9 @@ export const mediaWorker = new Worker<MediaJobPayload>(
 
         // 3. General Public Uploads (Logos, Banners, Products without specific user ID)
         const cloudUrl = await uploadToCloudStorage({
-          buffer: processedWebpBuffer,
-          fileName: `${Date.now()}.webp`,
-          contentType: "image/webp",
+          buffer: processedPngBuffer,
+          fileName: `${Date.now()}.png`,
+          contentType: "image/png",
           folder: folder || currentCategory.toLowerCase(),
           isPublic: true,
         });

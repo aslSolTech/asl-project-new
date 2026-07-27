@@ -44,13 +44,12 @@ export interface UserDocumentUploadOptions {
     | "AVATAR"
     | "LOGO"
     | "BANNER";
-  contentType?: string | undefined; // Default: "image/webp"
+  contentType?: string | undefined; // Default: "image/png"
   existingKey?: string | undefined; // Pass old key when updating/re-uploading to delete old file first!
 }
 
-/**
- * Uploads an in-memory Buffer directly to DigitalOcean Spaces / AWS S3 Cloud Storage
- */
+//  Uploads an in-memory Buffer directly to DigitalOcean Spaces / AWS S3 Cloud Storage
+
 export const uploadToCloudStorage = async ({
   buffer,
   fileName,
@@ -85,7 +84,7 @@ export const uploadToCloudStorage = async ({
 
 /**
  * User Onboarding Document Manager:
- * 1. Stores files in User-Specific Folder: `users/{userId}/{kyc|profile}/{docType}.webp`
+ * 1. Stores files in User-Specific Folder: `users/{userId}/{kyc|profile}/{docType}.png`
  * 2. Automatic Lifecycle Update: If re-uploading/updating (existingKey provided),
  *    automatically DELETES the old file from Cloud Storage first!
  * 3. Privacy Control: KYC docs stored with Private ACL; Avatars/Logos stored Publicly.
@@ -94,7 +93,7 @@ export const uploadUserDocument = async ({
   buffer,
   userId,
   docType,
-  contentType = "image/webp",
+  contentType = "image/png",
   existingKey,
 }: UserDocumentUploadOptions): Promise<{ key: string; url: string; isPrivate: boolean }> => {
   // 1. Delete previous file if updating/re-uploading
@@ -119,7 +118,7 @@ export const uploadUserDocument = async ({
 
   const subFolder = isKyc ? "kyc" : "profile";
   const folder = `users/${userId}/${subFolder}`;
-  const fileName = `${docType.toLowerCase()}-${Date.now()}.webp`;
+  const fileName = `${docType.toLowerCase()}-${Date.now()}.png`;
   const key = `${folder}/${fileName}`;
 
   // 3. Upload to Cloud Storage
@@ -134,10 +133,8 @@ export const uploadUserDocument = async ({
   return { key, url, isPrivate: isKyc };
 };
 
-/**
- * Generates a short-lived Presigned URL for viewing private Fintech KYC documents.
- * Default expiration: 900 seconds (15 minutes).
- */
+// Generates a short-lived Presigned URL for viewing private Fintech KYC documents.
+// Default expiration: 900 seconds (15 minutes).
 export const getPresignedUrl = async (
   key: string,
   expiresInSeconds = 900
@@ -154,9 +151,7 @@ export const getPresignedUrl = async (
   }
 };
 
-/**
- * Deletes a file from Cloud Storage
- */
+// Deletes a file from Cloud Storage
 export const deleteFromCloudStorage = async (key: string): Promise<void> => {
   try {
     const command = new DeleteObjectCommand({

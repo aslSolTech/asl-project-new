@@ -1,6 +1,8 @@
 import 'dotenv/config';
 import { z } from 'zod';
 
+const isProd = process.env.NODE_ENV === 'production';
+
 const envSchema = z.object({
   PORT: z.coerce.number().default(3000),
   IP_BINDING: z.string().default('0.0.0.0'),
@@ -14,17 +16,25 @@ const envSchema = z.object({
   REDIS_PASSWORD: z.string().default(''),
   MYSQL_HOST: z.string().default('localhost'),
   MYSQL_PORT: z.coerce.number().default(3306),
-  MYSQL_DB: z.string().default('payzones_db'),
+  MYSQL_DBNAME: z.string().default('payzones_db'),
   MYSQL_USER: z.string().default('root'),
-  MYSQL_PWD: z.string().default('root1234'),
+  MYSQL_PWD: isProd ? z.string().min(1, 'MYSQL_PWD is required in production') : z.string().default(''),
   MYSQL_CONNECTION_LIMIT: z.coerce.number().default(5),
   CORS_ORIGIN: z.string().default('*'),
-  JWT_SECRET: z.string().default('secret'),
+  JWT_SECRET: isProd
+    ? z.string().min(32, 'JWT_SECRET must be at least 32 characters in production')
+    : z.string().default('dev_jwt_secret_32_bytes_minimum_key_for_testing'),
   JWT_SECRET_EXPIRES_IN: z.string().default('15m'),
-  JWT_REFRESH_SECRET: z.string().default(''),
+  JWT_REFRESH_SECRET: isProd
+    ? z.string().min(32, 'JWT_REFRESH_SECRET must be at least 32 characters in production')
+    : z.string().default('dev_jwt_refresh_secret_key_testing_32'),
   JWT_REFRESH_EXPIRES_IN: z.string().default('7d'),
-  AES_KEY: z.string().default('0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef'),
-  AES_IV: z.string().default('0123456789abcdef01234567'),
+  AES_KEY: isProd
+    ? z.string().min(32, 'AES_KEY must be provided in production')
+    : z.string().default('0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef'),
+  AES_IV: isProd
+    ? z.string().min(16, 'AES_IV must be provided in production')
+    : z.string().default('0123456789abcdef01234567'),
   AES_ALGO: z.string().default('aes-256-gcm'),
   HTTP_ORIGIN: z.string().default('*'),
   HTTP_METHODS: z.string().default('*'),
@@ -36,14 +46,20 @@ const envSchema = z.object({
       return val;
     }, z.boolean())
     .default(true),
-  GMAIL_ID: z.email(),
-  GMAIL_APP_PASSWORD: z.string(),
+  GMAIL_ID: isProd
+    ? z.string().email('GMAIL_ID must be a valid email in production')
+    : z.string().email().or(z.literal('')).default(''),
+  GMAIL_APP_PASSWORD: z.string().default(''),
   S3_ENDPOINT: z.string().default('https://nyc3.digitaloceanspaces.com'),
   S3_REGION: z.string().default('nyc3'),
   S3_BUCKET: z.string().default('my-storage-bucket'),
   S3_ACCESS_KEY_ID: z.string().default(''),
   S3_SECRET_ACCESS_KEY: z.string().default(''),
   S3_CDN_URL: z.string().default(''),
+  MAX_WORKER_THREADS: z.coerce.number().default(0),
+  MAX_PAYLOAD_BYTES: z.coerce.number().default(1024),
+  FINTECH_SENSITIVE_KEY: z.string().default(''),
+  PINO_LOGGER_REDACT: z.string().default('')
 });
 
 export const env = envSchema.parse(process.env);
@@ -54,7 +70,7 @@ export const REDIS_PORT = env.REDIS_PORT;
 export const REDIS_PASSWORD = env.REDIS_PASSWORD;
 export const MYSQL_HOST = env.MYSQL_HOST;
 export const MYSQL_PORT = env.MYSQL_PORT;
-export const MYSQL_DB = env.MYSQL_DB;
+export const MYSQL_DBNAME = env.MYSQL_DBNAME;
 export const MYSQL_USER = env.MYSQL_USER;
 export const MYSQL_PWD = env.MYSQL_PWD;
 export const MYSQL_CONNECTION_LIMIT = env.MYSQL_CONNECTION_LIMIT;
@@ -80,6 +96,10 @@ export const S3_BUCKET = env.S3_BUCKET;
 export const S3_ACCESS_KEY_ID = env.S3_ACCESS_KEY_ID;
 export const S3_SECRET_ACCESS_KEY = env.S3_SECRET_ACCESS_KEY;
 export const S3_CDN_URL = env.S3_CDN_URL;
+export const MAX_WORKER_THREADS = env.MAX_WORKER_THREADS;
+export const MAX_PAYLOAD_BYTES = env.MAX_PAYLOAD_BYTES;
+export const FINTECH_SENSITIVE_KEY = env.FINTECH_SENSITIVE_KEY.split(',');
+export const PINO_LOGGER_REDACT = env.PINO_LOGGER_REDACT.split(',');
 
 export const CORS_OPTIONS = {
   origin: env.HTTP_ORIGIN?.split(',') || ['*'],

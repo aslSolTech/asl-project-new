@@ -1,4 +1,5 @@
 import multer from "multer";
+import type { Request } from "express";
 import path from "path";
 import fs from "fs";
 
@@ -15,7 +16,8 @@ const storage = multer.diskStorage({
     }
 });
 
-const fileFilter = (_req: any, _file: Express.Multer.File, cb: multer.FileFilterCallback) => {
+
+const fileFilter = (_req: Request, _file: Express.Multer.File, cb: multer.FileFilterCallback) => {
     cb(null, true);
 };
 
@@ -38,8 +40,8 @@ export const uploadMultiple = multer({
 
 // ──── Avatar Upload ──────────────────────────────
 const avatarStorage = multer.diskStorage({
-    destination: (req: any, _file, cb) => {
-        const userId = req.user?.id || "unknown";
+    destination: (req: Request, _file, cb) => {
+        const userId = (req as any).user?.id || "unknown";
         const dir = path.join(uploadDir, "avatars", String(userId));
         if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
         cb(null, dir);
@@ -52,9 +54,9 @@ const avatarStorage = multer.diskStorage({
 
 export const uploadAvatar = multer({
     storage: avatarStorage,
-    fileFilter: (req, file, cb) => {
+    fileFilter: (_req, file, cb) => {
         if (file.mimetype.startsWith("image/")) cb(null, true);
-        else cb(new Error("Only images are allowed for avatars") as any, false);
+        else cb(new Error("Only images are allowed for avatars"));
     },
     limits: { fileSize: 3 * 1024 * 1024 } // 3MB
 }).single("avatar");

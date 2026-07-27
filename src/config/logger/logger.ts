@@ -1,6 +1,6 @@
 import pino from 'pino';
 import { Writable } from 'stream';
-import { NODE_ENV } from '../dotenv/dotenv.js';
+import { NODE_ENV, PINO_LOGGER_REDACT } from '../dotenv/dotenv.js';
 import { getMonthlyLogModel } from '../mongodb/mongodb.js';
 
 // Environment checks
@@ -121,29 +121,8 @@ export const logger = pino(
     base: isProduction || isStaging ? { pid: process.pid } : null,
     timestamp: pino.stdTimeFunctions.isoTime,
     redact: {
-      paths: [
-        'req.headers.authorization',
-        'req.headers.cookie',
-        'password',
-        'token',
-        'accessToken',
-        'refreshToken',
-        'secret',
-        'creditCard',
-        'cardNumber',
-        'cvv',
-        'cvc',
-        'pin',
-        'upiPin',
-        'otp',
-        'pan',
-        'accountNumber',
-        'aadhaar',
-        'ssn',
-        'passcode',
-        'privateKey',
-        'secretKey',
-      ],
+      paths: PINO_LOGGER_REDACT,
+      censor: "[REDACTED]",
       remove: false,
     },
   },

@@ -57,8 +57,8 @@ export const excelReportGenerator = async ({
   const resultBuffer = await runInWorkerThread<Buffer>({
     workerCode,
     workerData: { fileName, data, columns },
-    timeoutMs: 120000, // 2 minutes timeout for massive reports
+    timeoutMs: 60000, // 1 minutes timeout for massive reports
   });
 
   return Buffer.from(resultBuffer);
-};
+}; 

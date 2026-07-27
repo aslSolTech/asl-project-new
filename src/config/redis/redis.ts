@@ -1,12 +1,13 @@
 import { Redis, type RedisOptions } from "ioredis";
 import { REDIS_HOST, REDIS_PORT, REDIS_PASSWORD } from "../dotenv/dotenv.js";
+import { logger } from "../logger/logger.js";
 
 export const redisOptions: RedisOptions = {
     host: REDIS_HOST,
     port: REDIS_PORT,
     password: REDIS_PASSWORD || undefined,
 
-    lazyConnect: true,
+    lazyConnect: false,
     enableReadyCheck: true,
 
     maxRetriesPerRequest: null,
@@ -23,7 +24,7 @@ export const redisOptions: RedisOptions = {
         return true;
     },
 
-    enableOfflineQueue: false,
+    enableOfflineQueue: true,
 
     autoResubscribe: true,
 
@@ -33,21 +34,21 @@ export const redisOptions: RedisOptions = {
 export const redis = new Redis(redisOptions);
 
 redis.on("connect", () => {
-  console.log("Redis Connected");
+ logger.info("Redis Connected!");
 });
 
 redis.on("ready", () => {
-  console.log("Redis Ready");
+  logger.info("Redis Ready!");
 });
 
 redis.on("error", (err) => {
-  console.error(err);
+  logger.error(err);
 });
 
 redis.on("close", () => {
-  console.log("Redis Closed");
+  logger.info("Redis Closed!");
 });
 
 redis.on("reconnecting", () => {
-  console.log("Redis Reconnecting...");
+  logger.info("Redis Reconnecting...!");
 });

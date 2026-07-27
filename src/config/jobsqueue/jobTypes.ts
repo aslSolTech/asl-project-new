@@ -5,13 +5,13 @@ export interface EmailJobPayload {
   subject: string;
   text?: string;
   html?: string;
-  attachments?: Array<{ filename: string; path?: string; content?: any }>;
+  attachments?: Array<{ filename: string; path?: string; content?: unknown }>;
 }
 
 export interface ExcelReportPayload {
   fileName: string;
   data: Array<Record<string, any>>;
-  columns: any[];
+  columns: Array<Record<string, unknown>>;
 }
 
 export interface PdfReportPayload {
