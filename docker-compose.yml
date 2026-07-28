@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # 1. Backend Service (Node.js + Express + BullMQ Workers)
   backend:
@@ -29,7 +27,7 @@ services:
 
   # 2. Redis (Local BullMQ Job Queue & Caching ke liye)
   redis:
-    image: redis:alpine
+    image: redis:8.2-alpine
     container_name: payzones_redis
     restart: always
     ports:
@@ -41,7 +39,7 @@ services:
 
   # 3. MariaDB Database (MySQL Compatible Database)
   mariadb:
-    image: mariadb:11
+    image: mariadb:11.8.3
     container_name: payzones_mariadb
     restart: always
     ports:
@@ -58,7 +56,7 @@ services:
 
   # 4. phpMyAdmin (MariaDB/MySQL Ko Browser me Manage karne ke liye GUI)
   phpmyadmin:
-    image: phpmyadmin:latest
+    image: phpmyadmin:5.2.2-apache
     container_name: payzones_phpmyadmin
     restart: always
     ports:
@@ -73,7 +71,7 @@ services:
 
   # 5. MongoDB Database
   mongodb:
-    image: mongo:7
+    image: mongo:8.0.13
     container_name: payzones_mongodb
     restart: always
     ports:
@@ -85,7 +83,7 @@ services:
 
   # 6. SonarQube (Code Quality & Vulnerability Scanner)
   sonarqube:
-    image: sonarqube:lts-community
+    image: sonarqube:community
     container_name: payzones_sonarqube
     restart: always
     ports:
