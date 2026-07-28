@@ -22,20 +22,12 @@ const envSchema = z.object({
   MYSQL_PWD: isProd ? z.string().min(1, 'MYSQL_PWD is required in production') : z.string().default(''),
   MYSQL_CONNECTION_LIMIT: z.coerce.number().default(5),
   CORS_ORIGIN: z.string().default('*'),
-  JWT_SECRET: isProd
-    ? z.string().min(32, 'JWT_SECRET must be at least 32 characters in production')
-    : z.string().default('dev_jwt_secret_32_bytes_minimum_key_for_testing'),
+  JWT_SECRET: isProd ? z.string().min(32, 'JWT_SECRET must be at least 32 characters in production') : z.string().default('dev_jwt_secret_32_bytes_minimum_key_for_testing'),
   JWT_SECRET_EXPIRES_IN: z.string().default('15m'),
-  JWT_REFRESH_SECRET: isProd
-    ? z.string().min(32, 'JWT_REFRESH_SECRET must be at least 32 characters in production')
-    : z.string().default('dev_jwt_refresh_secret_key_testing_32'),
+  JWT_REFRESH_SECRET: isProd ? z.string().min(32, 'JWT_REFRESH_SECRET must be at least 32 characters in production') : z.string().default('dev_jwt_refresh_secret_key_testing_32'),
   JWT_REFRESH_EXPIRES_IN: z.string().default('7d'),
-  AES_KEY: isProd
-    ? z.string().min(32, 'AES_KEY must be provided in production')
-    : z.string().default('0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef'),
-  AES_IV: isProd
-    ? z.string().min(16, 'AES_IV must be provided in production')
-    : z.string().default('0123456789abcdef01234567'),
+  AES_KEY: isProd ? z.string().min(32, 'AES_KEY must be provided in production') : z.string().default('0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef'),
+  AES_IV: isProd ? z.string().min(16, 'AES_IV must be provided in production') : z.string().default('0123456789abcdef01234567'),
   AES_ALGO: z.string().default('aes-256-gcm'),
   HTTP_ORIGIN: z.string().default('*'),
   HTTP_METHODS: z.string().default('*'),
@@ -47,9 +39,7 @@ const envSchema = z.object({
       return val;
     }, z.boolean())
     .default(true),
-  GMAIL_ID: isProd
-    ? z.email('GMAIL_ID must be a valid email in production')
-    : z.email().or(z.literal('')).default(''),
+  GMAIL_ID: isProd ? z.email('GMAIL_ID must be a valid email in production') : z.email().or(z.literal('')).default(''),
   GMAIL_APP_PASSWORD: z.string().default(''),
   S3_ENDPOINT: z.string().default('https://nyc3.digitaloceanspaces.com'),
   S3_REGION: z.string().default('nyc3'),
@@ -60,7 +50,7 @@ const envSchema = z.object({
   MAX_WORKER_THREADS: z.coerce.number().default(0),
   MAX_PAYLOAD_BYTES: z.coerce.number().default(1024),
   FINTECH_SENSITIVE_KEY: z.string().default(''),
-  PINO_LOGGER_REDACT: z.string().default('')
+  PINO_LOGGER_REDACT: z.string().default(''),
 });
 
 export const env = envSchema.parse(process.env);
@@ -108,5 +98,5 @@ export const CORS_OPTIONS = {
   methods: env.HTTP_METHODS?.split(','),
   allowedHeaders: env.HTTP_ALLOWED_HEADERS?.split(','),
   credentials: Boolean(env.HTTP_CREDENTIALS),
-  maxAge: env.HTTP_MAX_AGE
+  maxAge: env.HTTP_MAX_AGE,
 };

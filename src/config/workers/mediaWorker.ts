@@ -1,43 +1,22 @@
-import { Worker, type Job } from "bullmq";
-import { redisOptions } from "../redis/redis.js";
-import { logger } from "../logger/logger.js";
-import { processImageInWorkerThread } from "../images/imgConfig.js";
-import { uploadToCloudStorage, uploadUserDocument } from "../storage/s3Storage.js";
-import type {
-  CompressImagePayload,
-  ConvertImageFormatPayload,
-  ResizeImagePayload,
-  CreateZipArchivePayload,
-  WatermarkAndUploadPayload,
-} from "../jobsqueue/jobTypes.js";
+import { Worker, type Job } from 'bullmq';
+import { redisOptions } from '../redis/redis.js';
+import { logger } from '../logger/logger.js';
+import { processImageInWorkerThread } from '../images/imgConfig.js';
+import { uploadToCloudStorage, uploadUserDocument } from '../storage/s3Storage.js';
+import type { CompressImagePayload, ConvertImageFormatPayload, ResizeImagePayload, CreateZipArchivePayload, WatermarkAndUploadPayload } from '../jobsqueue/jobTypes.js';
 
-type MediaJobPayload =
-  | CompressImagePayload
-  | ConvertImageFormatPayload
-  | ResizeImagePayload
-  | CreateZipArchivePayload
-  | WatermarkAndUploadPayload;
+type MediaJobPayload = CompressImagePayload | ConvertImageFormatPayload | ResizeImagePayload | CreateZipArchivePayload | WatermarkAndUploadPayload;
 
 export const mediaWorker = new Worker<MediaJobPayload>(
-  "media-queue",
+  'media-queue',
   async (job: Job<MediaJobPayload>) => {
-    logger.info({ jobId: job.id, name: job.name }, "Processing media job in BullMQ worker");
+    logger.info({ jobId: job.id, name: job.name }, 'Processing media job in BullMQ worker');
 
     switch (job.name) {
-      case "watermarkAndUploadImage": {
-        const {
-          imageBufferBase64,
-          category = "GALLERY",
-          userId,
-          location,
-          timestamp,
-          skipWatermark,
-          watermarkText,
-          folder,
-          existingKey,
-        } = job.data as WatermarkAndUploadPayload;
+      case 'watermarkAndUploadImage': {
+        const { imageBufferBase64, category = 'GALLERY', userId, location, timestamp, skipWatermark, watermarkText, folder, existingKey } = job.data as WatermarkAndUploadPayload;
 
-        const rawBuffer = Buffer.from(imageBufferBase64, "base64");
+        const rawBuffer = Buffer.from(imageBufferBase64, 'base64');
         const currentCategory = category;
 
         // 1. Offload heavy Sharp watermarking & PNG conversion to node:worker_threads OS Thread!
@@ -48,8 +27,8 @@ export const mediaWorker = new Worker<MediaJobPayload>(
           location,
           timestamp,
           skipWatermark,
-          watermarkText: watermarkText || "© My App",
-          outputFormat: "png",
+          watermarkText: watermarkText || '© My App',
+          outputFormat: 'png',
           quality: 80,
         });
 
@@ -61,11 +40,11 @@ export const mediaWorker = new Worker<MediaJobPayload>(
             buffer: processedPngBuffer,
             userId,
             docType,
-            contentType: "image/png",
+            contentType: 'image/png',
             existingKey, // Automatically deletes old file version on re-upload/update!
           });
 
-          logger.info({ jobId: job.id, userId, key: result.key, isPrivate: result.isPrivate }, "User document uploaded to user folder");
+          logger.info({ jobId: job.id, userId, key: result.key, isPrivate: result.isPrivate }, 'User document uploaded to user folder');
           return result;
         }
 
@@ -73,49 +52,49 @@ export const mediaWorker = new Worker<MediaJobPayload>(
         const cloudUrl = await uploadToCloudStorage({
           buffer: processedPngBuffer,
           fileName: `${Date.now()}.png`,
-          contentType: "image/png",
+          contentType: 'image/png',
           folder: folder || currentCategory.toLowerCase(),
           isPublic: true,
         });
 
-        logger.info({ jobId: job.id, cloudUrl, category: currentCategory }, "Image processed & uploaded publicly to Cloud Storage");
+        logger.info({ jobId: job.id, cloudUrl, category: currentCategory }, 'Image processed & uploaded publicly to Cloud Storage');
         return { url: cloudUrl, isPrivate: false };
       }
 
-      case "compressImage": {
+      case 'compressImage': {
         const { inputPath, outputPath, quality } = job.data as CompressImagePayload;
-        logger.info({ jobId: job.id, inputPath, outputPath, quality }, "Compressing image");
+        logger.info({ jobId: job.id, inputPath, outputPath, quality }, 'Compressing image');
         break;
       }
-      case "convertImageFormat": {
+      case 'convertImageFormat': {
         const { inputPath, outputPath, format } = job.data as ConvertImageFormatPayload;
-        logger.info({ jobId: job.id, inputPath, outputPath, format }, "Converting image format");
+        logger.info({ jobId: job.id, inputPath, outputPath, format }, 'Converting image format');
         break;
       }
-      case "resizeImage": {
+      case 'resizeImage': {
         const { inputPath, outputPath, width, height } = job.data as ResizeImagePayload;
-        logger.info({ jobId: job.id, inputPath, outputPath, width, height }, "Resizing image");
+        logger.info({ jobId: job.id, inputPath, outputPath, width, height }, 'Resizing image');
         break;
       }
-      case "createZipArchive": {
+      case 'createZipArchive': {
         const { filePaths, zipOutputPath } = job.data as CreateZipArchivePayload;
-        logger.info({ jobId: job.id, count: filePaths.length, zipOutputPath }, "Creating ZIP archive");
+        logger.info({ jobId: job.id, count: filePaths.length, zipOutputPath }, 'Creating ZIP archive');
         break;
       }
       default:
-        logger.warn({ jobId: job.id, name: job.name }, "Unknown media job type");
+        logger.warn({ jobId: job.id, name: job.name }, 'Unknown media job type');
     }
   },
   {
     connection: redisOptions,
     concurrency: 2, // Low concurrency to protect CPU/RAM resources during image processing
-  }
+  },
 );
 
-mediaWorker.on("completed", (job) => {
-  logger.info({ jobId: job.id }, "Media worker completed job");
+mediaWorker.on('completed', (job) => {
+  logger.info({ jobId: job.id }, 'Media worker completed job');
 });
 
-mediaWorker.on("failed", (job, err) => {
-  logger.error({ jobId: job?.id, err }, "Media worker failed job");
+mediaWorker.on('failed', (job, err) => {
+  logger.error({ jobId: job?.id, err }, 'Media worker failed job');
 });

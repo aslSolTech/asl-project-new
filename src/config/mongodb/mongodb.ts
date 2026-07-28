@@ -96,7 +96,7 @@ const logSchema = new Schema<ILog>(
   {
     timestamps: { createdAt: true, updatedAt: false },
     versionKey: false,
-  }
+  },
 );
 
 // Cache compiled models per month
@@ -121,4 +121,4 @@ export const getMonthlyLogModel = (date: Date = new Date()): Model<ILog> => {
   const model = mongoose.model<ILog>(collectionName, logSchema, collectionName);
   modelsCache[collectionName] = model;
   return model;
-}
+};

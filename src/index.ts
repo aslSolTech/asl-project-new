@@ -3,7 +3,6 @@ import { httpServer } from './app/app.js';
 import { logger } from './config/logger/logger.js';
 import { closeAllWorkers } from './config/workers/workers.js';
 
-
 // Server Start
 httpServer.listen(API_PORT, IP_BINDING, () => {
   logger.info(`Server running on http://localhost:${API_PORT}`);

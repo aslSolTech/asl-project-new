@@ -11,7 +11,7 @@ export const errorHandler: ErrorRequestHandler = (
   req: Request,
   res: Response,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _next: NextFunction
+  _next: NextFunction,
 ): void => {
   let statusCode = StatusCodes.INTERNAL_SERVER_ERROR;
   let message = 'Internal Server Error';
@@ -69,7 +69,7 @@ export const errorHandler: ErrorRequestHandler = (
         ip: req.ip,
         stack: err.stack,
       },
-      `[Unhandled Exception] ${message}`
+      `[Unhandled Exception] ${message}`,
     );
   } else {
     logger.warn(
@@ -80,7 +80,7 @@ export const errorHandler: ErrorRequestHandler = (
         errorCode,
         message,
       },
-      `[Operational Exception] ${message}`
+      `[Operational Exception] ${message}`,
     );
   }
 

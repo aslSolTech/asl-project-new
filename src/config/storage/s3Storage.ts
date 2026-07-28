@@ -1,14 +1,7 @@
-import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import {
-  S3_ENDPOINT,
-  S3_REGION,
-  S3_BUCKET,
-  S3_ACCESS_KEY_ID,
-  S3_SECRET_ACCESS_KEY,
-  S3_CDN_URL,
-} from "../dotenv/dotenv.js";
-import { logger } from "../logger/logger.js";
+import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { S3_ENDPOINT, S3_REGION, S3_BUCKET, S3_ACCESS_KEY_ID, S3_SECRET_ACCESS_KEY, S3_CDN_URL } from '../dotenv/dotenv.js';
+import { logger } from '../logger/logger.js';
 
 // Initialize S3 Client compatible with DigitalOcean Spaces, AWS S3, Cloudflare R2, MinIO
 export const s3Client = new S3Client({
@@ -32,31 +25,14 @@ export interface CloudUploadOptions {
 export interface UserDocumentUploadOptions {
   buffer: Buffer;
   userId: string; // e.g. "usr_10024"
-  docType:
-  | "PAN"
-  | "AADHAR"
-  | "VOTER_ID"
-  | "PASSPORT"
-  | "DRIVING_LICENSE"
-  | "BANK_STATEMENT"
-  | "CHEQUE"
-  | "GST"
-  | "AVATAR"
-  | "LOGO"
-  | "BANNER";
+  docType: 'PAN' | 'AADHAR' | 'VOTER_ID' | 'PASSPORT' | 'DRIVING_LICENSE' | 'BANK_STATEMENT' | 'CHEQUE' | 'GST' | 'AVATAR' | 'LOGO' | 'BANNER';
   contentType?: string | undefined; // Default: "image/png"
   existingKey?: string | undefined; // Pass old key when updating/re-uploading to delete old file first!
 }
 
 //  Uploads an in-memory Buffer directly to DigitalOcean Spaces / AWS S3 Cloud Storage
 
-export const uploadToCloudStorage = async ({
-  buffer,
-  fileName,
-  contentType,
-  folder = "storage",
-  isPublic = true,
-}: CloudUploadOptions): Promise<string> => {
+export const uploadToCloudStorage = async ({ buffer, fileName, contentType, folder = 'storage', isPublic = true }: CloudUploadOptions): Promise<string> => {
   try {
     const key = folder ? `${folder}/${fileName}` : fileName;
 
@@ -65,19 +41,17 @@ export const uploadToCloudStorage = async ({
       Key: key,
       Body: buffer,
       ContentType: contentType,
-      ACL: isPublic ? "public-read" : "private",
+      ACL: isPublic ? 'public-read' : 'private',
     });
 
     await s3Client.send(command);
 
-    const fileUrl = S3_CDN_URL
-      ? `${S3_CDN_URL.replace(/\/$/, "")}/${key}`
-      : `${S3_ENDPOINT.replace(/\/$/, "")}/${S3_BUCKET}/${key}`;
+    const fileUrl = S3_CDN_URL ? `${S3_CDN_URL.replace(/\/$/, '')}/${key}` : `${S3_ENDPOINT.replace(/\/$/, '')}/${S3_BUCKET}/${key}`;
 
-    logger.info({ key, fileUrl, isPublic }, "File uploaded successfully to Cloud Storage");
+    logger.info({ key, fileUrl, isPublic }, 'File uploaded successfully to Cloud Storage');
     return fileUrl;
   } catch (err) {
-    logger.error({ err, fileName }, "Failed to upload file to Cloud Storage");
+    logger.error({ err, fileName }, 'Failed to upload file to Cloud Storage');
     throw err;
   }
 };
@@ -93,30 +67,21 @@ export const uploadUserDocument = async ({
   buffer,
   userId,
   docType,
-  contentType = "image/png",
+  contentType = 'image/png',
   existingKey,
 }: UserDocumentUploadOptions): Promise<{ key: string; url: string; isPrivate: boolean }> => {
   // 1. Delete previous file if updating/re-uploading
   if (existingKey) {
-    logger.info({ userId, existingKey }, "Deleting previous document version before update...");
+    logger.info({ userId, existingKey }, 'Deleting previous document version before update...');
     await deleteFromCloudStorage(existingKey).catch((err) => {
-      logger.warn({ err, existingKey }, "Could not delete existing file (might not exist)");
+      logger.warn({ err, existingKey }, 'Could not delete existing file (might not exist)');
     });
   }
 
   // 2. Determine folder & privacy
-  const isKyc = [
-    "PAN",
-    "AADHAR",
-    "VOTER_ID",
-    "PASSPORT",
-    "DRIVING_LICENSE",
-    "BANK_STATEMENT",
-    "CHEQUE",
-    "GST",
-  ].includes(docType);
+  const isKyc = ['PAN', 'AADHAR', 'VOTER_ID', 'PASSPORT', 'DRIVING_LICENSE', 'BANK_STATEMENT', 'CHEQUE', 'GST'].includes(docType);
 
-  const subFolder = isKyc ? "kyc" : "profile";
+  const subFolder = isKyc ? 'kyc' : 'profile';
   const folder = `users/${userId}/${subFolder}`;
   const fileName = `${docType.toLowerCase()}-${Date.now()}.png`;
   const key = `${folder}/${fileName}`;
@@ -135,10 +100,7 @@ export const uploadUserDocument = async ({
 
 // Generates a short-lived Presigned URL for viewing private Fintech KYC documents.
 // Default expiration: 900 seconds (15 minutes).
-export const getPresignedUrl = async (
-  key: string,
-  expiresInSeconds = 900
-): Promise<string> => {
+export const getPresignedUrl = async (key: string, expiresInSeconds = 900): Promise<string> => {
   try {
     const command = new GetObjectCommand({
       Bucket: S3_BUCKET,
@@ -146,7 +108,7 @@ export const getPresignedUrl = async (
     });
     return await getSignedUrl(s3Client, command, { expiresIn: expiresInSeconds });
   } catch (err) {
-    logger.error({ err, key }, "Failed to generate presigned URL");
+    logger.error({ err, key }, 'Failed to generate presigned URL');
     throw err;
   }
 };
@@ -159,9 +121,9 @@ export const deleteFromCloudStorage = async (key: string): Promise<void> => {
       Key: key,
     });
     await s3Client.send(command);
-    logger.info({ key }, "File deleted from Cloud Storage");
+    logger.info({ key }, 'File deleted from Cloud Storage');
   } catch (err) {
-    logger.error({ err, key }, "Failed to delete file from Cloud Storage");
+    logger.error({ err, key }, 'Failed to delete file from Cloud Storage');
     throw err;
   }
 };

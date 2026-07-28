@@ -6,13 +6,7 @@ export class AppError extends Error {
   public readonly isOperational: boolean;
   public readonly errors?: unknown;
 
-  constructor(
-    message: string,
-    statusCode: number = StatusCodes.INTERNAL_SERVER_ERROR,
-    errorCode?: string,
-    errors?: unknown,
-    isOperational: boolean = true
-  ) {
+  constructor(message: string, statusCode: number = StatusCodes.INTERNAL_SERVER_ERROR, errorCode?: string, errors?: unknown, isOperational: boolean = true) {
     super(message);
     Object.setPrototypeOf(this, new.target.prototype);
 

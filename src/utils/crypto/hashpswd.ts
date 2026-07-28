@@ -1,4 +1,4 @@
-import { hash, verify } from "argon2";
+import { hash, verify } from 'argon2';
 
 interface HashPasswordProps {
   password: string;

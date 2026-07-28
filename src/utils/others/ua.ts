@@ -1,4 +1,4 @@
-import { UAParser, type IResult } from "ua-parser-js";
+import { UAParser, type IResult } from 'ua-parser-js';
 
 interface ParseUserAgent {
   userAgentString?: string;

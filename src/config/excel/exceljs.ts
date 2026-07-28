@@ -1,4 +1,4 @@
-import { runInWorkerThread } from "../../utils/workerThread/threadRunner.js";
+import { runInWorkerThread } from '../../utils/workerThread/threadRunner.js';
 
 export interface ReportColumn {
   header: string;
@@ -15,11 +15,7 @@ export interface ExcelGeneratorPayload<T extends Record<string, unknown> = Recor
 // Offloads Excel workbook generation to a separate OS Worker Thread (node:worker_threads)
 // to ensure 0ms Event Loop blockage on the main Node.js process.
 
-export const excelReportGenerator = async ({
-  fileName,
-  data,
-  columns,
-}: ExcelGeneratorPayload): Promise<Buffer> => {
+export const excelReportGenerator = async ({ fileName, data, columns }: ExcelGeneratorPayload): Promise<Buffer> => {
   const workerCode = `
     import { parentPort, workerData } from "node:worker_threads";
     import ExcelJS from "exceljs";
@@ -61,4 +57,4 @@ export const excelReportGenerator = async ({
   });
 
   return Buffer.from(resultBuffer);
-}; 
+};

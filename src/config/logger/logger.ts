@@ -60,21 +60,7 @@ const buildLogDoc = (logObj: Record<string, unknown>): Record<string, unknown> =
   }
   const category = (logObj.category as 'HTTP' | 'APP' | 'ERROR') || 'APP';
 
-  const {
-    msg,
-    level,
-    time,
-    pid,
-    hostname,
-    requestId,
-    category: _cat,
-    request,
-    response,
-    err,
-    stack,
-    code,
-    ...restDetails
-  } = logObj;
+  const { msg, level, time, pid, hostname, requestId, category: _cat, request, response, err, stack, code, ...restDetails } = logObj;
 
   const docToSave: Record<string, unknown> = {
     category,
@@ -161,11 +147,11 @@ export const logger = pino(
     timestamp: pino.stdTimeFunctions.isoTime,
     redact: {
       paths: PINO_LOGGER_REDACT,
-      censor: "[REDACTED]",
+      censor: '[REDACTED]',
       remove: false,
     },
   },
-  pino.multistream(streams)
+  pino.multistream(streams),
 );
 
 export type { Logger } from 'pino';

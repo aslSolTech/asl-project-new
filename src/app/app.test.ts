@@ -29,7 +29,7 @@ describe('Global Error Handling & API Response System', () => {
       '/test-error',
       asyncHandler(async () => {
         throw new BadRequestError('Invalid input payload', { field: 'email' });
-      })
+      }),
     );
 
     testApp.get(
@@ -37,14 +37,14 @@ describe('Global Error Handling & API Response System', () => {
       asyncHandler(async () => {
         const schema = z.object({ username: z.string().min(3) });
         schema.parse({ username: 'a' });
-      })
+      }),
     );
 
     testApp.get(
       '/test-uncaught',
       asyncHandler(async () => {
         throw new Error('Database connection failed unexpectedly');
-      })
+      }),
     );
 
     testApp.use(notFoundHandler);

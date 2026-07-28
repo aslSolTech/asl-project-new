@@ -15,7 +15,7 @@ export interface RequestWithUser extends Request {
 }
 
 const FINTECH_SENSITIVE_KEYS = new Set(FINTECH_SENSITIVE_KEY);
-const TOTAL_PAYLOAD_BYTES = (MAX_PAYLOAD_BYTES * MAX_PAYLOAD_BYTES); // 1 MB max payload
+const TOTAL_PAYLOAD_BYTES = MAX_PAYLOAD_BYTES * MAX_PAYLOAD_BYTES; // 1 MB max payload
 
 // PCI-DSS Compliant Credit/Debit Card Number Masking
 const maskCardNumbers = (str: string): string => {

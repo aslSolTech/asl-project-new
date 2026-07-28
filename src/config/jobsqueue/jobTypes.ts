@@ -1,5 +1,5 @@
-import type { ImageCategory } from "../images/imgConfig.js";
-import type { ReportColumn } from "../excel/exceljs.js";
+import type { ImageCategory } from '../images/imgConfig.js';
+import type { ReportColumn } from '../excel/exceljs.js';
 
 export interface EmailJobPayload {
   to: string;
@@ -36,7 +36,7 @@ export interface CompressImagePayload {
 export interface ConvertImageFormatPayload {
   inputPath: string;
   outputPath: string;
-  format: "webp" | "png" | "jpeg" | "avif";
+  format: 'webp' | 'png' | 'jpeg' | 'avif';
 }
 
 export interface ResizeImagePayload {

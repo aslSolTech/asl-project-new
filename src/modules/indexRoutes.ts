@@ -1,9 +1,9 @@
-import { Router } from "express";
+import { Router } from 'express';
 
-import uploadRoutes from "./upload/upload.routes.js";
+import uploadRoutes from './upload/upload.routes.js';
 
 const indexRouter = Router();
 
-indexRouter.use("/upload", uploadRoutes);
+indexRouter.use('/upload', uploadRoutes);
 
 export default indexRouter;

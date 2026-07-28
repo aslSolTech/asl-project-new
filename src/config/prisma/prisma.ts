@@ -1,7 +1,7 @@
-import { MYSQL_CONNECTION_LIMIT, MYSQL_HOST, MYSQL_PORT, MYSQL_PWD, MYSQL_USER, MYSQL_DBNAME, NODE_ENV } from "../dotenv/dotenv.js";
-import { PrismaMariaDb } from "@prisma/adapter-mariadb";
-import { PrismaClient } from "../../generated/prisma/client.js";
-import { logger } from "../logger/logger.js";
+import { MYSQL_CONNECTION_LIMIT, MYSQL_HOST, MYSQL_PORT, MYSQL_PWD, MYSQL_USER, MYSQL_DBNAME, NODE_ENV } from '../dotenv/dotenv.js';
+import { PrismaMariaDb } from '@prisma/adapter-mariadb';
+import { PrismaClient } from '../../generated/prisma/client.js';
+import { logger } from '../logger/logger.js';
 
 const globalForPrisma = globalThis as unknown as {
   prisma?: PrismaClient;
@@ -24,12 +24,11 @@ if (NODE_ENV === 'development') globalForPrisma.prisma = prisma;
 export const connectMySQL = async (): Promise<void> => {
   try {
     await prisma.$connect();
-    logger.info("Mariadb/MySQL connection established successfully!");
+    logger.info('Mariadb/MySQL connection established successfully!');
   } catch (error) {
     logger.error(`Mariadb/MySQL connection failed: ${error}`);
     throw error;
   }
 };
-
 
 export { prisma };

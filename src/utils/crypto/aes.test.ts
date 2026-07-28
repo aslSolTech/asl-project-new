@@ -14,8 +14,6 @@ describe('AES-256-GCM Encryption / Decryption Module', () => {
   });
 
   it('should throw an error for malformed ciphertext payload', () => {
-    expect(() => decryptAES('invalid_ciphertext_without_authtag')).toThrowError(
-      'Invalid encrypted data payload: Missing authentication tag'
-    );
+    expect(() => decryptAES('invalid_ciphertext_without_authtag')).toThrowError('Invalid encrypted data payload: Missing authentication tag');
   });
 });

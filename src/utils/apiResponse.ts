@@ -31,7 +31,7 @@ export class ApiResponse {
       message?: string;
       data?: T;
       meta?: Record<string, unknown>;
-    } = {}
+    } = {},
   ): Response {
     return res.status(statusCode).json({
       status: true,
@@ -56,7 +56,7 @@ export class ApiResponse {
       message?: string;
       error?: ApiErrorDetail;
       meta?: Record<string, unknown>;
-    } = {}
+    } = {},
   ): Response {
     return res.status(statusCode).json({
       status: false,

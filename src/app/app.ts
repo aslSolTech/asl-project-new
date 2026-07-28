@@ -36,13 +36,13 @@ app.use(getStatusMonitorMiddleware(io));
 app.set('trust proxy', 1);
 
 // Secure HTTP Headers (XSS, Clickjacking, Hide X-Powered-By)
-app.use(helmet()); 
+app.use(helmet());
 
 // Rate Limiting Protection against DDoS / Brute-force
-app.use(globalLimiter); 
+app.use(globalLimiter);
 
 // Structured Request Logger
-app.use(httpLogger); 
+app.use(httpLogger);
 
 // HTTP Request Logging (Dev mode - detailed)
 app.use(morgan('dev'));
@@ -95,11 +95,7 @@ app.get(`${API_BASE_URL}/health-check`, async (_req: Request, res: Response) => 
   const activeSocketConnections = io.engine ? io.engine.clientsCount : 0;
 
   const isHealthy =
-    redisStatus === 'CONNECTED' &&
-    mysqlStatus === 'CONNECTED' &&
-    mongodbStatus === 'CONNECTED' &&
-    bullmqStatus.status === 'RUNNING' &&
-    socketStatus === 'CONNECTED';
+    redisStatus === 'CONNECTED' && mysqlStatus === 'CONNECTED' && mongodbStatus === 'CONNECTED' && bullmqStatus.status === 'RUNNING' && socketStatus === 'CONNECTED';
 
   ApiResponse.success(res, {
     message: 'Backend Services Health Check',
