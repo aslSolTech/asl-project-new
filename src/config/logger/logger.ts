@@ -24,7 +24,10 @@ const getLogLevelName = (level: unknown): string => {
   if (typeof level === 'number') {
     return levelMap[level] || String(level);
   }
-  return String(level || 'info');
+  if (typeof level === 'string') {
+    return level;
+  }
+  return 'info';
 };
 
 // Helper to extract error details without deep condition nesting
@@ -38,8 +41,8 @@ const extractErrorDetails = (logObj: Record<string, unknown>): Record<string, un
 
   if (typeof stack === 'string') {
     errorDetails.stack = stack;
-  } else if (err && typeof err === 'object' && 'stack' in err && err.stack) {
-    errorDetails.stack = String(err.stack);
+  } else if (err && typeof err === 'object' && 'stack' in err && typeof err.stack === 'string') {
+    errorDetails.stack = err.stack;
   }
 
   return Object.keys(errorDetails).length > 0 ? errorDetails : null;
@@ -48,7 +51,13 @@ const extractErrorDetails = (logObj: Record<string, unknown>): Record<string, un
 // Helper to build document for MongoDB log storage
 const buildLogDoc = (logObj: Record<string, unknown>): Record<string, unknown> => {
   const levelName = getLogLevelName(logObj.level);
-  const message = String(logObj.msg || logObj.message || 'Log Event');
+  const rawMsg = logObj.msg ?? logObj.message;
+  let message = 'Log Event';
+  if (typeof rawMsg === 'string') {
+    message = rawMsg;
+  } else if (typeof rawMsg === 'number') {
+    message = String(rawMsg);
+  }
   const category = (logObj.category as 'HTTP' | 'APP' | 'ERROR') || 'APP';
 
   const {

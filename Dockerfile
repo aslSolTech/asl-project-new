@@ -8,7 +8,7 @@ RUN apk add --no-cache openssl libc6-compat
 COPY package*.json ./
 COPY prisma ./prisma/
 
-RUN npm ci
+RUN npm ci --ignore-scripts
 
 # Stage 2: Builder
 FROM node:22-alpine AS builder
@@ -20,7 +20,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Generate Prisma Client & compile TypeScript to JS
-RUN npx prisma generate
+RUN ./node_modules/.bin/prisma generate
 RUN npm run build
 
 # Prune devDependencies to keep final production image minimal

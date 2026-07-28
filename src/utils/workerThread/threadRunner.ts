@@ -51,7 +51,19 @@ export const runInWorkerThread = <T = unknown>({
       if (timer) clearTimeout(timer);
 
       if (message && typeof message === "object" && "error" in message) {
-        const errMsg = String((message as Record<string, unknown>).error || "Worker Thread Error");
+        const errVal = (message as Record<string, unknown>).error;
+        let errMsg = "Worker Thread Error";
+
+        if (typeof errVal === "string") {
+          errMsg = errVal;
+        } else if (errVal instanceof Error) {
+          errMsg = errVal.message;
+        } else if (errVal && typeof errVal === "object" && "message" in errVal && typeof (errVal as { message: unknown }).message === "string") {
+          errMsg = (errVal as { message: string }).message;
+        } else if (errVal) {
+          errMsg = JSON.stringify(errVal);
+        }
+
         reject(new Error(errMsg));
       } else {
         resolve(message as T);
