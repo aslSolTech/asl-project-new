@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from 'express';
-import { randomUUID } from 'crypto';
+import { randomUUID } from 'node:crypto';
 import { logger } from '../../config/logger/logger.js';
 import { FINTECH_SENSITIVE_KEY, MAX_PAYLOAD_BYTES } from '../../config/dotenv/dotenv.js';
 

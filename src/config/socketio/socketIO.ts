@@ -1,9 +1,9 @@
 import { Server as SocketIOServer } from 'socket.io';
-import type { Server as HTTPServer } from 'http';
+import type { Server as HTTPServer } from 'node:http';
 import { CORS_OPTIONS } from '../dotenv/dotenv.js';
 import { logger } from '../logger/logger.js';
 
-export let io: SocketIOServer;
+let io: SocketIOServer;
 
 export const initSocketIO = (httpServer: HTTPServer): SocketIOServer => {
   io = new SocketIOServer(httpServer, {
@@ -18,5 +18,12 @@ export const initSocketIO = (httpServer: HTTPServer): SocketIOServer => {
     });
   });
 
+  return io;
+};
+
+export const getIO = (): SocketIOServer => {
+  if (!io) {
+    throw new Error('Socket.io has not been initialized! Call initSocketIO(httpServer) first.');
+  }
   return io;
 };

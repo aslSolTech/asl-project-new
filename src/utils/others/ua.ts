@@ -1,12 +1,12 @@
 import { UAParser, type IResult } from "ua-parser-js";
 
-interface parseUserAgentProps {
+interface ParseUserAgent {
   userAgentString?: string;
 }
 
 export type parseUserAgentResult = IResult;
 
-export const parseUserAgent = ({ userAgentString }: parseUserAgentProps = {}): parseUserAgentResult => {
+export const parseUserAgent = ({ userAgentString }: ParseUserAgent = {}): parseUserAgentResult => {
   const parser = new UAParser(userAgentString);
   return parser.getResult();
 };

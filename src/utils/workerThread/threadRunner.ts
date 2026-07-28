@@ -6,7 +6,7 @@ import { MAX_WORKER_THREADS } from "../../config/dotenv/dotenv.js";
 export interface ThreadRunnerOptions {
   workerCode?: string;
   scriptPath?: string;
-  workerData?: Record<string, unknown> | unknown;
+  workerData?: Record<string, unknown>
   timeoutMs?: number; // Default: 60,000ms (1 min)
   threadCount?: number; // Default: 1
 }

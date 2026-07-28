@@ -1,4 +1,5 @@
 import type { ImageCategory } from "../images/imgConfig.js";
+import type { ReportColumn } from "../excel/exceljs.js";
 
 export interface EmailJobPayload {
   to: string;
@@ -8,10 +9,10 @@ export interface EmailJobPayload {
   attachments?: Array<{ filename: string; path?: string; content?: unknown }>;
 }
 
-export interface ExcelReportPayload {
+export interface ExcelReportPayload<T extends Record<string, unknown> = Record<string, unknown>> {
   fileName: string;
-  data: Array<Record<string, any>>;
-  columns: Array<Record<string, unknown>>;
+  data: Array<T>;
+  columns: Array<ReportColumn>;
 }
 
 export interface PdfReportPayload {
@@ -20,9 +21,9 @@ export interface PdfReportPayload {
   content: string;
 }
 
-export interface CsvReportPayload {
+export interface CsvReportPayload<T extends Record<string, unknown> = Record<string, unknown>> {
   fileName: string;
-  data: Array<Record<string, any>>;
+  data: Array<T>;
   columns?: string[];
 }
 
@@ -84,3 +85,6 @@ export interface MediaJobDataMap {
 export type EmailJobType = keyof EmailJobDataMap;
 export type ReportJobType = keyof ReportJobDataMap;
 export type MediaJobType = keyof MediaJobDataMap;
+
+export interface AllJobDataMap extends EmailJobDataMap, ReportJobDataMap, MediaJobDataMap {}
+export type JobType = keyof AllJobDataMap;

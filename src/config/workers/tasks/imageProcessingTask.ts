@@ -15,8 +15,12 @@ async function runTask() {
   parentPort.postMessage(Buffer.from(processedBuffer));
 }
 
-runTask().catch((err) => {
+try {
+  await runTask();
+} catch (err) {
   if (parentPort) {
-    parentPort.postMessage({ error: err instanceof Error ? err.message : String(err) });
+    parentPort.postMessage({
+      error: err instanceof Error ? err.message : String(err),
+    });
   }
-});
+}

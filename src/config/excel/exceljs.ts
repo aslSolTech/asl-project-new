@@ -6,9 +6,9 @@ export interface ReportColumn {
   width?: number;
 }
 
-export interface ExcelGeneratorPayload {
+export interface ExcelGeneratorPayload<T extends Record<string, unknown> = Record<string, unknown>> {
   fileName: string;
-  data: Array<Record<string, any>>;
+  data: Array<T>;
   columns: Array<ReportColumn>;
 }
 

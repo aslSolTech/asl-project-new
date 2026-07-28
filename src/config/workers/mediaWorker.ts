@@ -27,7 +27,7 @@ export const mediaWorker = new Worker<MediaJobPayload>(
       case "watermarkAndUploadImage": {
         const {
           imageBufferBase64,
-          category,
+          category = "GALLERY",
           userId,
           location,
           timestamp,
@@ -38,7 +38,7 @@ export const mediaWorker = new Worker<MediaJobPayload>(
         } = job.data as WatermarkAndUploadPayload;
 
         const rawBuffer = Buffer.from(imageBufferBase64, "base64");
-        const currentCategory = category || "GALLERY";
+        const currentCategory = category;
 
         // 1. Offload heavy Sharp watermarking & PNG conversion to node:worker_threads OS Thread!
         const processedPngBuffer = await processImageInWorkerThread({

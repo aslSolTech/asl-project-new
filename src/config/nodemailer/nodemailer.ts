@@ -14,6 +14,7 @@ interface TransportOptions {
     user: string;
     pass: string;
   };
+  secure: boolean;
 }
 
 const transportOptions: TransportOptions = {
@@ -22,6 +23,7 @@ const transportOptions: TransportOptions = {
     user: GMAIL_ID,
     pass: GMAIL_APP_PASSWORD,
   },
+  secure: true,
 };
 
 const transporter = createTransport(transportOptions);

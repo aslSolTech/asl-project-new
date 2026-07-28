@@ -6,6 +6,7 @@ const isProd = process.env.NODE_ENV === 'production';
 const envSchema = z.object({
   PORT: z.coerce.number().default(3000),
   IP_BINDING: z.string().default('0.0.0.0'),
+  DNS_IP_ADDRESS: z.string().default('localhost'),
   NODE_ENV: z.enum(['development', 'staging', 'production', 'test']).default('development'),
   API_PREFIX: z.string().default('/api'),
   API_VERSION: z.coerce.number().default(1.0),
@@ -47,8 +48,8 @@ const envSchema = z.object({
     }, z.boolean())
     .default(true),
   GMAIL_ID: isProd
-    ? z.string().email('GMAIL_ID must be a valid email in production')
-    : z.string().email().or(z.literal('')).default(''),
+    ? z.email('GMAIL_ID must be a valid email in production')
+    : z.email().or(z.literal('')).default(''),
   GMAIL_APP_PASSWORD: z.string().default(''),
   S3_ENDPOINT: z.string().default('https://nyc3.digitaloceanspaces.com'),
   S3_REGION: z.string().default('nyc3'),
@@ -76,6 +77,7 @@ export const MYSQL_PWD = env.MYSQL_PWD;
 export const MYSQL_CONNECTION_LIMIT = env.MYSQL_CONNECTION_LIMIT;
 export const API_PORT = env.PORT;
 export const IP_BINDING = env.IP_BINDING;
+export const DNS_IP_ADDRESS = env.DNS_IP_ADDRESS.split(',');
 export const CORS_ORIGIN = env.CORS_ORIGIN?.split(',') || ['*'];
 export const NODE_ENV = env.NODE_ENV;
 export const JWT_SECRET = env.JWT_SECRET;

@@ -1,5 +1,5 @@
 import pino from 'pino';
-import { Writable } from 'stream';
+import { Writable } from 'node:stream';
 import { NODE_ENV, PINO_LOGGER_REDACT } from '../dotenv/dotenv.js';
 import { getMonthlyLogModel } from '../mongodb/mongodb.js';
 
@@ -19,58 +19,81 @@ const levelMap: Record<number, string> = {
   60: 'fatal',
 };
 
+// Helper to get level string name from Pino level number or string
+const getLogLevelName = (level: unknown): string => {
+  if (typeof level === 'number') {
+    return levelMap[level] || String(level);
+  }
+  return String(level || 'info');
+};
+
+// Helper to extract error details without deep condition nesting
+const extractErrorDetails = (logObj: Record<string, unknown>): Record<string, unknown> | null => {
+  const { code, stack, err } = logObj;
+  const errorDetails: Record<string, unknown> = {};
+
+  if (typeof code === 'string') {
+    errorDetails.code = code;
+  }
+
+  if (typeof stack === 'string') {
+    errorDetails.stack = stack;
+  } else if (err && typeof err === 'object' && 'stack' in err && err.stack) {
+    errorDetails.stack = String(err.stack);
+  }
+
+  return Object.keys(errorDetails).length > 0 ? errorDetails : null;
+};
+
+// Helper to build document for MongoDB log storage
+const buildLogDoc = (logObj: Record<string, unknown>): Record<string, unknown> => {
+  const levelName = getLogLevelName(logObj.level);
+  const message = String(logObj.msg || logObj.message || 'Log Event');
+  const category = (logObj.category as 'HTTP' | 'APP' | 'ERROR') || 'APP';
+
+  const {
+    msg,
+    level,
+    time,
+    pid,
+    hostname,
+    requestId,
+    category: _cat,
+    request,
+    response,
+    err,
+    stack,
+    code,
+    ...restDetails
+  } = logObj;
+
+  const docToSave: Record<string, unknown> = {
+    category,
+    level: levelName,
+    message,
+  };
+
+  if (typeof requestId === 'string') docToSave.requestId = requestId;
+  if (request && typeof request === 'object') docToSave.request = request;
+  if (response && typeof response === 'object') docToSave.response = response;
+
+  const errorDetails = extractErrorDetails(logObj);
+  if (errorDetails) {
+    docToSave.errorDetails = errorDetails;
+  }
+
+  if (Object.keys(restDetails).length > 0) {
+    docToSave.metadata = restDetails;
+  }
+
+  return docToSave;
+};
+
 // Asynchronously save log entry to current month's MongoDB collection (logs_YYYY_MM)
 export const saveLogToMongo = (logObj: Record<string, unknown>): void => {
   setImmediate(async () => {
     try {
-      const levelNum = typeof logObj.level === 'number' ? logObj.level : 30;
-      const levelName = levelMap[levelNum] || String(logObj.level || 'info');
-      const message = String(logObj.msg || logObj.message || 'Log Event');
-      const category = (logObj.category as 'HTTP' | 'APP' | 'ERROR') || 'APP';
-
-      const {
-        msg,
-        level,
-        time,
-        pid,
-        hostname,
-        requestId,
-        category: _cat,
-        request,
-        response,
-        err,
-        stack,
-        code,
-        ...restDetails
-      } = logObj;
-
-      const docToSave: Record<string, unknown> = {
-        category,
-        level: levelName,
-        message,
-      };
-
-      if (typeof requestId === 'string') docToSave.requestId = requestId;
-      if (request && typeof request === 'object') docToSave.request = request;
-      if (response && typeof response === 'object') docToSave.response = response;
-
-      if (typeof stack === 'string' || typeof code === 'string' || (err && typeof err === 'object')) {
-        const errorDetails: Record<string, unknown> = {};
-        if (typeof code === 'string') errorDetails.code = code;
-        if (typeof stack === 'string') {
-          errorDetails.stack = stack;
-        } else if (err && typeof err === 'object' && 'stack' in (err as Record<string, unknown>)) {
-          errorDetails.stack = String((err as Record<string, unknown>).stack);
-        }
-        if (Object.keys(errorDetails).length > 0) {
-          docToSave.errorDetails = errorDetails;
-        }
-      }
-
-      if (Object.keys(restDetails).length > 0) {
-        docToSave.metadata = restDetails;
-      }
-
+      const docToSave = buildLogDoc(logObj);
       const LogModel = getMonthlyLogModel(new Date());
       await LogModel.create(docToSave);
     } catch {
@@ -114,10 +137,17 @@ if (!isTest) {
   }
 }
 
+// Determine log level based on environment
+const getLogLevel = (): string => {
+  if (isTest) return 'silent';
+  if (isDev) return 'debug';
+  return 'info';
+};
+
 // Pino logger instance
 export const logger = pino(
   {
-    level: isTest ? 'silent' : isDev ? 'debug' : 'info',
+    level: getLogLevel(),
     base: isProduction || isStaging ? { pid: process.pid } : null,
     timestamp: pino.stdTimeFunctions.isoTime,
     redact: {

@@ -8,6 +8,8 @@ import type {
   ReportJobType,
   MediaJobDataMap,
   MediaJobType,
+  AllJobDataMap,
+  JobType,
 } from "./jobTypes.js";
 
 const defaultJobOptions: JobsOptions = {
@@ -16,8 +18,8 @@ const defaultJobOptions: JobsOptions = {
     type: "exponential",
     delay: 5000,
   },
-  removeOnComplete: 1000,
-  removeOnFail: 500,
+  removeOnComplete: 500,
+  removeOnFail: 1000,
 };
 
 // Dedicated Queues for Workload Isolation
@@ -43,8 +45,8 @@ const isRedisAvailable = (): boolean => {
   return redis.status === "ready" || redis.status === "connecting";
 };
 
-// Dispatcher Helpers
-export const addEmailJob = async <T extends EmailJobType>(
+// Private Internal Dispatcher Helpers
+const addEmailJob = async <T extends EmailJobType>(
   type: T,
   data: EmailJobDataMap[T],
   opts?: JobsOptions
@@ -60,7 +62,7 @@ export const addEmailJob = async <T extends EmailJobType>(
   }
 };
 
-export const addReportJob = async <T extends ReportJobType>(
+const addReportJob = async <T extends ReportJobType>(
   type: T,
   data: ReportJobDataMap[T],
   opts?: JobsOptions
@@ -76,7 +78,7 @@ export const addReportJob = async <T extends ReportJobType>(
   }
 };
 
-export const addMediaJob = async <T extends MediaJobType>(
+const addMediaJob = async <T extends MediaJobType>(
   type: T,
   data: MediaJobDataMap[T],
   opts?: JobsOptions
@@ -92,11 +94,23 @@ export const addMediaJob = async <T extends MediaJobType>(
   }
 };
 
-// Backward-compatible addJob wrapper
-export const addJob = async (type: string, data: unknown): Promise<void> => {
-  if (type in ({ sendEmail: true } as Record<string, boolean>)) {
-    await addEmailJob("sendEmail", data as any);
+// Generic universal job dispatcher wrapper
+export const addJob = async <K extends JobType>(
+  type: K,
+  data: AllJobDataMap[K],
+  opts?: JobsOptions
+): Promise<void> => {
+  if (type === "sendEmail") {
+    await addEmailJob(type as EmailJobType, data as EmailJobDataMap[EmailJobType], opts);
+  } else if (
+    type === "compressImage" ||
+    type === "convertImageFormat" ||
+    type === "resizeImage" ||
+    type === "createZipArchive" ||
+    type === "watermarkAndUploadImage"
+  ) {
+    await addMediaJob(type as MediaJobType, data as MediaJobDataMap[MediaJobType], opts);
   } else {
-    await addReportJob(type as ReportJobType, data as any);
+    await addReportJob(type as ReportJobType, data as ReportJobDataMap[ReportJobType], opts);
   }
 };

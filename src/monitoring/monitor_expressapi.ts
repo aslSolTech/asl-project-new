@@ -1,10 +1,11 @@
 import statusMonitor from 'express-status-monitor';
 import { Server as SocketIOServer } from 'socket.io';
+import { API_BASE_URL } from '../config/dotenv/dotenv.js';
 
 export const getStatusMonitorMiddleware = (io?: SocketIOServer) => {
   return statusMonitor({
     title: 'Backend API Status Monitor',
-    path: '/status',
+    path: `${API_BASE_URL}/status`,
     socketPath: '/socket.io',
     websocket: io ?? null,
     spans: [

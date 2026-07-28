@@ -1,9 +1,9 @@
-import http from 'http';
+import http from 'node:http';
 import express, { type Request, type Response } from 'express';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import cors from 'cors';
-import { CORS_OPTIONS } from '../config/dotenv/dotenv.js';
+import { API_BASE_URL, CORS_OPTIONS } from '../config/dotenv/dotenv.js';
 import { httpLogger } from '../middlewares/logger/httpLogger.js';
 import { globalLimiter } from '../middlewares/ratelimiter/rateLimiter.js';
 import { connectMongoDB } from '../config/mongodb/mongodb.js';
@@ -16,6 +16,7 @@ import { notFoundHandler } from '../middlewares/errorhandler/notFoundHandler.js'
 import { ApiResponse } from '../utils/apiResponse.js';
 import { getStatusMonitorMiddleware } from '../monitoring/monitor_expressapi.js';
 import { initSocketIO } from '../config/socketio/socketio.js';
+import indexRouter from '../modules/indexRoutes.js';
 
 // Express app
 const app = express();
@@ -61,7 +62,7 @@ await connectMongoDB();
 startAllWorkers();
 
 // Health Check / Root route with MySQL, Redis, MongoDB, and BullMQ Workers Status
-app.get('/', async (_req: Request, res: Response) => {
+app.get(`${API_BASE_URL}/health-check`, async (_req: Request, res: Response) => {
   let redisStatus = 'DISCONNECTED';
   let mysqlStatus = 'DISCONNECTED';
   let mongodbStatus = mongoose.connection.readyState === 1 ? 'CONNECTED' : 'DISCONNECTED';
@@ -112,10 +113,13 @@ app.get('/', async (_req: Request, res: Response) => {
         status: socketStatus,
         activeConnections: activeSocketConnections,
       },
-      statusMonitor: '/status',
+      statusMonitor: `${_req.protocol}://${_req.get('host')}${API_BASE_URL}/status`,
     },
   });
 });
+
+// API Routes
+app.use(`${API_BASE_URL}`, indexRouter);
 
 // 404 handler for unmatched routes
 app.use(notFoundHandler);

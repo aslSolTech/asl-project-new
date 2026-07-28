@@ -1,11 +1,11 @@
 import dns from 'node:dns';
 import mongoose, { Schema, type Document, type Model } from 'mongoose';
-import { MONGODB_URI } from '../dotenv/dotenv.js';
+import { MONGODB_URI, DNS_IP_ADDRESS } from '../dotenv/dotenv.js';
 import { logger } from '../logger/logger.js';
 
 // Fix querySrv ECONNREFUSED caused by local ISP DNS blocking MongoDB Atlas SRV lookup
 try {
-  dns.setServers(['8.8.8.8', '1.1.1.1']);
+  dns.setServers(DNS_IP_ADDRESS);
 } catch {
   // Ignore if custom dns set is unavailable
 }
