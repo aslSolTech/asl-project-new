@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import { addJob } from '../../config/jobsqueue/bullmqConfig.js';
-import { uploadToCloudStorage, uploadUserDocument, getPresignedUrl } from '../../config/storage/s3Storage.js';
+import { uploadToCloudStorage, uploadUserDocument } from '../../config/storage/s3Storage.js';
 
 /**
  * 1. Image Upload Controller (Queue + Sharp Worker Thread + S3)
@@ -90,25 +90,5 @@ export const uploadDocumentController = async (req: Request, res: Response) => {
     key: result.key,
     url: result.url,
     isPrivate: result.isPrivate,
-  });
-};
-
-/**
- * 4. Get Presigned URL for Private KYC Document
- * Route: GET /api/v1/upload/document/presigned-url?key=users/usr_100/kyc/pan-123.png
- */
-export const getDocumentPresignedUrlController = async (req: Request, res: Response) => {
-  const { key } = req.query;
-
-  if (!key || typeof key !== 'string') {
-    return res.status(400).json({ status: false, message: 'Document S3 key is required' });
-  }
-
-  // Generate temporary S3 presigned URL valid for 15 minutes (900 seconds)
-  const presignedUrl = await getPresignedUrl(key, 900);
-
-  return res.status(200).json({
-    status: true,
-    presignedUrl,
   });
 };

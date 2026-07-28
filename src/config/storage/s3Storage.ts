@@ -1,5 +1,4 @@
-import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { S3_ENDPOINT, S3_REGION, S3_BUCKET, S3_ACCESS_KEY_ID, S3_SECRET_ACCESS_KEY, S3_CDN_URL } from '../dotenv/dotenv.js';
 import { logger } from '../logger/logger.js';
 
@@ -96,21 +95,6 @@ export const uploadUserDocument = async ({
   });
 
   return { key, url, isPrivate: isKyc };
-};
-
-// Generates a short-lived Presigned URL for viewing private Fintech KYC documents.
-// Default expiration: 900 seconds (15 minutes).
-export const getPresignedUrl = async (key: string, expiresInSeconds = 900): Promise<string> => {
-  try {
-    const command = new GetObjectCommand({
-      Bucket: S3_BUCKET,
-      Key: key,
-    });
-    return await getSignedUrl(s3Client, command, { expiresIn: expiresInSeconds });
-  } catch (err) {
-    logger.error({ err, key }, 'Failed to generate presigned URL');
-    throw err;
-  }
 };
 
 // Deletes a file from Cloud Storage
