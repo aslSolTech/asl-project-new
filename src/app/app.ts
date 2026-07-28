@@ -51,8 +51,8 @@ app.use(morgan('dev'));
 app.use(cors(CORS_OPTIONS));
 
 // Body Parsing Middleware
-app.use(express.json({ limit: '10kb' }));
-app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+app.use(express.json({ limit: '50kb' }));
+app.use(express.urlencoded({ extended: true, limit: '100kb' }));
 
 // Connect MongoDB/MySQL
 await connectMySQL();
