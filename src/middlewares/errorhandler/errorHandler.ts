@@ -57,7 +57,19 @@ export const errorHandler: ErrorRequestHandler = (
     message = 'Authentication token has expired';
     errorCode = 'TOKEN_EXPIRED';
     isOperational = true;
+  // 5. Other Generic Errors (Axios/Third-Party/Standard Errors)
+  } else {
+    const extractedMessage =
+      (err as any)?.response?.data?.message ||
+      (err as any)?.response?.message ||
+      err?.message;
+
+    if (extractedMessage) {
+      message = extractedMessage;
+    }
   }
+
+  const finalMessage = message && message !== 'Internal Server Error' ? message : ((err as any)?.response?.data?.message || (err as any)?.response?.message || err?.message || 'Something went wrong');
 
   // Log error with Pino
   if (!isOperational || statusCode >= 500) {
@@ -69,7 +81,7 @@ export const errorHandler: ErrorRequestHandler = (
         ip: req.ip,
         stack: err.stack,
       },
-      `[Unhandled Exception] ${message}`,
+      `[Unhandled Exception] ${finalMessage}`,
     );
   } else {
     logger.warn(
@@ -78,23 +90,23 @@ export const errorHandler: ErrorRequestHandler = (
         method: req.method,
         statusCode,
         errorCode,
-        message,
+        message: finalMessage,
       },
-      `[Operational Exception] ${message}`,
+      `[Operational Exception] ${finalMessage}`,
     );
   }
 
   // Construct response payload
   const errorDetail = {
     code: errorCode,
-    message,
+    message: finalMessage,
     ...(details !== undefined && { details }),
     ...(NODE_ENV === 'development' && { stack: err.stack }),
   };
 
   ApiResponse.error(res, {
     statusCode,
-    message: isOperational || NODE_ENV === 'development' ? message : 'Something went wrong',
+    message: finalMessage,
     error: errorDetail,
   });
 };
