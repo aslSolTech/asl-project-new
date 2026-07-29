@@ -134,7 +134,6 @@ const addWatermarkToImage = async ({
 };
 
 
-
 /**
  * Smart Image Processor:
  * - AADHAR, PAN, VOTER_ID, PASSPORT, BANK_STATEMENT, LOGO, BANNER, AVATAR:
@@ -177,7 +176,6 @@ export const processImageForUpload = async ({
   // KYC Docs, Logos, Banners, Avatars (No Watermark — direct optimize & PNG conversion)
   return await convertToPng(imageBuffer);
 };
-
 
 
 // Offloads heavy Sharp Image Processing / Watermarking to a separate OS Worker Thread (node:worker_threads)
