@@ -1,0 +1,90 @@
+services:
+  backend:
+
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+
+    container_name: payzones_backend_dev
+
+    restart: unless-stopped
+
+    ports:
+      - "5000:5000"
+
+    env_file:
+      - .env
+
+    environment:
+      NODE_ENV: development
+
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+
+      MYSQL_HOST: mariadb
+      MYSQL_PORT: 3306
+
+      MONGODB_URI: mongodb://mongodb:27017/payzones_logs
+
+    volumes:
+      - .:/app
+      - dev_node_modules:/app/node_modules
+
+    command: npm run dev
+
+    depends_on:
+      - redis
+      - mariadb
+      - mongodb
+
+    networks:
+      - payzones_net
+
+  redis:
+    image: redis:8.2-alpine
+    container_name: payzones_redis_dev
+    ports:
+      - "6379:6379"
+    networks:
+      - payzones_net
+
+  mariadb:
+    image: mariadb:12.3
+    container_name: payzones_mariadb_dev
+    ports:
+      - "3307:3306"
+    environment:
+      MARIADB_ROOT_PASSWORD: rootpassword
+      MARIADB_DATABASE: payzones_db
+      MARIADB_USER: payzones_user
+      MARIADB_PASSWORD: payzones_password
+    networks:
+      - payzones_net
+
+  mongodb:
+    image: mongo:8.0.13
+    container_name: payzones_mongodb_dev
+    ports:
+      - "27017:27017"
+    networks:
+      - payzones_net
+
+  phpmyadmin:
+    image: phpmyadmin:5.2.2-apache
+    container_name: payzones_phpmyadmin_dev
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mariadb
+      PMA_PORT: 3306
+    depends_on:
+      - mariadb
+    networks:
+      - payzones_net
+
+networks:
+  payzones_net:
+    driver: bridge
+
+volumes:
+  dev_node_modules:

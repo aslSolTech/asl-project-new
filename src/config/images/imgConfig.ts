@@ -20,7 +20,8 @@ export interface WatermarkOptions {
 }
 
 export interface ProcessImageOptions {
-  imageBuffer: Buffer;
+  imageBuffer?: Buffer | undefined;
+  imageBufferBase64?: string | undefined;
   category?: ImageCategory | undefined;
   userId?: string | undefined;
   location?: string | undefined;
@@ -33,21 +34,12 @@ export interface ProcessImageOptions {
 }
 
 // 1. Convert any image Buffer to PNG in memory (No Watermark)
-export const convertToPng = async (inputBuffer: Buffer): Promise<Buffer> => {
+const convertToPng = async (inputBuffer: Buffer): Promise<Buffer> => {
   return await sharp(inputBuffer).png().toBuffer();
 };
 
-export const convertToWebp = async (inputBuffer: Buffer, quality = 80): Promise<Buffer> => {
-  return await sharp(inputBuffer).webp({ quality }).toBuffer();
-};
-
-// 2. Generate Thumbnail (Resize) in memory
-export const createThumbnail = async (inputBuffer: Buffer, width = 300, height = 300): Promise<Buffer> => {
-  return await sharp(inputBuffer).resize(width, height, { fit: 'cover' }).png().toBuffer();
-};
-
-// 3. Dynamic Watermark Generator (with date-fns, User ID, and Location)
-export const addWatermarkToImage = async ({
+// 2. Dynamic Watermark Generator (with date-fns, User ID, and Location)
+const addWatermarkToImage = async ({
   imageBuffer,
   watermarkBuffer,
   watermarkText = '© My App',
@@ -141,6 +133,8 @@ export const addWatermarkToImage = async ({
   }
 };
 
+
+
 /**
  * Smart Image Processor:
  * - AADHAR, PAN, VOTER_ID, PASSPORT, BANK_STATEMENT, LOGO, BANNER, AVATAR:
@@ -163,6 +157,10 @@ export const processImageForUpload = async ({
 
   const shouldWatermark = skipWatermark !== undefined ? !skipWatermark : !isKycOrBrandDoc;
 
+  if (!imageBuffer) {
+    throw new Error('imageBuffer is required in processImageForUpload fn!');
+  }
+
   if (shouldWatermark) {
     return await addWatermarkToImage({
       imageBuffer,
@@ -180,16 +178,23 @@ export const processImageForUpload = async ({
   return await convertToPng(imageBuffer);
 };
 
+
+
 // Offloads heavy Sharp Image Processing / Watermarking to a separate OS Worker Thread (node:worker_threads)
 // WITHOUT ANY CODE DUPLICATION — reusing processImageForUpload directly in the worker task.
 
 export const processImageInWorkerThread = async (options: ProcessImageOptions): Promise<Buffer> => {
-  const scriptPath = path.resolve(process.cwd(), 'dist/config/workers/tasks/imageProcessingTask.js');
 
+  // These path (scriptPath / fallbackScriptPath) helps = Completely isolated, new OS CPU core execution (Non-blocking / Fast).
+  const scriptPath = path.resolve(process.cwd(), 'dist/config/workers/tasks/imageProcessingTask.js');
   const fallbackScriptPath = path.resolve(process.cwd(), 'src/config/workers/tasks/imageProcessingTask.ts');
 
-  const imageBufferBase64 = options.imageBuffer.toString('base64');
+  const imageBufferBase64 = options.imageBufferBase64 || options.imageBuffer?.toString('base64');
 
+  if (!imageBufferBase64) {
+    throw new Error('Either imageBuffer or imageBufferBase64 must be provided to processImageInWorkerThread');
+  }
+  // 
   const resultBuffer = await runInWorkerThread<Buffer>({
     scriptPath: process.env['NODE_ENV'] === 'production' ? scriptPath : fallbackScriptPath,
     workerData: {

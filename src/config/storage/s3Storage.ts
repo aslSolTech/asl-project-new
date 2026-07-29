@@ -29,8 +29,7 @@ export interface UserDocumentUploadOptions {
   existingKey?: string | undefined; // Pass old key when updating/re-uploading to delete old file first!
 }
 
-//  Uploads an in-memory Buffer directly to DigitalOcean Spaces / AWS S3 Cloud Storage
-
+//  Uploads to DO Spaces/S3 Compatible Storage and public upload only
 export const uploadToCloudStorage = async ({ buffer, fileName, contentType, folder = 'storage', isPublic = true }: CloudUploadOptions): Promise<string> => {
   try {
     const key = folder ? `${folder}/${fileName}` : fileName;
@@ -58,8 +57,7 @@ export const uploadToCloudStorage = async ({ buffer, fileName, contentType, fold
 /**
  * User Onboarding Document Manager:
  * 1. Stores files in User-Specific Folder: `users/{userId}/{kyc|profile}/{docType}.png`
- * 2. Automatic Lifecycle Update: If re-uploading/updating (existingKey provided),
- *    automatically DELETES the old file from Cloud Storage first!
+ * 2. If re-uploading/updating (existingKey provided), auto-deletes the old file from Cloud Storage first!
  * 3. Privacy Control: KYC docs stored with Private ACL; Avatars/Logos stored Publicly.
  */
 export const uploadUserDocument = async ({
@@ -69,11 +67,12 @@ export const uploadUserDocument = async ({
   contentType = 'image/png',
   existingKey,
 }: UserDocumentUploadOptions): Promise<{ key: string; url: string; isPrivate: boolean }> => {
+
   // 1. Delete previous file if updating/re-uploading
   if (existingKey) {
-    logger.info({ userId, existingKey }, 'Deleting previous document version before update...');
+    logger.info({ userId, existingKey }, 'Deleting previous document/file before update...');
     await deleteFromCloudStorage(existingKey).catch((err) => {
-      logger.warn({ err, existingKey }, 'Could not delete existing file (might not exist)');
+      logger.warn({ err, existingKey }, 'Could not delete existing document/file');
     });
   }
 
@@ -82,7 +81,7 @@ export const uploadUserDocument = async ({
 
   const subFolder = isKyc ? 'kyc' : 'profile';
   const folder = `users/${userId}/${subFolder}`;
-  const fileName = `${docType.toLowerCase()}-${Date.now()}.png`;
+  const fileName = `${docType.toLowerCase()}-${userId}-${Date.now()}.png`;
   const key = `${folder}/${fileName}`;
 
   // 3. Upload to Cloud Storage

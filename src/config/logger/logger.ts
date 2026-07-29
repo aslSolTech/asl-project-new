@@ -1,4 +1,5 @@
 import pino from 'pino';
+import pinoPretty from 'pino-pretty';
 import { Writable } from 'node:stream';
 import { NODE_ENV, PINO_LOGGER_REDACT } from '../dotenv/dotenv.js';
 import { getMonthlyLogModel } from '../mongodb/mongodb.js';
@@ -117,16 +118,18 @@ const streams: pino.StreamEntry[] = [];
 if (!isTest) {
   streams.push({ stream: mongoStream });
   if (isDev) {
-    streams.push({
-      stream: pino.transport({
-        target: 'pino-pretty',
-        options: {
+    try {
+      streams.push({
+        stream: pinoPretty({
           colorize: true,
           translateTime: 'SYS:yyyy-mm-dd HH:MM:ss.l',
           ignore: 'pid,hostname',
-        },
-      }),
-    });
+        }),
+      });
+    } catch {
+      // pino-pretty not available, fallback to stdout
+      streams.push({ stream: process.stdout });
+    }
   } else if (isProduction || isStaging) {
     streams.push({ stream: process.stdout });
   }

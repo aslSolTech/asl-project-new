@@ -2,10 +2,10 @@ import { Worker, type Job } from 'bullmq';
 import { redisOptions } from '../redis/redis.js';
 import { logger } from '../logger/logger.js';
 import { processImageInWorkerThread } from '../images/imgConfig.js';
-import { uploadToCloudStorage, uploadUserDocument } from '../storage/s3Storage.js';
-import type { CompressImagePayload, ConvertImageFormatPayload, ResizeImagePayload, CreateZipArchivePayload, WatermarkAndUploadPayload } from '../jobsqueue/jobTypes.js';
+import { uploadToCloudStorage, uploadUserDocument, type UserDocumentUploadOptions } from '../storage/s3Storage.js';
+import type { CreateZipArchivePayload, WatermarkAndUploadPayload } from '../jobsqueue/jobTypes.js';
 
-type MediaJobPayload = CompressImagePayload | ConvertImageFormatPayload | ResizeImagePayload | CreateZipArchivePayload | WatermarkAndUploadPayload;
+type MediaJobPayload = CreateZipArchivePayload | WatermarkAndUploadPayload;
 
 export const mediaWorker = new Worker<MediaJobPayload>(
   'media-queue',
@@ -16,12 +16,11 @@ export const mediaWorker = new Worker<MediaJobPayload>(
       case 'watermarkAndUploadImage': {
         const { imageBufferBase64, category = 'GALLERY', userId, location, timestamp, skipWatermark, watermarkText, folder, existingKey } = job.data as WatermarkAndUploadPayload;
 
-        const rawBuffer = Buffer.from(imageBufferBase64, 'base64');
         const currentCategory = category;
 
         // 1. Offload heavy Sharp watermarking & PNG conversion to node:worker_threads OS Thread!
         const processedPngBuffer = await processImageInWorkerThread({
-          imageBuffer: rawBuffer,
+          imageBufferBase64,
           category: currentCategory,
           userId,
           location,
@@ -34,7 +33,7 @@ export const mediaWorker = new Worker<MediaJobPayload>(
 
         // 2. If userId is provided, use User Onboarding Folder Hierarchy with Auto-Delete of Old Version
         if (userId) {
-          const docType = currentCategory as any;
+          const docType = currentCategory as UserDocumentUploadOptions['docType'];
 
           const result = await uploadUserDocument({
             buffer: processedPngBuffer,
@@ -49,36 +48,24 @@ export const mediaWorker = new Worker<MediaJobPayload>(
         }
 
         // 3. General Public Uploads (Logos, Banners, Products without specific user ID)
+        const folderName = folder || currentCategory.toLowerCase();
+
         const cloudUrl = await uploadToCloudStorage({
           buffer: processedPngBuffer,
-          fileName: `${Date.now()}.png`,
+          fileName: `${folderName}-${Date.now()}.png`,
           contentType: 'image/png',
-          folder: folder || currentCategory.toLowerCase(),
+          folder: folderName,
           isPublic: true,
         });
 
-        logger.info({ jobId: job.id, cloudUrl, category: currentCategory }, 'Image processed & uploaded publicly to Cloud Storage');
+        logger.info({ jobId: job.id, cloudUrl, folderName }, 'Image processed & uploaded publicly to Cloud Storage');
         return { url: cloudUrl, isPrivate: false };
       }
 
-      case 'compressImage': {
-        const { inputPath, outputPath, quality } = job.data as CompressImagePayload;
-        logger.info({ jobId: job.id, inputPath, outputPath, quality }, 'Compressing image');
-        break;
-      }
-      case 'convertImageFormat': {
-        const { inputPath, outputPath, format } = job.data as ConvertImageFormatPayload;
-        logger.info({ jobId: job.id, inputPath, outputPath, format }, 'Converting image format');
-        break;
-      }
-      case 'resizeImage': {
-        const { inputPath, outputPath, width, height } = job.data as ResizeImagePayload;
-        logger.info({ jobId: job.id, inputPath, outputPath, width, height }, 'Resizing image');
-        break;
-      }
+      // separate job for create zip files
       case 'createZipArchive': {
         const { filePaths, zipOutputPath } = job.data as CreateZipArchivePayload;
-        logger.info({ jobId: job.id, count: filePaths.length, zipOutputPath }, 'Creating ZIP archive');
+        logger.info({ jobId: job.id, count: filePaths.length, zipOutputPath }, 'Creating ZIP archive.');
         break;
       }
       default:
