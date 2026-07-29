@@ -1,6 +1,6 @@
 import type { Request, Response } from 'express';
 import { addJob } from '../../config/jobsqueue/bullmqConfig.js';
-import { uploadToCloudStorage, uploadUserDocument } from '../../config/storage/s3Storage.js';
+import { uploadToCloudStorage, uploadUserDocument, type UserDocumentUploadOptions } from '../../config/storage/s3Storage.js';
 
 /**
  * 1. Image Upload Controller (Queue + Sharp Worker Thread + S3)
@@ -12,7 +12,7 @@ export const uploadImageController = async (req: Request, res: Response) => {
     return res.status(400).json({ status: false, message: 'No image file provided' });
   }
 
-  const category = (req.body.category || 'GALLERY') as any;
+  const category = (req.body.category || 'GALLERY') as UserDocumentUploadOptions['docType'];
   const userId = req.body.userId || undefined;
 
   // Convert in-memory buffer to Base64 payload for Redis queue
@@ -73,7 +73,7 @@ export const uploadDocumentController = async (req: Request, res: Response) => {
   }
 
   const userId = req.body.userId || 'usr_guest';
-  const docType = (req.body.docType || 'PAN') as any;
+  const docType = (req.body.docType || 'PAN') as UserDocumentUploadOptions['docType'];
   const existingKey = req.body.existingKey || undefined; // Delete old file if re-uploading
 
   const result = await uploadUserDocument({

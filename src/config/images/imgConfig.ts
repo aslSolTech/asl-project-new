@@ -4,7 +4,7 @@ import { formatISODate } from '../../utils/others/datefns.js';
 import { runInWorkerThread } from '../../utils/workerThread/threadRunner.js';
 
 export type ImageCategory =
-  'PRODUCT' | 'GALLERY' | 'LOGO' | 'BANNER' | 'AVATAR' | 'AADHAR' | 'PAN' | 'VOTER_ID' | 'PASSPORT' | 'DRIVING_LICENSE' | 'BANK_STATEMENT' | 'CHEQUE' | 'GST' | 'KYC_DOC';
+  'GALLERY' | 'LOGO' | 'BANNER' | 'AVATAR' | 'AADHAR' | 'PAN' | 'VOTER_ID' | 'PASSPORT' | 'DRIVING_LICENSE' | 'BANK_STATEMENT' | 'CHEQUE' | 'GST' | 'KYC_DOC';
 
 export interface WatermarkOptions {
   imageBuffer: Buffer;
