@@ -1,10 +1,11 @@
 import { Redis, type RedisOptions } from 'ioredis';
-import { REDIS_HOST, REDIS_PORT, REDIS_PASSWORD } from '../dotenv/dotenv.js';
+import { REDIS_HOST, REDIS_PORT, REDIS_PASSWORD, REDIS_USERNAME } from '../dotenv/dotenv.js';
 import { logger } from '../logger/logger.js';
 
 export const redisOptions: RedisOptions = {
   host: REDIS_HOST,
   port: REDIS_PORT,
+  ...(REDIS_USERNAME ? { username: REDIS_USERNAME } : {}),
   ...(REDIS_PASSWORD ? { password: REDIS_PASSWORD } : {}),
 
   lazyConnect: false,
