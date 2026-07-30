@@ -2,6 +2,7 @@ FROM node:24-alpine AS builder
 
 WORKDIR /app
 
+ENV NODE_ENV=production
 RUN apk add --no-cache openssl
 
 COPY package.json package-lock.json ./
@@ -20,7 +21,6 @@ WORKDIR /app
 
 RUN apk add --no-cache openssl
 
-ENV NODE_ENV=production
 ENV PORT=5000
 
 COPY --chown=node:node --from=builder /app/package.json .
