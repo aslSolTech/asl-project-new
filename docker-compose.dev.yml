@@ -70,7 +70,7 @@ services:
       - payzones_net
 
   phpmyadmin:
-    image: phpmyadmin:5.2.2-apache
+    image: phpmyadmin/phpmyadmin
     container_name: payzones_phpmyadmin_dev
     ports:
       - "8080:80"
@@ -79,6 +79,21 @@ services:
       PMA_PORT: 3306
     depends_on:
       - mariadb
+    networks:
+      - payzones_net
+  
+  # 5. Nginx Reverse Proxy
+  nginx:
+    image: nginx:latest
+    container_name: nginx_router_dev
+    restart: always
+    ports:
+      - "80:80" # Web traffic ke liye standard port
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - phpmyadmin
+      - backend
     networks:
       - payzones_net
 
