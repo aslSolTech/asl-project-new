@@ -1,4 +1,4 @@
-import { API_PORT, IP_BINDING, API_BASE_URL } from './config/dotenv/dotenv.js';
+import { API_PORT, IP_BINDING } from './config/dotenv/dotenv.js';
 import { httpServer } from './app/app.js';
 import { logger } from './config/logger/logger.js';
 import { closeAllWorkers } from './config/workers/workers.js';
@@ -6,7 +6,6 @@ import { closeAllWorkers } from './config/workers/workers.js';
 // Server Start
 httpServer.listen(API_PORT, IP_BINDING, () => {
   logger.info(`Server running on http://localhost:${API_PORT}`);
-  logger.info(`Status Monitor Dashboard: http://localhost:${API_PORT}${API_BASE_URL}/status`);
 });
 
 // Graceful Shutdown Helper
