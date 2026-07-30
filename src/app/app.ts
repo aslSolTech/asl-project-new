@@ -14,7 +14,7 @@ import { startAllWorkers, getWorkersHealth } from '../config/workers/workers.js'
 import { errorHandler } from '../middlewares/errorhandler/errorHandler.js';
 import { notFoundHandler } from '../middlewares/errorhandler/notFoundHandler.js';
 import { ApiResponse } from '../utils/apiResponse.js';
-import { initSocketIO } from '../config/socketio/socketIO.js';
+import { initSocketIO } from '../config/socketio/socketIo.js';
 import indexRouter from '../modules/indexRoutes.js';
 
 // Express app
