@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: payzones_backend
+    container_name: payzones_backend_live
     restart: always
     ports:
       - '5000:5000'
@@ -31,7 +31,7 @@ services:
   # 2. Redis (Local BullMQ Job Queue & Caching ke liye)
   redis:
     image: redis:8.2-alpine
-    container_name: payzones_redis
+    container_name: payzones_redis_live
     restart: always
     ports:
       - '6379:6379'
@@ -44,7 +44,7 @@ services:
   # 3. MariaDB Database (MySQL Compatible Database)
   mariadb:
     image: mariadb:12.3
-    container_name: payzones_mariadb
+    container_name: payzones_mariadb_live
     restart: always
     ports:
       - '3307:3306'
@@ -61,7 +61,7 @@ services:
   # 4. phpMyAdmin (MariaDB/MySQL Ko Browser me Manage karne ke liye GUI)
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: payzones_phpmyadmin
+    container_name: payzones_phpmyadmin_live
     restart: always
     ports:
       - '8080:80'
@@ -91,7 +91,7 @@ services:
   # 6. MongoDB Database
   mongodb:
     image: mongo:8.0.13
-    container_name: payzones_mongodb
+    container_name: payzones_mongodb_live
     restart: always
     ports:
       - '27017:27017'
