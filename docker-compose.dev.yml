@@ -52,6 +52,8 @@ services:
   mariadb:
     image: mariadb:12.3
     container_name: payzones_mariadb_dev
+    logging:
+      driver: "none"
     ports:
       - "3307:3306"
     environment:
@@ -67,6 +69,10 @@ services:
     container_name: payzones_mongodb_dev
     ports:
       - "27017:27017"
+    logging:
+      driver: "none"
+    volumes:
+      - mongo_data:/data/db
     networks:
       - payzones_net
 

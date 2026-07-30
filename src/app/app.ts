@@ -105,7 +105,6 @@ app.get(`${API_BASE_URL}/health-check`, async (_req: Request, res: Response) => 
         status: socketStatus,
         activeConnections: activeSocketConnections,
       },
-      statusMonitor: `${_req.protocol}://${_req.get('host')}${API_BASE_URL}/status`,
     },
   });
 });
