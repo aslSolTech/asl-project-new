@@ -14,8 +14,7 @@ import { startAllWorkers, getWorkersHealth } from '../config/workers/workers.js'
 import { errorHandler } from '../middlewares/errorhandler/errorHandler.js';
 import { notFoundHandler } from '../middlewares/errorhandler/notFoundHandler.js';
 import { ApiResponse } from '../utils/apiResponse.js';
-import { getStatusMonitorMiddleware } from '../monitoring/monitor_expressapi.js';
-import { initSocketIO } from '../config/socketio/socketio.js';
+import { initSocketIO } from '../config/socketio/socketIO.js';
 import indexRouter from '../modules/indexRoutes.js';
 
 // Express app
@@ -28,9 +27,6 @@ const httpServer = http.createServer(app);
 const io = initSocketIO(httpServer);
 
 // Middlewares
-
-// Express Status Monitor (connected with Socket.io server)
-app.use(getStatusMonitorMiddleware(io));
 
 // Enable trust proxy for rate limiting & IP tracking
 app.set('trust proxy', 1);
