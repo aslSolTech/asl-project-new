@@ -155,3 +155,23 @@
     animation: none;
     mix-blend-mode: normal;
 }
+
+/* ─── Custom Colored Scrollbar ─────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(30, 77, 140, 0.05);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #1E4D8C 0%, #F7941D 100%);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #163a6b 0%, #e08312 100%);
+}
