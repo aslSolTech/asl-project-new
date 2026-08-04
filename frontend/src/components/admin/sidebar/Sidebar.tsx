@@ -129,6 +129,14 @@ const menuItems: MenuItem[] = [
     title: "Settings",
     icon: Settings,
     items: [
+       {
+        title: "Master",
+        items: [
+          { title: "Two-Factor Auth", href: "/dashboard/settings/security/2fa" },
+          { title: "API Keys", href: "/dashboard/settings/security/api-keys" },
+          { title: "Login History", href: "/dashboard/settings/security/history" },
+        ],
+      },
       {
         title: "Account",
         items: [
@@ -163,14 +171,14 @@ export function DashboardSidebar() {
   const [openSubMenu, setOpenSubMenu] = useState<string | null>(initialSubOpen);
 
   return (
-    <Sidebar className="border-r-0 bg-white/60 dark:bg-slate-900/80 backdrop-blur-xl transition-colors">
+    <Sidebar className="border-r-0 bg-white/60 dark:bg-slate-700/80 backdrop-blur-xl transition-colors">
       <SidebarHeader className="h-16 flex items-center px-6 border-b-0">
         {/* <Link href="/" className="flex items-center gap-3"> */}
           <NavbarLogo imgSrc='/logo/logo.png' altName='Logo' />
         {/* </Link> */}
       </SidebarHeader>
 
-      <SidebarContent className="px-3 py-4 overflow-y-auto">
+      <SidebarContent className="px-0 py-4 overflow-y-auto">
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu className="space-y-1">
@@ -185,17 +193,17 @@ export function DashboardSidebar() {
                     }}
                   >
                     <div className="group/menu-item relative">
-                      <CollapsibleTrigger className="w-full flex items-center justify-between hover:bg-white dark:hover:bg-slate-800/80 hover:shadow-sm transition-all duration-200 group h-auto py-3 px-3 rounded-lg cursor-pointer">
+                      <CollapsibleTrigger className="w-full flex items-center justify-between hover:bg-blue-50/70 dark:hover:bg-slate-800/80 hover:shadow-sm transition-all duration-200 group h-auto py-3 px-3 rounded-lg cursor-pointer">
                         <div className="flex items-center gap-3">
-                          <item.icon className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                          <span className="font-medium text-sm text-slate-800 dark:text-slate-200">{item.title}</span>
+                          <item.icon className="w-5 h-5 text-secondary dark:text-blue-400" />
+                          <span className="font-semibold text-sm text-slate-800 dark:text-slate-200 group-hover:text-secondary ">{item.title}</span>
                         </div>
                         <ChevronDown className="w-4 h-4 text-slate-400 dark:text-slate-500 transition-transform duration-200 group-data-[state=open]:rotate-180" />
                       </CollapsibleTrigger>
 
                       <CollapsibleContent>
-                        {/* Wire Connection tree container */}
-                        <div className="relative ml-6 pl-3 border-l-2 border-dashed border-blue-400/40 dark:border-blue-500/30 my-1 space-y-1">
+                        {/* Blue Theme Curved Tree Container */}
+                        <div className="relative ml-4 pl-2 space-y-1 my-1">
                           {item.items?.map((sub) => {
                             const isSubOpen = openSubMenu === sub.title;
                             return (
@@ -206,33 +214,47 @@ export function DashboardSidebar() {
                                   setOpenSubMenu(open ? sub.title : null);
                                 }}
                               >
-                                <div className="group/menu-sub-item relative">
-                                  {/* Horizontal wire connection line */}
-                                  <div className="absolute -left-3 top-4 w-3 h-0.5 border-t-2 border-dashed border-blue-400/40 dark:border-blue-500/30" />
-                                  <CollapsibleTrigger className="w-full flex items-center justify-between hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:text-blue-700 dark:hover:text-blue-300 text-slate-700 dark:text-slate-300 transition-all text-sm h-auto py-2 px-2.5 rounded-lg cursor-pointer">
-                                    <span className="font-medium text-xs text-slate-700 dark:text-slate-300">{sub.title}</span>
+                                <div className="group/menu-sub-item relative pl-4">
+                                  {/* Curved L-connector line pointing to sub-menu */}
+                                  <div className="absolute left-0 top-0 bottom-1/2 w-3 border-l-2 border-b-2 rounded-bl-lg border-blue-400/40 dark:border-blue-500/40 pointer-events-none" />
+
+                                  {/* Sub menu trigger */}
+                                  <CollapsibleTrigger className="w-full flex items-center justify-between hover:bg-blue-50/80 dark:hover:bg-slate-800/60 text-slate-700 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-300 transition-all text-xs font-semibold py-2 px-3 rounded-lg cursor-pointer">
+                                    <span>{sub.title}</span>
                                     <ChevronDown className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 transition-transform duration-200 group-data-[state=open]:rotate-180" />
                                   </CollapsibleTrigger>
 
-                                  <CollapsibleContent>
-                                    <div className="relative ml-4 pl-2 border-l border-orange-400/40 dark:border-orange-500/30 space-y-0.5 my-1">
-                                      {sub.items?.map((subSub) => (
-                                        <div key={subSub.href} className="relative">
-                                          <div className="absolute -left-2 top-3 w-2 h-0.5 border-t border-orange-400/40 dark:border-orange-500/30" />
-                                          <SidebarMenuSubButton
-                                            render={<Link href={subSub.href} />}
-                                            isActive={pathname === subSub.href}
-                                            className={cn(
-                                              "text-xs h-auto py-1.5 px-2 transition-all rounded-md",
-                                              pathname === subSub.href
-                                                ? "bg-blue-600 text-white font-medium shadow-sm"
-                                                : "text-slate-500 dark:text-slate-400 hover:bg-blue-50/70 dark:hover:bg-slate-800 hover:text-blue-700 dark:hover:text-blue-300"
-                                            )}
-                                          >
-                                            {subSub.title}
-                                          </SidebarMenuSubButton>
-                                        </div>
-                                      ))}
+                                  <CollapsibleContent className="animate-in fade-in-50 duration-200">
+                                    <div className="relative ml-2 pl-4 space-y-1 tracking-wide my-1">
+                                      {sub.items?.map((subSub) => {
+                                        const isActive = pathname === subSub.href;
+                                        return (
+                                          <div key={subSub.href} className="relative">
+                                            {/* Curved L-connector line pointing to sub-sub-menu */}
+                                            <div className="absolute -left-4 top-0 bottom-1/2 w-3.5 border-l-2 border-b-2 rounded-bl-md border-blue-400/35 dark:border-blue-500/35 pointer-events-none" />
+                                            <SidebarMenuSubButton
+                                               render={<Link href={subSub.href} />}
+                                               isActive={isActive}
+                                               className={cn(
+                                                 "w-full text-[11px] leading-tight py-1 px-2.5 rounded-md font-medium transition-all duration-200 flex items-center gap-1.5 mb-2",
+                                                 isActive
+                                                  ? "bg-blue-600 dark:bg-blue-600 text-white dark:text-white shadow-md shadow-blue-500/25 font-medium "
+                                                   : "text-slate-600 dark:text-slate-400 hover:bg-blue-50/80 dark:hover:bg-slate-800/60 hover:text-blue-600 dark:hover:text-blue-300"
+                                               )}
+                                             >
+                                               <span
+                                                 className={cn(
+                                                   "w-1 h-1 rounded-full transition-all shrink-0",
+                                                   isActive
+                                                     ? "bg-white shadow-xs"
+                                                     : "bg-blue-400/50 dark:bg-blue-500/50"
+                                                 )}
+                                               />
+                                               <span>{subSub.title}</span>
+                                             </SidebarMenuSubButton>
+                                          </div>
+                                        );
+                                      })}
                                     </div>
                                   </CollapsibleContent>
                                 </div>
@@ -251,12 +273,12 @@ export function DashboardSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="p-4 border-t-0">
-        <div className="bg-gradient-to-r from-blue-700 via-blue-800 to-slate-900 rounded-xl p-4 text-white shadow-lg shadow-blue-900/20 relative overflow-hidden group">
-          <div className="absolute -right-4 -bottom-4 w-16 h-16 bg-orange-500/20 rounded-full blur-xl group-hover:bg-orange-500/30 transition-all" />
+        <div className="bg-gradient-to-br from-blue-900 via-slate-900 to-slate-950 rounded-xl p-4 text-white shadow-lg shadow-blue-950/40 relative overflow-hidden group border border-blue-500/20">
+          <div className="absolute -right-4 -bottom-4 w-16 h-16 bg-blue-500/20 rounded-full blur-xl group-hover:bg-blue-500/30 transition-all" />
           <p className="text-xs font-medium opacity-80 mb-1">Available Balance</p>
-          <p className="text-2xl font-bold">₹24,562.80</p>
+          <p className="text-2xl font-bold text-white">₹24,562.80</p>
           <div className="flex items-center gap-1 mt-2 text-xs">
-            <span className="font-semibold text-amber-400">+12.5%</span>
+            <span className="font-semibold text-blue-400">+12.5%</span>
             <span className="opacity-70">this month</span>
           </div>
         </div>

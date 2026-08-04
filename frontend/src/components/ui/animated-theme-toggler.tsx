@@ -37,6 +37,13 @@ function polygonCollapsed(cx: number, cy: number, vertexCount: number): string {
   return `polygon(${pairs})`
 }
 
+function getCircleClipPaths(cx: number, cy: number, maxRadius: number): [string, string] {
+  return [
+    `circle(0px at ${cx}px ${cy}px)`,
+    `circle(${maxRadius}px at ${cx}px ${cy}px)`,
+  ]
+}
+
 function getThemeTransitionClipPaths(
   variant: TransitionVariant,
   cx: number,
@@ -47,10 +54,7 @@ function getThemeTransitionClipPaths(
 ): [string, string] {
   switch (variant) {
     case "circle":
-      return [
-        `circle(0px at ${cx}px ${cy}px)`,
-        `circle(${maxRadius}px at ${cx}px ${cy}px)`,
-      ]
+      return getCircleClipPaths(cx, cy, maxRadius)
     case "square": {
       const halfW = Math.max(cx, viewportWidth - cx)
       const halfH = Math.max(cy, viewportHeight - cy)
@@ -126,10 +130,8 @@ function getThemeTransitionClipPaths(
       return [starPolygon(startR), starPolygon(R)]
     }
     default:
-      return [
-        `circle(0px at ${cx}px ${cy}px)`,
-        `circle(${maxRadius}px at ${cx}px ${cy}px)`,
-      ]
+      return getCircleClipPaths(cx, cy, maxRadius)
+
   }
 }
 
@@ -166,7 +168,17 @@ export const AnimatedThemeToggler = ({
     return () => observer.disconnect()
   }, [isControlled])
 
+  const isTransitioningRef = useRef(false)
+  const lastCallRef = useRef<number>(0)
+
   const toggleTheme = useCallback(() => {
+    const now = Date.now()
+    // Throttle calls based on animation duration + small buffer (e.g. 100ms)
+    if (now - lastCallRef.current < duration + 100) return
+    if (isTransitioningRef.current) return
+
+    lastCallRef.current = now
+
     const button = buttonRef.current
     if (!button) return
 
@@ -216,6 +228,8 @@ export const AnimatedThemeToggler = ({
       viewportHeight
     )
 
+    isTransitioningRef.current = true
+
     const root = document.documentElement
     root.dataset.magicuiThemeVt = "active"
     root.style.setProperty(
@@ -229,6 +243,7 @@ export const AnimatedThemeToggler = ({
       delete root.dataset.magicuiThemeVt
       root.style.removeProperty("--magicui-theme-toggle-vt-duration")
       root.style.removeProperty("--magicui-theme-vt-clip-from")
+      isTransitioningRef.current = false
     }
 
     const transition = document.startViewTransition(() => {
@@ -241,7 +256,7 @@ export const AnimatedThemeToggler = ({
     }
 
     const ready = transition?.ready
-    if (ready && typeof ready.then === "function") {
+    if (ready !== undefined) {
       ready.then(() => {
         document.documentElement.animate(
           {
@@ -255,6 +270,8 @@ export const AnimatedThemeToggler = ({
             pseudoElement: "::view-transition-new(root)",
           }
         )
+      }).catch(() => {
+        // Ignore animation errors if transition was aborted
       })
     }
   }, [shape, fromCenter, duration, isDark, isControlled, onThemeChange])
