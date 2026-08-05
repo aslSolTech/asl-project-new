@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { NavbarLogo } from "@/components/ui/resizable-navbar";
-import { useState } from "react";
+import { useState, memo } from "react";
 
 type SubSubItem = {
   title: string;
@@ -633,7 +633,7 @@ const menuItems: MenuItem[] = [
   }
 ];
 
-export function DashboardSidebar() {
+export const DashboardSidebar = memo(function DashboardSidebar() {
   const pathname = usePathname();
   
   // Track open main menu item for accordion behavior (opening 2nd closes 1st)
@@ -814,4 +814,4 @@ export function DashboardSidebar() {
       </SidebarFooter>
     </Sidebar>
   );
-}
+});

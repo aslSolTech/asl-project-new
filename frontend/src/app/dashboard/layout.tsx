@@ -1,7 +1,18 @@
+import type { Metadata } from "next";
 import { DashboardHeader } from "@/components/admin/header/Header";
 import { DashboardSidebar } from "@/components/admin/sidebar/Sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
- 
+
+export const metadata: Metadata = {
+  title: "Dashboard",
+  description: "Payzones Admin Dashboard",
+  icons: {
+    icon: "/logo/logo.png",
+    shortcut: "/logo/logo.png",
+    apple: "/logo/logo.png",
+  },
+};
+
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <SidebarProvider>

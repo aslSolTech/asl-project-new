@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import Link from "next/link";
 import { LogOut, Settings, Shield, User } from "lucide-react";
 import {
@@ -20,7 +21,7 @@ const user = {
   role: "Admin",
 };
 
-export function ProfileMenu() {
+export const ProfileMenu = memo(function ProfileMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-white/60 dark:hover:bg-slate-800/60 transition-all duration-200 group outline-none cursor-pointer">
@@ -96,4 +97,4 @@ export function ProfileMenu() {
       </DropdownMenuContent>
     </DropdownMenu>
   );
-}
+});

@@ -1,5 +1,6 @@
 "use client";
 
+import { memo, useMemo } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { ChevronRight, PanelLeft } from "lucide-react";
@@ -68,9 +69,9 @@ function generateBreadcrumbs(pathname: string) {
   return crumbs;
 }
 
-export function DashboardHeader() {
+export const DashboardHeader = memo(function DashboardHeader() {
   const pathname = usePathname();
-  const breadcrumbs = generateBreadcrumbs(pathname);
+  const breadcrumbs = useMemo(() => generateBreadcrumbs(pathname), [pathname]);
 
   return (
     <header className="sticky top-0 z-40 backdrop-blur-xl bg-white/70 dark:bg-slate-900/80 border-b border-white/40 dark:border-slate-800 shadow-sm h-16 flex items-center justify-between px-4 md:px-6 transition-colors">
@@ -111,4 +112,4 @@ export function DashboardHeader() {
       </div>
     </header>
   );
-}
+});
