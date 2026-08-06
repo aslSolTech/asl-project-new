@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useAppForm } from "@/components/shared/form/form";
+import { useAppForm } from "@/components/form_builder/form";
 import { LOGIN_DEFAULT_VALUES, FORM_CONTAINER_VARIANTS, FORM_ITEM_VARIANTS } from "@/constants";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

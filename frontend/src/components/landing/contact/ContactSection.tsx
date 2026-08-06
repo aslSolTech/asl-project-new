@@ -1,6 +1,6 @@
 'use client';
 
-import { useAppForm } from '@/components/shared/form/form';
+import { useAppForm } from '@/components/form_builder/form';
 import { contactSchema } from '@/validations';
 import { CONTACT_CARDS, CONTACT_DEFAULT_VALUES, CONTACT_SERVICES } from '@/constants';
 import { z } from 'zod';

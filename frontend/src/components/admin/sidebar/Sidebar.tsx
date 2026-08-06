@@ -753,7 +753,7 @@ export const DashboardSidebar = memo(function DashboardSidebar() {
                                     <ChevronDown className="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 transition-transform duration-200 group-data-[state=open]:rotate-180" />
                                   </CollapsibleTrigger>
 
-                                  <CollapsibleContent className="animate-in fade-in-50 duration-200">
+                                  <CollapsibleContent>
                                     <div className="relative ml-2 pl-4 space-y-1 tracking-wide my-1">
                                       {sub.items?.map((subSub) => {
                                         const isActive = pathname === subSub.href;

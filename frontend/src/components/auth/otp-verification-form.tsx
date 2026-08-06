@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useAppForm } from "@/components/shared/form/form";
+import { useAppForm } from "@/components/form_builder/form";
 import { useAuthStore } from "@/stores/authStore";
 import {
   OTP_VERIFICATION_DEFAULT_VALUES,
