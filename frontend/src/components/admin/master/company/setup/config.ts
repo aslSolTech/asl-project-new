@@ -11,18 +11,18 @@ export interface CompanyFieldConfig {
 
 export const companySetupFieldsConfig: readonly CompanyFieldConfig[] = [
   {
-    key: "companyName",
-    label: "Company Name",
-    type: "text",
-    placeholder: "e.g. Payzones Tech Solutions Pvt Ltd",
-    required: true,
-  },
-  {
     key: "companyLogo",
     label: "Company Logo",
     type: "file",
     placeholder: "e.g. Company Logo",
     // required: true,
+  },
+  {
+    key: "companyName",
+    label: "Company Name",
+    type: "text",
+    placeholder: "e.g. Payzones Tech Solutions Pvt Ltd",
+    required: true,
   },
   {
     key: "companyEmail",

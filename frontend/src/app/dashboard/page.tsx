@@ -1,6 +1,7 @@
 import { ArrowUpRight, CheckCircle2, Clock } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 const stats = [
   {
@@ -97,9 +98,9 @@ export default function DashboardPage() {
       <Card className="bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border-white/50 dark:border-slate-800 shadow-sm overflow-hidden">
         <CardHeader className="border-b border-slate-100 dark:border-slate-800 flex flex-row items-center justify-between">
           <CardTitle className="text-base font-semibold text-slate-800 dark:text-slate-100">Recent Transfers</CardTitle>
-          <button className="text-sm text-blue-600 dark:text-blue-400 hover:text-orange-500 font-medium transition-colors">
+          <Button variant="link" className="hover:no-underline text-sm text-secondary dark:text-blue-400 hover:text-secondary font-medium transition-colors">
             View All
-          </button>
+          </Button>
         </CardHeader>
         <div className="overflow-x-auto">
           <table className="w-full">

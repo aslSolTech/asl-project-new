@@ -33,7 +33,7 @@ export function CompanySetupForm({ initialData }: CompanySetupFormProps) {
   });
 
   return (
-    <div className="w-full max-w-3xl p-6 sm:p-8 bg-card border border-border rounded-2xl shadow-xl space-y-6">
+    <div className="w-full max-wxl p-6 sm:p-8 bg-card border border-border rounded-2xl shadow-xl space-y-6">
       <div className="flex items-center gap-3 border-b border-border pb-4">
         <div className="p-3 rounded-xl bg-primary/10 text-primary">
           <Building2 className="w-6 h-6" />
@@ -55,7 +55,7 @@ export function CompanySetupForm({ initialData }: CompanySetupFormProps) {
           }}
           className="space-y-6"
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 sm:gap-6">
             {companySetupFieldsConfig.map((field) => (
               <div
                 key={field.key}

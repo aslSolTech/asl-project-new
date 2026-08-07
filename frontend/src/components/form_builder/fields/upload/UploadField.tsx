@@ -10,6 +10,7 @@ import { Camera, AlertTriangle } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 export function UploadField(props: Readonly<UploadFieldProps>) {
   const {
@@ -140,11 +141,12 @@ export function UploadField(props: Readonly<UploadFieldProps>) {
 
             {firstItem && (firstItem.previewUrl || firstItem.url) ? (
               <>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={firstItem.previewUrl || firstItem.url}
+                <Image
+                  src={(firstItem.previewUrl || firstItem.url)!}
                   alt={firstItem.name}
-                  className="w-full h-full object-cover"
+                  width={100}
+                  height={100}
+                  className="w-full h-full object-cover alt:text-xs"
                 />
                 {/* Hover Camera Overlay */}
                 <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex flex-col items-center justify-center text-white">
@@ -162,23 +164,27 @@ export function UploadField(props: Readonly<UploadFieldProps>) {
 
           {firstItem && isPreview && (
             <div className="flex items-center gap-2 text-xs">
-              <button
+              <Button
                 type="button"
+                variant="link"
+                size="sm"
                 onClick={() => setModalIndex(0)}
-                className="text-primary hover:underline font-medium"
+                className="hover:font-medium text-secondary transition-all duration-200 text-xs font-normal hover:no-underline p-0"
               >
                 View Avatar
-              </button>
+              </Button>
               {showRemove && (
                 <>
                   <span>•</span>
-                  <button
+                  <Button
                     type="button"
+                    variant="link"
+                    size="sm"
                     onClick={() => handleRemove(firstItem.id)}
-                    className="text-destructive hover:underline font-medium"
+                    className="text-destructive hover:font-medium transition-all duration-200 text-xs font-normal hover:no-underline p-0"
                   >
                     Remove
-                  </button>
+                  </Button>
                 </>
               )}
             </div>
