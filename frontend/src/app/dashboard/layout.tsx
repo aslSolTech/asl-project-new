@@ -22,7 +22,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
         </div>
         <div className="flex flex-col flex-1">
           <DashboardHeader />
-          <div className="grow p-6 md:overflow-y-auto md:p-12">{children}</div>
+          <div className="grow p-6 md:overflow-y-auto">{children}</div>
         </div>
       </div>
     </SidebarProvider>
