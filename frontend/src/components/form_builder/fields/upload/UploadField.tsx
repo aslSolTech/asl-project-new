@@ -81,15 +81,15 @@ export function UploadField(props: Readonly<UploadFieldProps>) {
   return (
     <div className={cn("w-full space-y-2", className)}>
       {/* Label */}
-      {label && (
-        <Label htmlFor={fieldId} className="text-sm font-semibold text-foreground flex items-center gap-1">
+      {label && !isAvatar && (
+        <Label htmlFor={fieldId} className="text-sm font-semibold text-foreground flex items-center">
           {label}
           {required && <span className="text-destructive font-bold">*</span>}
         </Label>
       )}
 
       {/* Description */}
-      {description && <p className="text-xs text-muted-foreground">{description}</p>}
+      {description && !isAvatar && <p className="text-xs text-muted-foreground">{description}</p>}
 
       {/* Validation Error Alert */}
       {fieldError && (
@@ -100,8 +100,7 @@ export function UploadField(props: Readonly<UploadFieldProps>) {
             <button
               type="button"
               onClick={() => setValidationError(null)}
-              className="text-xs underline font-bold hover:opacity-80"
-            >
+              className="text-xs underline font-bold hover:opacity-80">
               Dismiss
             </button>
           )}
@@ -127,8 +126,7 @@ export function UploadField(props: Readonly<UploadFieldProps>) {
                 ? "border-primary bg-primary/10 scale-105"
                 : "border-border hover:border-primary/80 bg-muted/30",
               disabled && "opacity-50 cursor-not-allowed"
-            )}
-          >
+            )}>
             <input
               ref={inputRef}
               type="file"
@@ -189,6 +187,15 @@ export function UploadField(props: Readonly<UploadFieldProps>) {
               )}
             </div>
           )}
+
+          {label && (
+            <Label htmlFor={fieldId} className="text-sm font-semibold text-foreground flex items-center mt-1">
+              {label}
+              {required && <span className="text-destructive font-bold">*</span>}
+            </Label>
+          )}
+
+          {description && <p className="text-xs text-muted-foreground">{description}</p>}
         </div>
       )}
 

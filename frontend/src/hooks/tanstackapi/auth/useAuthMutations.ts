@@ -1,12 +1,12 @@
 import { useMutation } from "@tanstack/react-query";
 import { useAuthStore } from "@/stores/authStore";
+import { authService } from "@/modules/auth/services";
 import {
-  authService,
   LoginRequest,
   CompanySignupRequest,
   ForgotPasswordRequest,
   OtpVerificationRequest,
-} from "@/services";
+} from "@/modules/auth/types";
 
 export function useLoginMutation() {
   const { setAuthSuccess, setAuthError, clearMessages } = useAuthStore();

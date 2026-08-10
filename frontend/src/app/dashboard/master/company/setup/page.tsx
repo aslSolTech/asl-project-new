@@ -6,10 +6,10 @@ import { DataTable, DataTableColumnHeader, AppTableFeatures } from "@/components
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useCompanyListQuery } from "@/hooks/tanstackapi/company/useCompanyQueries";
-import { useCompanyModalStore } from "@/stores/useCompanyModalStore";
-import { CompanyRecord } from "@/services/company/company.types";
-import { CompanyModal } from "@/components/admin/master/company/components/company-modal";
-import { CompanyDeleteDialog } from "@/components/admin/master/company/components/company-delete-dialog";
+import { useCompanyModalStore } from "@/modules/admin/stores/useCompanyModalStore";
+import { CompanyRecord } from "@/modules/admin/types";
+import { CompanyModal } from "@/modules/admin/components/master/company/components/company-modal";
+import { CompanyDeleteDialog } from "@/modules/admin/components/master/company/components/company-delete-dialog";
 import {
   Building2,
   Plus,

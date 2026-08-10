@@ -1,10 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { companyApi } from "@/services/company/company.api";
+import { companyApi } from "@/modules/admin/services";
 import {
   CreateCompanyPayload,
   UpdateCompanyPayload,
-} from "@/services/company/company.types";
+} from "@/modules/admin/types";
 
 export const companyKeys = {
   all: ["companies"] as const,

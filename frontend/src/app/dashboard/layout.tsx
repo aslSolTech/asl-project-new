@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { DashboardHeader } from "@/components/admin/header/Header";
-import { DashboardSidebar } from "@/components/admin/sidebar/Sidebar";
+import { DashboardHeader } from "@/modules/admin/components/header/Header";
+import { DashboardSidebar } from "@/modules/admin/components/sidebar/Sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 
 export const metadata: Metadata = {

@@ -1,4 +1,4 @@
-import Homepage from "@/components/landing/main/Homepage";
+import Homepage from "@/modules/landing/components/main/Homepage";
 
 const Home = () => {
   return (
