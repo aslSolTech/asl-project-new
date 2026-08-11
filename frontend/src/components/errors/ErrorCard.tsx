@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { RotateCcw, ChevronLeft, Home } from 'lucide-react';
-import { ErrorCardProps } from '@/types/errors';
+import { ErrorCardProps } from '@/components/errors/errors';
 
 export function ErrorCard({
   statusCode,

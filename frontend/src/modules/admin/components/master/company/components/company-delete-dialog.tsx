@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useCompanyModalStore } from "@/modules/admin/stores/useCompanyModalStore";
-import { useDeleteCompanyMutation } from "@/hooks/tanstackapi/company/useCompanyQueries";
+import { useDeleteCompanyMutation } from "@/modules/admin/hooks";
 import { AlertTriangle, Trash2 } from "lucide-react";
 
 export function CompanyDeleteDialog() {

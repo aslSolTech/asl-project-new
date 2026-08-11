@@ -5,7 +5,7 @@ import { ColumnDef, Column, Row } from "@tanstack/react-table";
 import { DataTable, DataTableColumnHeader, AppTableFeatures } from "@/components/shared/data-table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useCompanyListQuery } from "@/hooks/tanstackapi/company/useCompanyQueries";
+import { useCompanyListQuery } from "@/modules/admin/hooks";
 import { useCompanyModalStore } from "@/modules/admin/stores/useCompanyModalStore";
 import { CompanyRecord } from "@/modules/admin/types";
 import { CompanyModal } from "@/modules/admin/components/master/company/components/company-modal";
@@ -22,6 +22,7 @@ import {
   MapPin,
   RefreshCw,
 } from "lucide-react";
+import Image from "next/image";
 
 // Columns helper components
 function IdHeader({ column }: Readonly<{ column: Column<AppTableFeatures, CompanyRecord, unknown> }>) {
@@ -46,10 +47,11 @@ function NameCell({ row }: Readonly<{ row: Row<AppTableFeatures, CompanyRecord> 
     <div className="flex items-center gap-3 py-1">
       <div className="w-9 h-9 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0 font-bold text-sm">
         {company.companyLogo && typeof company.companyLogo === "string" ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <Image
             src={company.companyLogo}
             alt={company.companyName}
+            width={32}
+            height={32}
             className="w-full h-full object-cover rounded-xl"
           />
         ) : (
@@ -65,8 +67,7 @@ function NameCell({ row }: Readonly<{ row: Row<AppTableFeatures, CompanyRecord> 
             href={company.website.startsWith("http") ? company.website : `https://${company.website}`}
             target="_blank"
             rel="noreferrer"
-            className="text-[11px] text-muted-foreground hover:text-primary flex items-center gap-1 truncate"
-          >
+            className="text-[11px] text-muted-foreground hover:text-primary flex items-center gap-1 truncate">
             <Globe className="w-3 h-3 shrink-0" />
             {company.website.replace(/^https?:\/\//, "")}
           </a>

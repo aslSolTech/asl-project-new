@@ -8,7 +8,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { useCompanyModalStore } from "@/modules/admin/stores/useCompanyModalStore";
-import { useCompanyDetailQuery } from "@/hooks/tanstackapi/company/useCompanyQueries";
+import { useCompanyDetailQuery } from "@/modules/admin/hooks";
 import { CompanyForm } from "./company-form";
 import { Building2 } from "lucide-react";
 

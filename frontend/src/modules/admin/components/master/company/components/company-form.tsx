@@ -7,7 +7,7 @@ import { companySetupFieldsConfig } from "@/modules/admin/constants";
 import {
   useCreateCompanyMutation,
   useUpdateCompanyMutation,
-} from "@/hooks/tanstackapi/company/useCompanyQueries";
+} from "@/modules/admin/hooks";
 import { CompanyRecord } from "@/modules/admin/types";
 import { Save } from "lucide-react";
 
