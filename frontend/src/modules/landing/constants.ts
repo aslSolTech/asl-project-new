@@ -506,7 +506,15 @@ export const MOCKUP_STATS = [
   { label: 'AEPS Txn', value: '156', icon: Banknote, color: 'text-purple-500', bg: 'bg-purple-500/10' },
 ];
 
-export const MOCKUP_CHART_DATA = [40, 65, 45, 80, 55, 90, 70];
+export const MOCKUP_CHART_DATA = [
+  { day: 'Mon', value: 40 },
+  { day: 'Tue', value: 65 },
+  { day: 'Wed', value: 45 },
+  { day: 'Thu', value: 80 },
+  { day: 'Fri', value: 55 },
+  { day: 'Sat', value: 90 },
+  { day: 'Sun', value: 70 },
+];
 
 export const FOOTER_SECTIONS = [
   {

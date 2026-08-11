@@ -28,7 +28,7 @@ function DashboardMockup() {
           </div>
           <div className="flex-1 mx-4">
             <div className="h-5 rounded-md bg-muted/70 text-[10px] text-muted-foreground flex items-center px-2 font-mono">
-              dashboard.payzones.net
+              payzones.net
             </div>
           </div>
         </div>
@@ -37,7 +37,7 @@ function DashboardMockup() {
           {/* Header row */}
           <div className="flex items-center justify-between">
             <div>
-              <div className="text-xs text-muted-foreground">Good Morning, Ramesh 👋</div>
+              <div className="text-xs text-muted-foreground">Good Morning!, Users 👋</div>
               <div className="font-bold text-foreground text-sm">Payzones Dashboard</div>
             </div>
             <div className="h-8 w-8 rounded-full bg-gradient-to-br from-primary to-blue-500 flex items-center justify-center text-white text-xs font-bold">R</div>
@@ -80,14 +80,14 @@ function DashboardMockup() {
               <span className="text-[10px] text-green-500 font-bold">+18.4%</span>
             </div>
             <div className="flex items-end gap-1 h-14">
-              {MOCKUP_CHART_DATA.map((h, i) => (
+              {MOCKUP_CHART_DATA.map((item, i) => (
                 <motion.div
-                  key={h - i}
+                  key={item.day}
                   className="flex-1 rounded-t-sm bg-gradient-to-t from-primary/80 to-primary/30"
                   initial={{ scaleY: 0 }}
                   animate={{ scaleY: 1 }}
                   transition={{ delay: 1.2 + i * 0.08, duration: 0.4 }}
-                  style={{ height: `${h}%`, transformOrigin: 'bottom' }}
+                  style={{ height: `${item.value}%`, transformOrigin: 'bottom' }}
                 />
               ))}
             </div>
