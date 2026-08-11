@@ -138,7 +138,7 @@ export default function Footer() {
                 <div className="h-7 w-7 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
                   <MapPin className="h-3.5 w-3.5 text-primary" />
                 </div>
-                ASL Solutions Tech Pvt. Ltd., India
+               Powered by ASL Solutions Tech Pvt. Ltd., India
               </div>
             </div>
 
@@ -196,7 +196,7 @@ export default function Footer() {
           className="flex flex-col sm:flex-row justify-between items-center gap-4"
         >
           <p className="text-xs text-foreground/50 text-center sm:text-left">
-            © 2021–{currentYear} ASL Solutions Tech Pvt. Ltd. | Powered by Payzones. All rights reserved.
+            ©2022–{currentYear} Payzones|Powered by ASL Solutions Tech Pvt. Ltd. All rights reserved.
           </p>
 
           {/* Compliance badges */}
