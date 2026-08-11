@@ -64,8 +64,7 @@ export function CompanyForm({ mode, initialData, onSuccess }: CompanyFormProps) 
           {companySetupFieldsConfig.map((field) => (
             <div
               key={field.key}
-              className={field.type === "textarea" || field.type === "file" ? "md:col-span-2" : undefined}
-            >
+              className={field.type === "textarea" || field.type === "file" ? "md:col-span-2" : undefined}>
               <form.AppField
                 name={field.key}
                 validators={{
@@ -78,8 +77,7 @@ export function CompanyForm({ mode, initialData, onSuccess }: CompanyFormProps) 
                     }
                     return undefined;
                   },
-                }}
-              >
+                }}>
                 {(fieldState) => (
                   <FormField
                     name={field.key}
@@ -91,8 +89,7 @@ export function CompanyForm({ mode, initialData, onSuccess }: CompanyFormProps) 
                     value={fieldState.state.value ?? ""}
                     onChange={(val) => fieldState.handleChange(val as Parameters<typeof fieldState.handleChange>[0])}
                     onBlur={fieldState.handleBlur}
-                    error={fieldState.state.meta.errors.join(", ")}
-                  />
+                    error={fieldState.state.meta.errors.join(", ")} />
                 )}
               </form.AppField>
             </div>
@@ -101,13 +98,12 @@ export function CompanyForm({ mode, initialData, onSuccess }: CompanyFormProps) 
 
         <div className="flex items-center justify-end gap-3 pt-4 border-t border-border">
           <form.SubscribeButton
-            icon={<Save className="w-4 h-4 ml-1.5" />}
-            label={mode === "create" ? "Create Company" : "Update Company"}
-            loadingLabel={mode === "create" ? "Submitting..." : "Updating..."}
+            icon={<Save className="w-5 h-5" />}
+            label={mode === "create" ? "Create" : "Save Changes"}
+            loadingLabel="Saving..."
             isLoading={isPending}
             disabled={isPending}
-            className="px-6 py-2.5 font-semibold cursor-pointer"
-          />
+            className={isPending ? "cursor-not-allowed" : "cursor-pointer"} />
         </div>
       </form>
     </form.AppForm>

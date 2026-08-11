@@ -50,16 +50,14 @@ export function CompanyDeleteDialog() {
           <Button
             variant="outline"
             onClick={closeDeleteDialog}
-            disabled={deleteMutation.isPending}
-          >
+            disabled={deleteMutation.isPending}>
             Cancel
           </Button>
           <Button
             variant="destructive"
             onClick={handleDelete}
             disabled={deleteMutation.isPending}
-            className="flex items-center gap-2"
-          >
+            className="flex items-center gap-2">
             <Trash2 className="w-4 h-4" />
             {deleteMutation.isPending ? "Deleting..." : "Delete Company"}
           </Button>

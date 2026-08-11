@@ -27,7 +27,7 @@ function SubscribeButton({ label, loadingLabel = "Submitting...", icon, disabled
           >
             {loading ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin inline-block" />
+                <Loader2 className="h-5 w-5 animate-spin inline-block" />
                 {loadingLabel}
               </>
             ) : (

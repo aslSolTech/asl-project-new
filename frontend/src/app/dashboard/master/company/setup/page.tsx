@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useMemo } from "react";
 import { ColumnDef, Column, Row } from "@tanstack/react-table";
 import { DataTable, DataTableColumnHeader, AppTableFeatures } from "@/components/shared/data-table";
@@ -22,7 +23,6 @@ import {
   MapPin,
   RefreshCw,
 } from "lucide-react";
-import Image from "next/image";
 
 // Columns helper components
 function IdHeader({ column }: Readonly<{ column: Column<AppTableFeatures, CompanyRecord, unknown> }>) {
@@ -264,15 +264,13 @@ export default function CompanySetupPage() {
             size="sm"
             onClick={() => void refetch()}
             disabled={isLoading}
-            className="flex items-center gap-2"
-          >
+            className="flex items-center gap-2">
             <RefreshCw className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`} />
             Refresh
           </Button>
           <Button
             onClick={openCreate}
-            className="flex items-center gap-2 shadow-sm font-semibold cursor-pointer"
-          >
+            className="flex items-center gap-2 shadow-sm font-semibold cursor-pointer">
             <Plus className="w-4 h-4" />
             Add Company
           </Button>
