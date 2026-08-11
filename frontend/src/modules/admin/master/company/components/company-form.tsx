@@ -2,13 +2,13 @@
 
 import { useAppForm } from "@/components/form_builder/form";
 import { FormField } from "@/components/form_builder/fields/FormFields";
-import { companySchema, CompanyFormInput } from "@/modules/admin/validations";
-import { companySetupFieldsConfig } from "@/modules/admin/constants";
+import { companySchema, CompanyFormInput } from "../validations";
+import { companySetupFieldsConfig } from "../constants";
 import {
   useCreateCompanyMutation,
   useUpdateCompanyMutation,
-} from "@/modules/admin/hooks";
-import { CompanyRecord } from "@/modules/admin/types";
+} from "../hooks";
+import { CompanyRecord } from "../types";
 import { Save } from "lucide-react";
 
 export interface CompanyFormProps {

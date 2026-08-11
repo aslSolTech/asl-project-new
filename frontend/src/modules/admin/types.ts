@@ -1,37 +1,27 @@
-export interface CompanyRecord {
-  id: string;
-  companyName: string;
-  companyLogo?: string | null;
-  companyEmail: string;
-  companyPhone: string;
-  website?: string | null;
-  address: string;
-  gstNumber?: string | null;
-  createdAt?: string;
-  updatedAt?: string;
-}
+import React from "react";
 
-export interface CreateCompanyPayload {
-  companyName: string;
-  companyLogo?: File | string | null;
-  companyEmail: string;
-  companyPhone: string;
-  website?: string;
-  address: string;
-  gstNumber?: string;
-}
+export type SubSubItem = {
+  title: string;
+  href: string;
+};
 
-export interface UpdateCompanyPayload extends Partial<CreateCompanyPayload> {
-  id: string;
-}
+export type SubItem = {
+  title: string;
+  href?: string;
+  items?: SubSubItem[];
+};
 
-export interface CompanyListResponse {
-  data: CompanyRecord[];
-  total?: number;
-  message?: string;
-}
+export type MenuItem = {
+  title: string;
+  icon: React.ElementType;
+  href?: string;
+  items?: SubItem[];
+};
 
-export interface CompanyDetailResponse {
-  data: CompanyRecord;
-  message?: string;
+export interface UserProfile {
+  name: string;
+  email: string;
+  username: string;
+  avatar: string;
+  role: string;
 }

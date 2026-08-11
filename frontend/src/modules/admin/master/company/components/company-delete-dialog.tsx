@@ -9,8 +9,8 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useCompanyModalStore } from "@/modules/admin/stores/useCompanyModalStore";
-import { useDeleteCompanyMutation } from "@/modules/admin/hooks";
+import { useCompanyModalStore } from "@/modules/admin/master/company/stores/useCompanyModalStore";
+import { useDeleteCompanyMutation } from "../hooks";
 import { AlertTriangle, Trash2 } from "lucide-react";
 
 export function CompanyDeleteDialog() {

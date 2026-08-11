@@ -7,61 +7,17 @@ import { ChevronRight, PanelLeft } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { ProfileMenu } from "../profiles/ProfileMenu";
 import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
+import { BREADCRUMB_LABEL_MAP } from "../../constants";
 
 function generateBreadcrumbs(pathname: string) {
   const segments = pathname.split("/").filter(Boolean);
   const crumbs = [{ label: "Dashboard", href: "/dashboard" }];
-  const labelMap: Record<string, string> = {
-    overview: "Overview",
-    daily: "Daily Summary",
-    weekly: "Weekly Report",
-    monthly: "Monthly Analytics",
-    analytics: "Analytics",
-    revenue: "Revenue Trends",
-    growth: "User Growth",
-    churn: "Churn Analysis",
-    transactions: "Transactions",
-    domestic: "Domestic",
-    bank: "Bank Transfers",
-    upi: "UPI Payments",
-    card: "Card Payments",
-    international: "International",
-    swift: "SWIFT Transfers",
-    wire: "Wire Transfers",
-    forex: "Currency Exchange",
-    payments: "Payments",
-    invoices: "Invoices",
-    create: "Create Invoice",
-    recurring: "Recurring Bills",
-    links: "Payment Links",
-    subscriptions: "Subscriptions",
-    active: "Active Plans",
-    history: "Billing History",
-    upgrade: "Upgrade Plan",
-    wallets: "Wallets",
-    crypto: "Crypto",
-    bitcoin: "Bitcoin",
-    ethereum: "Ethereum",
-    stable: "Stablecoins",
-    fiat: "Fiat",
-    usd: "USD Wallet",
-    eur: "EUR Wallet",
-    gbp: "GBP Wallet",
-    settings: "Settings",
-    account: "Account",
-    profile: "Profile Info",
-    kyc: "KYC Verification",
-    notifications: "Notifications",
-    security: "Security",
-    "2fa": "Two-Factor Auth",
-    "api-keys": "API Keys",
-  };
 
   let currentPath = "";
   segments.slice(1).forEach((seg) => {
     currentPath += `/${seg}`;
     crumbs.push({
-      label: labelMap[seg] || seg.charAt(0).toUpperCase() + seg.slice(1),
+      label: BREADCRUMB_LABEL_MAP[seg] || seg.charAt(0).toUpperCase() + seg.slice(1),
       href: `/dashboard${currentPath}`,
     });
   });

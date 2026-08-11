@@ -13,13 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-const user = {
-  name: "Test User",
-  email: "test@gmail.com",
-  username: "testuser",
-  avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Rolex",
-  role: "Admin",
-};
+import { DEFAULT_USER_PROFILE as user } from "../../constants";
 
 export const ProfileMenu = memo(function ProfileMenu() {
   return (

@@ -7,8 +7,8 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { useCompanyModalStore } from "@/modules/admin/stores/useCompanyModalStore";
-import { useCompanyDetailQuery } from "@/modules/admin/hooks";
+import { useCompanyModalStore } from "@/modules/admin/master/company/stores/useCompanyModalStore";
+import { useCompanyDetailQuery } from "../hooks";
 import { CompanyForm } from "./company-form";
 import { Building2 } from "lucide-react";
 

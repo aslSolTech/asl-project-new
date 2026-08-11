@@ -5,11 +5,11 @@ import { ColumnDef, Column, Row } from "@tanstack/react-table";
 import { DataTable, DataTableColumnHeader, AppTableFeatures } from "@/components/shared/data-table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useCompanyListQuery } from "@/modules/admin/hooks";
-import { useCompanyModalStore } from "@/modules/admin/stores/useCompanyModalStore";
-import { CompanyRecord } from "@/modules/admin/types";
-import { CompanyModal } from "@/modules/admin/components/master/company/components/company-modal";
-import { CompanyDeleteDialog } from "@/modules/admin/components/master/company/components/company-delete-dialog";
+import { useCompanyListQuery } from "@/modules/admin/master/company/hooks";
+import { useCompanyModalStore } from "@/modules/admin/master/company/stores/useCompanyModalStore";
+import { CompanyRecord } from "@/modules/admin/master/company/types";
+import { CompanyModal } from "@/modules/admin/master/company/components/company-modal";
+import { CompanyDeleteDialog } from "@/modules/admin/master/company/components/company-delete-dialog";
 import {
   Building2,
   Plus,
