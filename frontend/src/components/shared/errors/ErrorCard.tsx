@@ -29,20 +29,19 @@ export function ErrorCard({
         initial={{ opacity: 0, scale: 0.96 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, ease: 'easeOut' }}
-        className="relative z-10 w-full h-full max-w-7xl flex items-center"
-      >
+        className="relative z-10 w-full h-full max-w-7xl flex items-center">
         <div className="w-full h-full backdrop-blur-2xl bg-card border border-border/80 rounded-3xl p-6 sm:p-10 md:p-14 shadow-2xl relative overflow-hidden flex flex-col justify-center group">
           
           {/* Full Card Background Image Layer - Responsive Positioning */}
           {imageSrc && (
-            <div className="absolute inset-y-0 right-0 w-full md:w-[60%] lg:w-[50%] z-0 overflow-hidden pointer-events-none p-4 md:p-8 flex items-center justify-center md:justify-end">
+            <div className="absolute inset-y-0 right-0 w-full md:w-[60%] lg:w-[50%] z-0 overflow-hidden pointer-events-none p-4 md:p-8 flex items-center justify-center md:justify-end  overflow-hidden">
               <Image
                 src={imageSrc}
                 alt={`${displayStatusCode} Error Background`}
                 fill
                 priority
                 sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-contain object-center md:object-right w-full h-full opacity-20 sm:opacity-30 md:opacity-90 dark:opacity-25 transition-transform duration-1000 ease-out group-hover:scale-101"
+                className="object-contain object-center md:object-right w-full h-full opacity-20 sm:opacity-30 md:opacity-90 dark:opacity-60 transition-transform duration-1000 ease-out group-hover:scale-101"
               />
               {/* Soft gradient fade so text is 100% crisp on all screens */}
               {/* <div className="absolute inset-0 bg-gradient-to-r from-card via-card/80 to-transparent md:from-card md:via-card/40 md:to-transparent pointer-events-none" /> */}
