@@ -48,8 +48,6 @@ export function createModalStore<TData>(): UseBoundStore<StoreApi<GenericModalSt
     close: () =>
       set({
         isOpen: false,
-        selectedId: undefined,
-        selectedData: null,
       }),
 
     openDelete: (id: string, name: string) =>
@@ -62,8 +60,6 @@ export function createModalStore<TData>(): UseBoundStore<StoreApi<GenericModalSt
     closeDelete: () =>
       set({
         isDeleteOpen: false,
-        deletingId: undefined,
-        deletingName: undefined,
       }),
   }));
 }

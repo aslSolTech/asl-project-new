@@ -23,6 +23,7 @@ import {
   MapPin,
   RefreshCw,
 } from "lucide-react";
+import Link from "next/link";
 
 // Columns helper components
 function IdHeader({ column }: Readonly<{ column: Column<AppTableFeatures, CompanyRecord, unknown> }>) {
@@ -63,14 +64,14 @@ function NameCell({ row }: Readonly<{ row: Row<AppTableFeatures, CompanyRecord> 
           {company.companyName}
         </span>
         {company.website && (
-          <a
+          <Link
             href={company.website.startsWith("http") ? company.website : `https://${company.website}`}
             target="_blank"
             rel="noreferrer"
             className="text-[11px] text-muted-foreground hover:text-primary flex items-center gap-1 truncate">
             <Globe className="w-3 h-3 shrink-0" />
             {company.website.replace(/^https?:\/\//, "")}
-          </a>
+          </Link>
         )}
       </div>
     </div>
@@ -264,7 +265,7 @@ export default function CompanySetupPage() {
             size="sm"
             onClick={() => void refetch()}
             disabled={isLoading}
-            className="flex items-center gap-2">
+            className="flex items-center gap-2 bg-white">
             <RefreshCw className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`} />
             Refresh
           </Button>

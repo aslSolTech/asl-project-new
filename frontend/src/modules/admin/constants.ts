@@ -441,19 +441,19 @@ export const menuItems: MenuItem[] = [
       {
         title: "API Management",
         items: [
-          { title: "API Type", href: "/dashboard/master/api/type" },
-          { title: "API Register", href: "/dashboard/master/api/register" },
-          { title: "Request Parameter", href: "/dashboard/master/api/request-parameter" },
-          { title: "Status API", href: "/dashboard/master/api/status" },
-          { title: "Balance API", href: "/dashboard/master/api/balance" },
-          { title: "Callback API", href: "/dashboard/master/api/callback" },
+          { title: "API Type", href: "/dashboard/master/api-management/type" },
+          { title: "API Register", href: "/dashboard/master/api-management/register" },
+          { title: "Request Parameter", href: "/dashboard/master/api-management/request-parameter" },
+          { title: "Status API", href: "/dashboard/master/api-management/status" },
+          { title: "Balance API", href: "/dashboard/master/api-management/balance" },
+          { title: "Callback API", href: "/dashboard/master/api-management/callback" },
         ],
       },
       {
         title: "Operator",
         items: [
           { title: "Category", href: "/dashboard/master/operator/category" },
-          { title: "Operator Type", href: "/dashboard/master/operator/type" },
+          { title: "Operator Type", href: "/dashboard/master/operator/operator-type" },
           { title: "Operator Register", href: "/dashboard/master/operator/register" },
           { title: "Operator Code", href: "/dashboard/master/operator/code" },
         ],
@@ -634,17 +634,20 @@ export const menuItems: MenuItem[] = [
       },
     ],
   },
+   {
+    title: "Documentation",
+    icon: FileText,
+    items: [
+      {
+        title: "API Manual",
+        href: "/dashboard/documentation/api-manual"
+      },
+    ],
+  },
   {
     title: "Help Center",
     icon: CircleHelp,
-    items: [
-      {
-        title: "Documentation",
-        items: [
-          {
-            title: "API Manual",
-            href: "/dashboard/help/api-manual",
-          },
+      items: [
           {
             title: "Help Articles",
             href: "/dashboard/help/articles",
@@ -657,8 +660,6 @@ export const menuItems: MenuItem[] = [
             title: "Contact Support",
             href: "/dashboard/help/contact",
           },
-        ],
-      },
-    ],
+      ],
   },
 ];
