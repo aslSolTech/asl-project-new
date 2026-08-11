@@ -14,25 +14,25 @@ import { Building2 } from "lucide-react";
 
 export function CompanyModal() {
   const {
-    isCompanyModalOpen,
-    companyModalMode,
-    selectedCompanyId,
-    selectedCompany,
-    closeCompanyModal,
+    isOpen,
+    mode,
+    selectedId,
+    selectedData,
+    close,
   } = useCompanyModalStore();
 
-  // If in edit mode and selectedCompany isn't in store, fetch details via query
+  // If in edit mode and selectedData isn't in store, fetch details via query
   const shouldFetchDetail =
-    companyModalMode === "edit" && Boolean(selectedCompanyId) && !selectedCompany;
+    mode === "edit" && Boolean(selectedId) && !selectedData;
 
   const { data: fetchedCompany, isLoading: isDetailLoading } = useCompanyDetailQuery(
-    shouldFetchDetail ? selectedCompanyId : undefined
+    shouldFetchDetail ? selectedId : undefined
   );
 
-  const activeCompanyData = selectedCompany ?? fetchedCompany;
+  const activeCompanyData = selectedData ?? fetchedCompany;
 
   return (
-    <Dialog open={isCompanyModalOpen} onOpenChange={(open) => !open && closeCompanyModal()}>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && close()}>
       <DialogContent className="max-w-3xl">
         <DialogHeader className="border-b border-border pb-4">
           <div className="flex items-center gap-3">
@@ -41,10 +41,10 @@ export function CompanyModal() {
             </div>
             <div>
               <DialogTitle className="text-xl font-bold">
-                {companyModalMode === "create" ? "Add New Company" : "Edit Company Profile"}
+                {mode === "create" ? "Add New Company" : "Edit Company Profile"}
               </DialogTitle>
               <DialogDescription className="text-xs">
-                {companyModalMode === "create"
+                {mode === "create"
                   ? "Enter master details to set up a new company organization."
                   : "Update master details for the selected company organization."}
               </DialogDescription>
@@ -58,10 +58,10 @@ export function CompanyModal() {
           </div>
         ) : (
           <CompanyForm
-            key={selectedCompanyId ?? "create-mode"}
-            mode={companyModalMode}
+            key={selectedId ?? "create-mode"}
+            mode={mode}
             initialData={activeCompanyData}
-            onSuccess={closeCompanyModal}
+            onSuccess={close}
           />
         )}
       </DialogContent>

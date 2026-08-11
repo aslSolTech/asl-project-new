@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { ErrorCard } from "@/components/errors/ErrorCard";
+import { ErrorCard } from "@/components/shared/errors/ErrorCard";
 
 interface ErrorProps {
  readonly error: Error & { digest?: string };

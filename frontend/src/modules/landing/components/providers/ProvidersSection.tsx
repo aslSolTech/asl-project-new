@@ -2,27 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { CheckCircle2, ArrowRight } from 'lucide-react';
-
-const providers = [
-  'Financial Services',
-  'Insurance',
-  'Travel Booking – IRCTC',
-  'Bill Payments (BBPS)',
-  'E-Commerce – Amazon',
-  'Vouchers & OTT',
-  'Mobile & DTH Recharges',
-  'PAN Card Services',
-  'Micro ATM',
-  'AEPS Withdrawals',
-  'Money Transfer (DMT)',
-  'Bank Account Opening',
-];
-
-const partnerTickers = [
-  'Airtel', 'Jio', 'BSNL', 'Vi', 'Tata Sky', 'Dish TV',
-  'IRCTC', 'Amazon', 'NSDL', 'UTI', 'Axis Bank', 'SBI',
-  'Netflix', 'Hotstar', 'Amazon Prime', 'Zee5', 'LIC', 'ICICI',
-];
+import { providers, partnerTickers, providerStats } from '../../constants';
 
 export default function ProvidersSection() {
   const doubled = [...partnerTickers, ...partnerTickers];
@@ -107,12 +87,7 @@ export default function ProvidersSection() {
 
               {/* Mini stat pills */}
               <div className="flex flex-wrap justify-center gap-3">
-                {[
-                  { label: '₹3,500', sub: 'Starting Plan' },
-                  { label: '24×7', sub: 'Support' },
-                  { label: '5 mins', sub: 'Go Live' },
-                  { label: '100%', sub: 'Digital' },
-                ].map((stat) => (
+                {providerStats.map((stat) => (
                   <div key={stat.label} className="px-4 py-2 rounded-xl bg-muted border border-border text-center">
                     <div className="font-bold text-foreground text-sm">{stat.label}</div>
                     <div className="text-xs text-muted-foreground">{stat.sub}</div>

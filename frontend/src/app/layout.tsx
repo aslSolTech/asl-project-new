@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { ModalProvider } from "@/components/shared/providers/ModalProvider";
-import { QueryProvider } from "@/components/shared/providers/QueryProvider";
+import { ModalProvider } from "@/providers/ModalProvider";
+import { QueryProvider } from "@/providers/QueryProvider";
 import { geistSans, geistMono, inter, figtreeHeading, museoModerno } from "@/components/ui/fonts";
 import { Toaster } from "@/components/ui/sonner";
 

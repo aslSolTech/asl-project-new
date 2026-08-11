@@ -2,22 +2,8 @@
 
 import { motion, useInView } from 'framer-motion';
 import { useRef, useEffect, useState } from 'react';
-import { Calendar, Monitor, Users, Handshake } from 'lucide-react';
-
-interface SubStat {
-  readonly value: number
-  readonly suffix: string
-  readonly inView: boolean
-}
-
-
-
-const stats = [
-  { icon: Calendar, value: 10, suffix: '+', label: 'Years of Experience', description: 'Serving since Feb 2019' },
-  { icon: Monitor, value: 180, suffix: '+', label: 'Successful Projects', description: 'Across India' },
-  { icon: Users, value: 50, suffix: '+', label: 'Team Members', description: 'Expert professionals' },
-  { icon: Handshake, value: 8000, suffix: '+', label: 'Happy Clients', description: 'Retailers & distributors' },
-];
+import { stats } from '../../constants';
+import { SubStat } from '../../types';
 
 function AnimatedCounter({ value, suffix, inView }: SubStat) {
   const [count, setCount] = useState(0);

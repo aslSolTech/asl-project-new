@@ -2,70 +2,8 @@
 
 import { motion } from 'framer-motion';
 import { Star, Quote } from 'lucide-react';
-
-const testimonials = [
-  {
-    name: 'Ramesh Kumar',
-    role: 'Shopkeeper, UP',
-    initials: 'RK',
-    color: 'bg-blue-500',
-    rating: 5,
-    text: 'Payzones is a very very good app for my business. It\'s improving day by day and is the best service provider for AEPS. Thumbs Up from my side!',
-  },
-  {
-    name: 'Sunil Sharma',
-    role: 'Retailer, Bihar',
-    initials: 'SS',
-    color: 'bg-purple-500',
-    rating: 5,
-    text: 'Earlier it used to take me half a day to earn ₹300 but after joining Payzones I earn ₹300 in just 15 minutes by providing account opening service.',
-  },
-  {
-    name: 'Mohit Verma',
-    role: 'Distributor, Rajasthan',
-    initials: 'MV',
-    color: 'bg-green-500',
-    rating: 5,
-    text: 'I have experienced AEPS services from many companies. Thanks to Payzones, which is the most trusted company in this domain. It provides many services I earn well from.',
-  },
-  {
-    name: 'Priya Singh',
-    role: 'Shopkeeper, MP',
-    initials: 'PS',
-    color: 'bg-amber-500',
-    rating: 5,
-    text: 'After joining Payzones, our shop has become famous for banking services in the whole village, due to which the number of our customers has increased a lot.',
-  },
-  {
-    name: 'Ajay Patel',
-    role: 'Master Distributor, Gujarat',
-    initials: 'AP',
-    color: 'bg-red-500',
-    rating: 5,
-    text: 'The real-time commission and backoffice dashboard make managing my agent network effortless. Payzones has truly transformed how I run my business.',
-  },
-  {
-    name: 'Deepak Yadav',
-    role: 'Retailer, Jharkhand',
-    initials: 'DY',
-    color: 'bg-teal-500',
-    rating: 5,
-    text: 'Best platform for BBPS and money transfers. Customers now prefer to come to my shop for all banking needs. Highly recommended!',
-  },
-];
-
-interface SubTestimonial {
-  readonly rating: number
-  readonly name: string
-  readonly role: string
-  readonly initials: string
-  readonly color: string
-  readonly text: string
-}
-
-interface TestimonialCardProps {
-  readonly testimonial: SubTestimonial;
-}
+import { testimonials } from '../../constants';
+import { TestimonialCardProps } from '../../types';
 
 function TestimonialCard({ testimonial }: TestimonialCardProps) {
   return (

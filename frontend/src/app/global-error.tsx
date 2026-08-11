@@ -1,5 +1,5 @@
 "use client";
-import { ErrorCard } from "@/components/errors/ErrorCard";
+import { ErrorCard } from "@/components/shared/errors/ErrorCard";
 
 interface GlobalErrorProps {
   readonly error: Error & { digest?: string };

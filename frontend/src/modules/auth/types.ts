@@ -58,11 +58,6 @@ export interface AuthState {
   setOtpVerified: (message: string) => void;
   setAuthError: (error: string) => void;
 
-  login: (data: LoginFormData) => Promise<boolean>;
-  signupCompany: (data: CompanySignupFormData) => Promise<boolean>;
-  requestPasswordReset: (data: ForgotPasswordFormData) => Promise<boolean>;
-  verifyOtp: (data: OtpVerificationFormData & { userId?: string }) => Promise<boolean>;
-  resendOtp: (userId: string) => Promise<boolean>;
   clearMessages: () => void;
   logout: () => void;
 }

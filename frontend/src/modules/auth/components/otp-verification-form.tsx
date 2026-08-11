@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAppForm } from "@/components/form_builder/form";
-import { useAuthStore } from "@/stores/authStore";
+import { useAuthState } from "../stores/authState";
 import {
   OTP_VERIFICATION_DEFAULT_VALUES,
   OTP_TIMER_INITIAL_SECONDS,
@@ -23,10 +23,16 @@ import {
 import { ShieldCheck, Loader2, CheckCircle2, ArrowLeft, RefreshCw } from "lucide-react";
 import { motion } from "framer-motion";
 
+import { useVerifyOtpMutation, useResendOtpMutation } from "../hooks";
+
 export function OtpVerificationForm() {
   const router = useRouter();
-  const { pendingUserId, verifyOtp, resendOtp, isLoading, error, successMessage, clearMessages } = useAuthStore();
+  const { pendingUserId, error, successMessage, clearMessages } = useAuthState();
+  const { mutate: verifyOtp, isPending: isVerifying } = useVerifyOtpMutation();
+  const { mutate: resendOtp, isPending: isResending } = useResendOtpMutation();
   const [timer, setTimer] = useState(OTP_TIMER_INITIAL_SECONDS);
+
+  const isLoading = isVerifying || isResending;
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -38,17 +44,18 @@ export function OtpVerificationForm() {
 
   const defaultValues = OTP_VERIFICATION_DEFAULT_VALUES;
 
-  const handleSubmit = async ({ value }: { value: typeof defaultValues }) => {
+  const handleSubmit = ({ value }: { value: typeof defaultValues }) => {
     clearMessages();
-    const success = await verifyOtp({
+    verifyOtp({
       otpCode: value.otpCode,
       userId: pendingUserId ?? undefined,
+    }, {
+      onSuccess: () => {
+        setTimeout(() => {
+          router.push("/login");
+        }, 1500);
+      },
     });
-    if (success) {
-      setTimeout(() => {
-        router.push("/login");
-      }, 1500);
-    }
   };
 
   const form = useAppForm({
@@ -56,13 +63,14 @@ export function OtpVerificationForm() {
     onSubmit: handleSubmit,
   });
 
-  const handleResend = async () => {
+  const handleResend = () => {
     if (timer > 0 || !pendingUserId) return;
     clearMessages();
-    const success = await resendOtp(pendingUserId);
-    if (success) {
-      setTimer(60);
-    }
+    resendOtp({ userId: pendingUserId }, {
+      onSuccess: () => {
+        setTimer(60);
+      },
+    });
   };
 
   return (

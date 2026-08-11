@@ -58,7 +58,7 @@ export default function FaqsSection() {
             className="w-full space-y-4"
             defaultValue={[items[0]?.id]}
           >
-            {items.map((item: any) => (
+            {items.map((item) => (
               <AccordionItem
                 className="overflow-hidden border border-border/80 bg-card rounded-2xl shadow-md transition-all duration-300 hover:border-primary/40 hover:shadow-lg"
                 key={item.id}
@@ -90,7 +90,7 @@ export default function FaqsSection() {
                 </AccordionTrigger>
 
                 <AccordionContent className="px-6 pb-6 pt-0 space-y-3">
-                  {item.collapsibles.map((collapsible: any) => (
+                  {item.collapsibles.map((collapsible) => (
                     <Collapsible
                       className="space-y-2 border border-border/60 bg-muted/30 dark:bg-muted/20 rounded-xl p-4 transition-colors"
                       key={collapsible.id}

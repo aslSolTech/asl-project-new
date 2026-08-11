@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { useApiQuery, useApiMutation } from "@/hooks/useGenericApi";
+import { useApiQuery, useApiMutation } from "@/hooks/useTanstackApiHook";
 import { COMPANY_API_ENDPOINTS } from "./endpoints";
 import {
   CompanyRecord,

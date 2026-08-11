@@ -15,22 +15,22 @@ import { AlertTriangle, Trash2 } from "lucide-react";
 
 export function CompanyDeleteDialog() {
   const {
-    isDeleteDialogOpen,
-    deletingCompanyId,
-    deletingCompanyName,
-    closeDeleteDialog,
+    isDeleteOpen,
+    deletingId,
+    deletingName,
+    closeDelete: closeDeleteDialog,
   } = useCompanyModalStore();
 
   const deleteMutation = useDeleteCompanyMutation();
 
   const handleDelete = async () => {
-    if (!deletingCompanyId) return;
-    await deleteMutation.mutateAsync(deletingCompanyId);
+    if (!deletingId) return;
+    await deleteMutation.mutateAsync(deletingId);
     closeDeleteDialog();
   };
 
   return (
-    <Dialog open={isDeleteDialogOpen} onOpenChange={(open) => !open && closeDeleteDialog()}>
+    <Dialog open={isDeleteOpen} onOpenChange={(open) => !open && closeDeleteDialog()}>
       <DialogContent className="max-w-md">
         <DialogHeader className="space-y-2">
           <div className="w-10 h-10 rounded-full bg-destructive/10 text-destructive flex items-center justify-center">
@@ -40,7 +40,7 @@ export function CompanyDeleteDialog() {
           <DialogDescription>
             Are you sure you want to delete{" "}
             <span className="font-semibold text-foreground">
-              {deletingCompanyName ?? "this company"}
+              {deletingName ?? "this company"}
             </span>{" "}
             ? This action cannot be undone.
           </DialogDescription>

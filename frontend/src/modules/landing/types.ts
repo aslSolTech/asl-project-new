@@ -54,3 +54,26 @@ export interface MobileLinkVariants {
     transition: { delay: number; duration: number };
   };
 }
+
+export interface SubTestimonial {
+  readonly rating: number;
+  readonly name: string;
+  readonly role: string;
+  readonly initials: string;
+  readonly color: string;
+  readonly text: string;
+}
+
+export interface TestimonialCardProps {
+  readonly testimonial: SubTestimonial;
+}
+
+export interface SubStat {
+  readonly value: number;
+  readonly suffix: string;
+  readonly inView: boolean;
+}
+
+export interface Indice {
+  readonly index: number;
+}

@@ -9,23 +9,27 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { User, Loader2, ArrowRight, ArrowLeft } from "lucide-react";
-import { useAuthStore } from "@/stores/authStore";
+import { useAuthState } from "../stores/authState";
 import { motion } from "framer-motion";
+
+import { useRequestPasswordResetMutation } from "../hooks";
 
 export function ForgotPasswordForm() {
   const router = useRouter();
-  const { requestPasswordReset, isLoading, error, successMessage, clearMessages } = useAuthStore();
+  const { error, successMessage, clearMessages } = useAuthState();
+  const { mutate: requestPasswordReset, isPending: isLoading } = useRequestPasswordResetMutation();
 
   const defaultValues = FORGOT_PASSWORD_DEFAULT_VALUES;
 
-  const handleSubmit = async ({ value }: { value: typeof defaultValues }) => {
+  const handleSubmit = ({ value }: { value: typeof defaultValues }) => {
     clearMessages();
-    const success = await requestPasswordReset(value);
-    if (success) {
-      setTimeout(() => {
-        router.push("/verify-otp");
-      }, 1200);
-    }
+    requestPasswordReset(value, {
+      onSuccess: () => {
+        setTimeout(() => {
+          router.push("/verify-otp");
+        }, 1200);
+      },
+    });
   };
 
   const form = useAppForm({

@@ -1,8 +1,9 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
-import { ArrowRight, ShieldCheck, Zap, Wallet, ChevronRight, TrendingUp, Users, Banknote } from 'lucide-react';
+import { ArrowRight, ChevronRight, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
+import { QUICK_SERVICES, STATIC_PARTICLES, HERO_FEATURES, HERO_STATS, MOCKUP_STATS, MOCKUP_CHART_DATA } from '../../constants';
 
 // ── Animated dashboard SVG (inline, no images needed) ──
 function DashboardMockup() {
@@ -60,11 +61,7 @@ function DashboardMockup() {
 
           {/* Stats row */}
           <div className="grid grid-cols-3 gap-2">
-            {[
-              { label: 'Commission', value: '₹1,240', icon: TrendingUp, color: 'text-green-500', bg: 'bg-green-500/10' },
-              { label: 'Agents', value: '23', icon: Users, color: 'text-blue-500', bg: 'bg-blue-500/10' },
-              { label: 'AEPS Txn', value: '156', icon: Banknote, color: 'text-purple-500', bg: 'bg-purple-500/10' },
-            ].map((s) => {
+            {MOCKUP_STATS.map((s) => {
               const Icon = s.icon;
               return (
                 <div key={s.label} className={`rounded-lg ${s.bg} p-2.5 text-center`}>
@@ -83,9 +80,9 @@ function DashboardMockup() {
               <span className="text-[10px] text-green-500 font-bold">+18.4%</span>
             </div>
             <div className="flex items-end gap-1 h-14">
-              {[40, 65, 45, 80, 55, 90, 70].map((h, i) => (
+              {MOCKUP_CHART_DATA.map((h, i) => (
                 <motion.div
-                  key={i}
+                  key={h - i}
                   className="flex-1 rounded-t-sm bg-gradient-to-t from-primary/80 to-primary/30"
                   initial={{ scaleY: 0 }}
                   animate={{ scaleY: 1 }}
@@ -103,12 +100,7 @@ function DashboardMockup() {
 
           {/* Service quick access */}
           <div className="grid grid-cols-4 gap-1.5">
-            {[
-              { label: 'AEPS', emoji: '🏧' },
-              { label: 'Recharge', emoji: '📱' },
-              { label: 'Bill Pay', emoji: '⚡' },
-              { label: 'Transfer', emoji: '💸' },
-            ].map((s) => (
+            {QUICK_SERVICES.map((s) => (
               <div key={s.label} className="rounded-lg bg-muted/60 border border-border/40 p-2 text-center">
                 <div className="text-base leading-none mb-1">{s.emoji}</div>
                 <div className="text-[9px] text-muted-foreground font-medium">{s.label}</div>
@@ -139,28 +131,6 @@ function DashboardMockup() {
     </motion.div>
   );
 }
-const STATIC_PARTICLES = [
-  { id: 1, left: 12, top: 25, duration: 5.2, delay: 0.5 },
-  { id: 2, left: 78, top: 15, duration: 6.8, delay: 1.2 },
-  { id: 3, left: 34, top: 85, duration: 4.5, delay: 2.1 },
-  { id: 4, left: 56, top: 45, duration: 7.2, delay: 0.8 },
-  { id: 5, left: 89, top: 65, duration: 5.9, delay: 1.5 },
-  { id: 6, left: 23, top: 55, duration: 6.1, delay: 0.3 },
-  { id: 7, left: 45, top: 12, duration: 4.8, delay: 2.7 },
-  { id: 8, left: 67, top: 88, duration: 5.4, delay: 1.1 },
-  { id: 9, left: 91, top: 32, duration: 7.5, delay: 0.4 },
-  { id: 10, left: 15, top: 73, duration: 6.3, delay: 1.9 },
-  { id: 11, left: 50, top: 92, duration: 5.0, delay: 2.3 },
-  { id: 12, left: 82, top: 50, duration: 6.6, delay: 0.7 },
-  { id: 13, left: 28, top: 20, duration: 7.0, delay: 1.6 },
-  { id: 14, left: 70, top: 78, duration: 4.9, delay: 2.2 },
-  { id: 15, left: 38, top: 60, duration: 5.5, delay: 0.9 },
-  { id: 16, left: 62, top: 28, duration: 6.2, delay: 1.4 },
-  { id: 17, left: 95, top: 82, duration: 7.8, delay: 2.5 },
-  { id: 18, left: 5, top: 40, duration: 5.7, delay: 1.8 },
-  { id: 19, left: 48, top: 70, duration: 6.4, delay: 0.2 },
-  { id: 20, left: 87, top: 95, duration: 4.7, delay: 1.0 },
-];
 
 // ── Floating particles background ──
 function Particles() {
@@ -316,11 +286,7 @@ export default function Hero() {
               transition={{ duration: 0.5, delay: 0.45 }}
               className="flex flex-wrap justify-center lg:justify-start gap-2 mb-8"
             >
-              {[
-                { icon: ShieldCheck, label: 'RBI Compliant' },
-                { icon: Zap, label: 'Instant Settlement' },
-                { icon: Wallet, label: 'Zero Wallet Charges' },
-              ].map((f) => {
+              {HERO_FEATURES.map((f) => {
                 const Icon = f.icon;
                 return (
                   <div
@@ -341,11 +307,7 @@ export default function Hero() {
               transition={{ delay: 0.6 }}
               className="flex items-center justify-center lg:justify-start gap-6 pt-4 border-t border-border/30"
             >
-              {[
-                { val: '10+', label: 'Years' },
-                { val: '8,000+', label: 'Retailers' },
-                { val: '25+', label: 'Services' },
-              ].map((s, i) => (
+              {HERO_STATS.map((s, i) => (
                 <div key={s.label} className="text-center lg:text-left flex items-center gap-3">
                   {i > 0 && <div className="h-6 w-px bg-border" />}
                   <div>

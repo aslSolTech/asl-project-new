@@ -1,4 +1,4 @@
-import { ErrorCard } from "@/components/errors/ErrorCard";
+import { ErrorCard } from "@/components/shared/errors/ErrorCard";
 
 export default function Unauthorized() {
   return (

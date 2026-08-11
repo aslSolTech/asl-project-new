@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAppForm } from "@/components/form_builder/form";
-import { useAuthStore } from "@/stores/authStore";
+import { useAuthState } from "../stores/authState";
 import { SIGNUP_DEFAULT_VALUES, BUSINESS_TYPES, FORM_CONTAINER_VARIANTS, FORM_ITEM_VARIANTS } from "../constants";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -34,21 +34,25 @@ import {
 } from "lucide-react";
 import { motion } from "framer-motion";
 
+import { useSignupCompanyMutation } from "../hooks";
+
 export function CompanySignupForm() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-  const { signupCompany, isLoading, error, successMessage, clearMessages } = useAuthStore();
+  const { error, successMessage, clearMessages } = useAuthState();
+  const { mutate: signupCompany, isPending: isLoading } = useSignupCompanyMutation();
 
   const defaultValues = SIGNUP_DEFAULT_VALUES;
 
-  const handleSubmit = async ({ value }: { value: typeof defaultValues }) => {
+  const handleSubmit = ({ value }: { value: typeof defaultValues }) => {
     clearMessages();
-    const success = await signupCompany(value);
-    if (success) {
-      setTimeout(() => {
-        router.push("/verify-otp");
-      }, 1200);
-    }
+    signupCompany(value, {
+      onSuccess: () => {
+        setTimeout(() => {
+          router.push("/verify-otp");
+        }, 1200);
+      },
+    });
   };
 
   const form = useAppForm({

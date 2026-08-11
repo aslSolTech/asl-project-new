@@ -1,54 +1,9 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { UserPlus, FileCheck, Rocket, TrendingUp, ArrowRight } from 'lucide-react';
-
-const steps = [
-  {
-    icon: UserPlus,
-    step: '01',
-    title: 'Apply & Register',
-    desc: 'Choose your plan — Retailer, Distributor, Master Distributor or Whitelabel. Register online in minutes.',
-    iconBg: 'bg-blue-500/15',
-    iconColor: 'text-blue-500',
-    borderColor: 'border-blue-500/40',
-    dotColor: '#3b82f6',
-  },
-  {
-    icon: FileCheck,
-    step: '02',
-    title: 'KYC Verification',
-    desc: 'Complete your KYC with Aadhaar & PAN. Our team verifies and activates your account within 24 hours.',
-    iconBg: 'bg-purple-500/15',
-    iconColor: 'text-purple-500',
-    borderColor: 'border-purple-500/40',
-    dotColor: '#a855f7',
-  },
-  {
-    icon: Rocket,
-    step: '03',
-    title: 'Get Activated',
-    desc: 'Go live in 5 minutes! Access 25+ banking & utility services via our app, portal or API.',
-    iconBg: 'bg-primary/15',
-    iconColor: 'text-primary',
-    borderColor: 'border-primary/40',
-    dotColor: '#F7941D',
-  },
-  {
-    icon: TrendingUp,
-    step: '04',
-    title: 'Start Earning',
-    desc: 'Earn real-time commissions on every transaction. Track your earnings live on the dashboard.',
-    iconBg: 'bg-green-500/15',
-    iconColor: 'text-green-500',
-    borderColor: 'border-green-500/40',
-    dotColor: '#22c55e',
-  },
-];
-
-type Indice = {
-  readonly index: number
-}
+import { ArrowRight } from 'lucide-react';
+import { steps } from '../../constants';
+import { Indice } from '../../types';
 
 // Segment line between two steps with looping traveller dot
 function SegmentLine({ index }: Indice) {

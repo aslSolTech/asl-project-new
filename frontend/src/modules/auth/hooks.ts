@@ -1,5 +1,5 @@
-import { useAuthStore } from "@/stores/authStore";
-import { useApiMutation } from "@/hooks/useGenericApi";
+import { useAuthState } from "./stores/authState";
+import { useApiMutation } from "@/hooks/useTanstackApiHook";
 import { AUTH_API_ENDPOINTS } from "./endpoints";
 import {
   LoginRequest,
@@ -10,7 +10,7 @@ import {
 } from "./types";
 
 export function useLoginMutation() {
-  const { setAuthSuccess, setAuthError, clearMessages } = useAuthStore();
+  const { setAuthSuccess, setAuthError, clearMessages } = useAuthState();
 
   return useApiMutation<AuthResponse, Error, LoginRequest>(
     AUTH_API_ENDPOINTS.LOGIN,
@@ -35,7 +35,7 @@ export function useLoginMutation() {
 }
 
 export function useSignupCompanyMutation() {
-  const { setPendingUser, setAuthError, clearMessages } = useAuthStore();
+  const { setPendingUser, setAuthError, clearMessages } = useAuthState();
 
   return useApiMutation<AuthResponse, Error, CompanySignupRequest>(
     AUTH_API_ENDPOINTS.SIGNUP_COMPANY,
@@ -57,7 +57,7 @@ export function useSignupCompanyMutation() {
 }
 
 export function useRequestPasswordResetMutation() {
-  const { setPendingUser, setAuthError, clearMessages } = useAuthStore();
+  const { setPendingUser, setAuthError, clearMessages } = useAuthState();
 
   return useApiMutation<AuthResponse, Error, ForgotPasswordRequest>(
     AUTH_API_ENDPOINTS.FORGOT_PASSWORD,
@@ -79,7 +79,7 @@ export function useRequestPasswordResetMutation() {
 }
 
 export function useVerifyOtpMutation() {
-  const { setOtpVerified, setAuthError, clearMessages } = useAuthStore();
+  const { setOtpVerified, setAuthError, clearMessages } = useAuthState();
 
   return useApiMutation<AuthResponse, Error, OtpVerificationRequest>(
     AUTH_API_ENDPOINTS.VERIFY_OTP,
@@ -91,6 +91,28 @@ export function useVerifyOtpMutation() {
         },
         onSuccess: (data) => {
           setOtpVerified(data.message ?? "OTP verified!");
+        },
+        onError: (error: Error) => {
+          setAuthError(error.message);
+        },
+      },
+    }
+  );
+}
+
+export function useResendOtpMutation() {
+  const { setAuthSuccess, setAuthError, clearMessages } = useAuthState();
+
+  return useApiMutation<AuthResponse, Error, { userId: string }>(
+    AUTH_API_ENDPOINTS.RESEND_OTP,
+    {
+      method: "POST",
+      options: {
+        onMutate: () => {
+          clearMessages();
+        },
+        onSuccess: (data) => {
+          setAuthSuccess(null, null, data.message ?? "OTP sent successfully!");
         },
         onError: (error: Error) => {
           setAuthError(error.message);

@@ -3,82 +3,12 @@
 import { motion } from 'framer-motion'
 import Image from 'next/image'
 import { Mail, Phone, MapPin, ArrowRight } from 'lucide-react'
+import { FOOTER_SECTIONS, COMPLIANCE_BADGES, SOCIAL_LINKS } from '../../constants'
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
-  const footerSections = [
-    {
-      title: 'Services',
-      links: [
-        { label: 'AEPS Service', href: '#services' },
-        { label: 'Money Transfer', href: '#services' },
-        { label: 'BBPS Bill Payments', href: '#services' },
-        { label: 'Mobile Recharge', href: '#services' },
-        { label: 'PAN Card Services', href: '#services' },
-      ],
-    },
-    {
-      title: 'Join Us',
-      links: [
-        { label: 'Retailer Plan', href: '#pricing' },
-        { label: 'Distributor Plan', href: '#pricing' },
-        { label: 'Master Distributor', href: '#pricing' },
-        { label: 'Whitelabel Solution', href: '#pricing' },
-      ],
-    },
-    {
-      title: 'Company',
-      links: [
-        { label: 'About Us', href: '#' },
-        { label: 'Contact', href: '#contact' },
-        { label: 'Privacy Policy', href: '#' },
-        { label: 'Terms of Service', href: '#' },
-        { label: 'Cancellation & Refund', href: '#' },
-      ],
-    },
-  ] as const
 
-  const socialLinks = [
-    {
-      label: 'Facebook',
-      href: '#',
-      svg: (
-        <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
-          <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
-        </svg>
-      ),
-    },
-    {
-      label: 'X / Twitter',
-      href: '#',
-      svg: (
-        <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
-          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-        </svg>
-      ),
-    },
-    {
-      label: 'Instagram',
-      href: '#',
-      svg: (
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-4 w-4">
-          <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
-          <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z" />
-          <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
-        </svg>
-      ),
-    },
-    {
-      label: 'YouTube',
-      href: '#',
-      svg: (
-        <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4">
-          <path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 00-1.95 1.96A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58zM9.75 15.02V8.98L15.5 12z" />
-        </svg>
-      ),
-    },
-  ]
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -214,23 +144,26 @@ export default function Footer() {
 
             {/* Social Links */}
             <div className="flex gap-2">
-              {socialLinks.map((social) => (
-                <motion.a
-                  key={social.label}
-                  href={social.href}
-                  whileHover={{ scale: 1.15, y: -2 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="p-2 rounded-lg bg-muted hover:bg-primary/10 text-foreground/60 hover:text-primary transition-colors border border-border/50"
-                  aria-label={social.label}
-                >
-                  {social.svg}
-                </motion.a>
-              ))}
+              {SOCIAL_LINKS.map((social) => {
+                const Icon = social.icon;
+                return (
+                  <motion.a
+                    key={social.label}
+                    href={social.href}
+                    whileHover={{ scale: 1.15, y: -2 }}
+                    whileTap={{ scale: 0.9 }}
+                    className="p-2 rounded-lg bg-muted hover:bg-primary/10 text-foreground/60 hover:text-primary transition-colors border border-border/50"
+                    aria-label={social.label}
+                  >
+                    <Icon className="h-4 w-4" />
+                  </motion.a>
+                );
+              })}
             </div>
           </motion.div>
 
           {/* Footer Link Sections */}
-          {footerSections.map((section) => (
+          {FOOTER_SECTIONS.map((section) => (
             <motion.div key={section.title} variants={itemVariants}>
               <h4 className="font-bold text-foreground mb-4 text-sm uppercase tracking-wider">{section.title}</h4>
               <ul className="space-y-2.5">
@@ -268,7 +201,7 @@ export default function Footer() {
 
           {/* Compliance badges */}
           <div className="flex gap-2 items-center flex-wrap justify-center">
-            {['RBI Compliant', 'SSL Secure', 'PCI DSS', 'ISO 27001'].map((badge) => (
+            {COMPLIANCE_BADGES.map((badge) => (
               <span
                 key={badge}
                 className="px-2.5 py-1 rounded-md bg-muted border border-border text-[10px] font-semibold text-foreground/60"

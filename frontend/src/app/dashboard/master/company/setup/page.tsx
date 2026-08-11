@@ -135,14 +135,14 @@ function ActionsHeader() {
 }
 
 function ActionsCell({ row }: Readonly<{ row: Row<AppTableFeatures, CompanyRecord> }>) {
-  const { openEditCompanyModal, openDeleteDialog } = useCompanyModalStore();
+  const { openEdit, openDelete } = useCompanyModalStore();
   const company = row.original;
   return (
     <div className="flex items-center gap-1.5">
       <Button
         variant="ghost"
         size="icon-sm"
-        onClick={() => openEditCompanyModal(company)}
+        onClick={() => openEdit(company.id, company)}
         title="Edit Company"
         className="h-8 w-8 text-muted-foreground hover:text-primary hover:bg-primary/10"
       >
@@ -152,7 +152,7 @@ function ActionsCell({ row }: Readonly<{ row: Row<AppTableFeatures, CompanyRecor
       <Button
         variant="ghost"
         size="icon-sm"
-        onClick={() => openDeleteDialog(company.id, company.companyName)}
+        onClick={() => openDelete(company.id, company.companyName)}
         title="Delete Company"
         className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
       >
@@ -165,7 +165,7 @@ function ActionsCell({ row }: Readonly<{ row: Row<AppTableFeatures, CompanyRecor
 
 export default function CompanySetupPage() {
   const { data: companiesData, isLoading, isError, refetch } = useCompanyListQuery();
-  const { openCreateCompanyModal } = useCompanyModalStore();
+  const { openCreate } = useCompanyModalStore();
 
   // Demo fallback dataset if backend table is empty during development
   const displayData = useMemo<CompanyRecord[]>(() => {
@@ -270,7 +270,7 @@ export default function CompanySetupPage() {
             Refresh
           </Button>
           <Button
-            onClick={openCreateCompanyModal}
+            onClick={openCreate}
             className="flex items-center gap-2 shadow-sm font-semibold cursor-pointer"
           >
             <Plus className="w-4 h-4" />

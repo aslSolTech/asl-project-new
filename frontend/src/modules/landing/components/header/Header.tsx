@@ -48,7 +48,7 @@ export default function Header() {
             isOpen={isMobileMenuOpen}
             onClose={() => setIsMobileMenuOpen(false)}
           >
-            {navItems.map((item: any) => (
+            {navItems.map((item) => (
               <a
                 key={item.key}
                 href={item.link}

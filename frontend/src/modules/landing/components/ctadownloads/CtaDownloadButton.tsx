@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Download, Star } from 'lucide-react';
+import { QUICK_SERVICES } from '../../constants';
 
 export default function CtaDownloadButton() {
   return (
@@ -111,9 +112,9 @@ export default function CtaDownloadButton() {
                   </div>
                   <p className="text-xs font-bold text-foreground">Payzones</p>
                   <div className="w-full space-y-2 mt-2">
-                    {['AEPS', 'Recharge', 'Bill Pay', 'Transfer'].map((item) => (
-                      <div key={item} className="rounded-lg bg-card/60 border border-border/50 px-3 py-1.5 text-xs text-foreground/70 text-left">
-                        {item}
+                    {QUICK_SERVICES.map((item) => (
+                      <div key={item.label} className="rounded-lg bg-card/60 border border-border/50 px-3 py-1.5 text-xs text-foreground/70 text-left">
+                        {item.label}
                       </div>
                     ))}
                   </div>

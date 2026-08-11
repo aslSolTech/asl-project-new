@@ -11,24 +11,27 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff, Lock, User, Loader2, ArrowRight } from "lucide-react";
-import { useAuthStore } from "@/stores/authStore";
+import { useAuthState } from "../stores/authState";
 import { motion } from "framer-motion";
+import { useLoginMutation } from "../hooks";
 
 export function LoginForm() {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-  const { login, isLoading, error, successMessage, clearMessages } = useAuthStore();
+  const { error, successMessage, clearMessages } = useAuthState();
+  const { mutate: login, isPending: isLoading } = useLoginMutation();
 
   const defaultValues = LOGIN_DEFAULT_VALUES;
 
-  const handleSubmit = async ({ value }: { value: typeof defaultValues }) => {
+  const handleSubmit = ({ value }: { value: typeof defaultValues }) => {
     clearMessages();
-    const success = await login(value);
-    if (success) {
-      setTimeout(() => {
-        router.push("/dashboard");
-      }, 1000);
-    }
+    login(value, {
+      onSuccess: () => {
+        setTimeout(() => {
+          router.push("/dashboard");
+        }, 1000);
+      },
+    });
   };
 
   const form = useAppForm({
