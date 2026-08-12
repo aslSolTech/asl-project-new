@@ -17,6 +17,28 @@ export const metadata: Metadata = {
     shortcut: "/logo/logo.png",
     apple: "/logo/logo.png",
   },
+  openGraph: {
+    title: "Payzones",
+    description: "Welcome to Payzones",
+    images: [
+      {
+        url: "/logo/logo.png",
+        alt: "Payzones",
+      },
+    ],
+    type: "website",
+    locale: "en_US",
+    siteName: "Payzones",
+    url: "https://payzones.net",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Payzones",
+    description: "Welcome to Payzones",
+    images: "/logo/logo.png",
+    site: "@payzones",
+    creator: "@payzones",
+  },
 };
 
 export default function RootLayout({

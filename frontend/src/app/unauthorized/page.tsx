@@ -1,12 +1,12 @@
 import { ErrorCard } from "@/components/shared/errors/ErrorCard";
 
-export default function Unauthorized() {
+export default function UnauthorizedPage() {
   return (
     <ErrorCard
       statusCode={401}
       imageSrc="/images/errors/401.png"
-      title="Authentication Required"
-      description="You need to be logged in to access this page. Please sign in to continue."
+      title="Unauthorized Access"
+      description="You need to be logged in to view this page. Please log in first."
       showHomeBtn={true}
       showBackBtn={true}
     />

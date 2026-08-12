@@ -52,16 +52,14 @@ export default async function CatchAllPage({ params }: CatchAllPageProps) {
       <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
         <Link
           href="/dashboard"
-          className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-secondary dark:bg-secondary/70 text-white font-medium text-sm hover:opacity-90 transition-opacity shadow-md hover:shadow-lg"
-        >
+          className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-secondary dark:bg-secondary/70 text-white font-medium text-sm hover:opacity-90 transition-opacity shadow-md hover:shadow-lg">
           <LayoutDashboard className="w-4 h-4" />
           Dashboard Overview
         </Link>
 
         <Link
           href="/"
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium text-sm hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700"
-        >
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-medium text-sm hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors border border-slate-200 dark:border-slate-700">
           <Home className="w-4 h-4" />
           Home Page
         </Link>
