@@ -37,6 +37,7 @@ export interface TextFieldProps extends Omit<React.ComponentProps<"input">, "nam
   readonly onBlur?: () => void;
   readonly className?: string;
   readonly wrapperClassName?: string;
+  readonly textTransform?: "uppercase" | "lowercase" | "capitalize";
 }
 
 export const FormField = forwardRef<HTMLInputElement | HTMLTextAreaElement, TextFieldProps>(
@@ -59,6 +60,7 @@ export const FormField = forwardRef<HTMLInputElement | HTMLTextAreaElement, Text
       onBlur,
       className,
       wrapperClassName,
+      textTransform,
       ...props
     },
     ref
@@ -94,10 +96,26 @@ export const FormField = forwardRef<HTMLInputElement | HTMLTextAreaElement, Text
             disabled={disabled}
             readOnly={readOnly}
             value={typeof value === "string" ? value : ""}
-            onChange={(e) => onChange?.(e.target.value)}
-            onBlur={onBlur}
+            onChange={(e) => {
+              let val = e.target.value;
+              if (textTransform === "uppercase") {
+                val = val.toUpperCase();
+              } else if (textTransform === "lowercase") {
+                val = val.toLowerCase();
+              } else if (textTransform === "capitalize") {
+                val = val.replace(/\b\w/g, (c) => c.toUpperCase());
+              }
+              onChange?.(val);
+            }}
+            onBlur={() => {
+              if (typeof value === "string") {
+                onChange?.(value.trim());
+              }
+              onBlur?.();
+            }}
             ref={ref as React.Ref<HTMLTextAreaElement>}
             className={cn(error && "border-destructive focus-visible:ring-destructive", className)}
+            style={{ textTransform, ...props.style }}
           />
           {renderHelperOrError()}
         </div>
@@ -106,23 +124,46 @@ export const FormField = forwardRef<HTMLInputElement | HTMLTextAreaElement, Text
 
     // 2. Select Dropdown Input
     if (type === "select") {
+      const placeholderText = placeholder || "Select option";
+      const stringifiedOptions = [
+        { value: "", label: placeholderText },
+        ...options.map((opt) => ({
+          ...opt,
+          value: String(opt.value),
+        })),
+      ];
       return (
         <div className={cn("flex flex-col gap-1.5 w-full", wrapperClassName)}>
           {label && (
             <Label htmlFor={fieldId} className="text-sm font-medium text-foreground">
               {label}
-              {required && <span className="text-destructive ml-1">*</span>}
+              {required && <span className="text-destructive">*</span>}
             </Label>
           )}
           <Select
+            items={stringifiedOptions}
             value={value !== undefined && value !== null ? String(value) : ""}
-            onValueChange={(val) => onChange?.(val)}
+            onValueChange={(val) => {
+              if (val === "") {
+                onChange?.("");
+                return;
+              }
+              const matchingOption = options.find((opt) => String(opt.value) === val);
+              if (matchingOption) {
+                onChange?.(matchingOption.value);
+              } else {
+                onChange?.(val);
+              }
+            }}
             disabled={disabled}
           >
             <SelectTrigger id={fieldId} className={cn(error && "border-destructive", className)}>
-              <SelectValue placeholder={placeholder || "Select option"} />
+              <SelectValue placeholder={placeholderText} />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value="" className="text-muted-foreground">
+                {placeholderText}
+              </SelectItem>
               {options.map((opt) => (
                 <SelectItem key={String(opt.value)} value={String(opt.value)}>
                   {opt.label}
@@ -223,16 +264,29 @@ export const FormField = forwardRef<HTMLInputElement | HTMLTextAreaElement, Text
           value={typeof value === "string" || typeof value === "number" ? value : ""}
           onChange={(e) => {
             if (!onChange) return;
+            let val = e.target.value;
+            if (textTransform === "uppercase") {
+              val = val.toUpperCase();
+            } else if (textTransform === "lowercase") {
+              val = val.toLowerCase();
+            } else if (textTransform === "capitalize") {
+              val = val.replace(/\b\w/g, (c) => c.toUpperCase());
+            }
             if (type === "number") {
-              const val = e.target.value;
-              onChange(val === "" ? "" : Number(val));
+              onChange(val === "" ? undefined : Number(val));
             } else {
-              onChange(e.target.value);
+              onChange(val);
             }
           }}
-          onBlur={onBlur}
+          onBlur={() => {
+            if (typeof value === "string") {
+              onChange?.(value.trim());
+            }
+            onBlur?.();
+          }}
           ref={ref as React.Ref<HTMLInputElement>}
           className={cn(error && "border-destructive focus-visible:ring-destructive", className)}
+          style={{ textTransform, ...props.style }}
           {...(props as React.ComponentProps<"input">)}
         />
         {renderHelperOrError()}

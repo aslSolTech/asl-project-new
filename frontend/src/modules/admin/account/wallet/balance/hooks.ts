@@ -1,9 +1,17 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useApiQuery, useApiMutation } from "@/hooks/useTanstackApiHook";
-import { BALANCE_API_ENDPOINTS } from "./endpoints";
-import { BalanceRecord, CreateBalancePayload, UpdateBalancePayload } from "./types";
+import { BALANCE_API_ENDPOINTS, WALLET_TYPE_API_ENDPOINTS } from "./endpoints";
+import {
+  BalanceRecord,
+  CreateBalancePayload,
+  UpdateBalancePayload,
+  WalletTypeRecord,
+  CreateWalletTypePayload,
+  UpdateWalletTypePayload,
+} from "./types";
 
+// ========================================== WALLET BALANCE HOOKS & KEYS ==========================================
 export const balanceKeys = {
   all: ["balance"] as const,
   lists: () => [...balanceKeys.all, "list"] as const,
@@ -75,6 +83,88 @@ export function useDeleteBalanceMutation() {
         onSuccess: () => {
           toast.success("Wallet Balance deleted successfully!");
           void queryClient.invalidateQueries({ queryKey: balanceKeys.all });
+        },
+        onError: (error: Error) => {
+          toast.error(error.message || "Failed to delete");
+        },
+      },
+    }
+  );
+}
+
+// =========================================== WALLET TYPE HOOKS & KEYS ===========================================
+
+export const walletTypeKeys = {
+  all: ["walletType"] as const,
+  lists: () => [...walletTypeKeys.all, "list"] as const,
+  list: (params?: Record<string, unknown>) => [...walletTypeKeys.lists(), params] as const,
+  details: () => [...walletTypeKeys.all, "detail"] as const,
+  detail: (id: string) => [...walletTypeKeys.details(), id] as const,
+};
+
+export function useWalletTypeListQuery() {
+  return useApiQuery<WalletTypeRecord[]>(
+    walletTypeKeys.lists(),
+    WALLET_TYPE_API_ENDPOINTS.LIST
+  );
+}
+
+export function useWalletTypeDetailQuery(id?: string) {
+  return useApiQuery<WalletTypeRecord>(
+    walletTypeKeys.detail(id!),
+    WALLET_TYPE_API_ENDPOINTS.DETAIL(id!),
+    { options: { enabled: Boolean(id) } }
+  );
+}
+
+export function useCreateWalletTypeMutation() {
+  const queryClient = useQueryClient();
+  return useApiMutation<WalletTypeRecord, Error, CreateWalletTypePayload>(
+    WALLET_TYPE_API_ENDPOINTS.CREATE,
+    {
+      method: "POST",
+      options: {
+        onSuccess: () => {
+          toast.success("Wallet Type created successfully!");
+          void queryClient.invalidateQueries({ queryKey: walletTypeKeys.all });
+        },
+        onError: (error: Error) => {
+          toast.error(error.message || "Failed to create");
+        },
+      },
+    }
+  );
+}
+
+export function useUpdateWalletTypeMutation() {
+  const queryClient = useQueryClient();
+  return useApiMutation<WalletTypeRecord, Error, UpdateWalletTypePayload>(
+    (variables) => WALLET_TYPE_API_ENDPOINTS.UPDATE(variables.id),
+    {
+      method: "PUT",
+      options: {
+        onSuccess: () => {
+          toast.success("Wallet Type updated successfully!");
+          void queryClient.invalidateQueries({ queryKey: walletTypeKeys.all });
+        },
+        onError: (error: Error) => {
+          toast.error(error.message || "Failed to update");
+        },
+      },
+    }
+  );
+}
+
+export function useDeleteWalletTypeMutation() {
+  const queryClient = useQueryClient();
+  return useApiMutation<{ success: boolean; message?: string }, Error, string>(
+    (id) => WALLET_TYPE_API_ENDPOINTS.DELETE(id),
+    {
+      method: "DELETE",
+      options: {
+        onSuccess: () => {
+          toast.success("Wallet Type deleted successfully!");
+          void queryClient.invalidateQueries({ queryKey: walletTypeKeys.all });
         },
         onError: (error: Error) => {
           toast.error(error.message || "Failed to delete");

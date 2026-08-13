@@ -38,13 +38,27 @@ function BankNameHeader({ column }: Readonly<{ column: Column<AppTableFeatures, 
 
 function BankNameCell({ row }: Readonly<{ row: Row<AppTableFeatures, AddRecord> }>) {
   const val = row.original.bankName;
-  if (val === "active" || val === "true") {
-    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">{val}</Badge>;
-  }
-  if (val === "inactive" || val === "false") {
-    return <Badge variant="outline" className="text-xs uppercase">{val}</Badge>;
-  }
   return <span className="text-sm font-medium text-foreground">{val || "-"}</span>;
+}
+
+
+function BranchNameHeader({ column }: Readonly<{ column: Column<AppTableFeatures, AddRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Branch Name" />;
+}
+
+function BranchNameCell({ row }: Readonly<{ row: Row<AppTableFeatures, AddRecord> }>) {
+  const val = row.original.branchName;
+  return <span className="text-sm text-muted-foreground">{val || "-"}</span>;
+}
+
+
+function IfscCodeHeader({ column }: Readonly<{ column: Column<AppTableFeatures, AddRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="IFSC Code" />;
+}
+
+function IfscCodeCell({ row }: Readonly<{ row: Row<AppTableFeatures, AddRecord> }>) {
+  const val = row.original.ifscCode;
+  return <span className="text-sm font-mono font-medium text-foreground uppercase">{val || "-"}</span>;
 }
 
 
@@ -54,13 +68,17 @@ function AccountNumberHeader({ column }: Readonly<{ column: Column<AppTableFeatu
 
 function AccountNumberCell({ row }: Readonly<{ row: Row<AppTableFeatures, AddRecord> }>) {
   const val = row.original.accountNumber;
-  if (val === "active" || val === "true") {
-    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">{val}</Badge>;
-  }
-  if (val === "inactive" || val === "false") {
-    return <Badge variant="outline" className="text-xs uppercase">{val}</Badge>;
-  }
-  return <span className="text-sm font-medium text-foreground">{val || "-"}</span>;
+  return <span className="text-sm font-mono text-foreground">{val || "-"}</span>;
+}
+
+
+function AccountHolderNameHeader({ column }: Readonly<{ column: Column<AppTableFeatures, AddRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Account Holder" />;
+}
+
+function AccountHolderNameCell({ row }: Readonly<{ row: Row<AppTableFeatures, AddRecord> }>) {
+  const val = row.original.accountHolderName;
+  return <span className="text-sm text-foreground">{val || "-"}</span>;
 }
 
 
@@ -70,13 +88,10 @@ function StatusHeader({ column }: Readonly<{ column: Column<AppTableFeatures, Ad
 
 function StatusCell({ row }: Readonly<{ row: Row<AppTableFeatures, AddRecord> }>) {
   const val = row.original.status;
-  if (val === "active" || val === "true") {
-    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">{val}</Badge>;
+  if (val === true || String(val) === "true") {
+    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">Active</Badge>;
   }
-  if (val === "inactive" || val === "false") {
-    return <Badge variant="outline" className="text-xs uppercase">{val}</Badge>;
-  }
-  return <span className="text-sm font-medium text-foreground">{val || "-"}</span>;
+  return <Badge variant="outline" className="text-xs uppercase">Inactive</Badge>;
 }
 
 
@@ -123,12 +138,15 @@ export default function AddPage() {
     }
     
     // Fallback data
-    const mock = [
+    const mock: AddRecord[] = [
       {
         id: "REC-101",
-        bankName: "Bank Name Val 1",
-        accountNumber: "Account Number Val 2",
-        status: "Status Val 3"
+        bankName: "HDFC Bank",
+        branchName: "Downtown Branch",
+        ifscCode: "HDFC0001234",
+        accountNumber: "9876543210",
+        accountHolderName: "John Doe",
+        status: true
       }
     ];
     return mock;
@@ -147,9 +165,24 @@ export default function AddPage() {
         cell: BankNameCell,
       },
       {
+        accessorKey: "branchName",
+        header: BranchNameHeader,
+        cell: BranchNameCell,
+      },
+      {
+        accessorKey: "ifscCode",
+        header: IfscCodeHeader,
+        cell: IfscCodeCell,
+      },
+      {
         accessorKey: "accountNumber",
         header: AccountNumberHeader,
         cell: AccountNumberCell,
+      },
+      {
+        accessorKey: "accountHolderName",
+        header: AccountHolderNameHeader,
+        cell: AccountHolderNameCell,
       },
       {
         accessorKey: "status",

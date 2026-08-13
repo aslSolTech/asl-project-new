@@ -10,7 +10,7 @@ import { Save } from "lucide-react";
 
 export interface AddFormProps {
   readonly mode: "create" | "edit";
-  readonly initialData?: AddRecord | null;
+  readonly initialData?: Readonly<AddRecord> | null;
   readonly onSuccess?: () => void;
 }
 
@@ -23,7 +23,10 @@ export function AddForm({ mode, initialData, onSuccess }: AddFormProps) {
     defaultValues: {
       bankName: initialData?.bankName ?? "",
       accountNumber: initialData?.accountNumber ?? "",
-      status: initialData?.status ?? "",
+      branchName: initialData?.branchName ?? "",
+      ifscCode: initialData?.ifscCode ?? "",
+      accountHolderName: initialData?.accountHolderName ?? "",
+      status: initialData?.status ?? false,
     } as AddFormInput,
     onSubmit: async ({ value }) => {
       const parsed = addSchema.safeParse(value);
@@ -51,7 +54,7 @@ export function AddForm({ mode, initialData, onSuccess }: AddFormProps) {
         }}
         className="space-y-5"
       >
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-2 gap-4">
           {addFieldsConfig.map((field) => (
             <div key={field.key}>
               <form.AppField
@@ -73,8 +76,10 @@ export function AddForm({ mode, initialData, onSuccess }: AddFormProps) {
                     name={field.key}
                     label={field.label}
                     type={field.type}
-                    placeholder={field.placeholder}
+                    placeholder={"placeholder" in field ? field.placeholder : undefined}
                     required={field.required}
+                    options={"options" in field ? field.options : undefined}
+                    textTransform={"textTransform" in field ? field.textTransform : undefined}
                     value={fieldState.state.value ?? ""}
                     onChange={(val) => fieldState.handleChange(val as Parameters<typeof fieldState.handleChange>[0])}
                     onBlur={fieldState.handleBlur}

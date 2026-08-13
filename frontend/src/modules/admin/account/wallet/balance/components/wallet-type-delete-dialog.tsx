@@ -9,13 +9,13 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useAddMoneyModalStore } from "../stores/useAddMoneyModalStore";
-import { useDeleteAddMoneyMutation } from "../hooks";
+import { useWalletTypeModalStore } from "../stores/useWalletTypeModalStore";
+import { useDeleteWalletTypeMutation } from "../hooks";
 import { AlertTriangle, Trash2 } from "lucide-react";
 
-export function AddMoneyDeleteDialog() {
-  const { isDeleteOpen, deletingId, deletingName, closeDelete } = useAddMoneyModalStore();
-  const deleteMutation = useDeleteAddMoneyMutation();
+export function WalletTypeDeleteDialog() {
+  const { isDeleteOpen, deletingId, deletingName, closeDelete } = useWalletTypeModalStore();
+  const deleteMutation = useDeleteWalletTypeMutation();
 
   const handleDelete = async () => {
     if (!deletingId) return;
@@ -30,13 +30,13 @@ export function AddMoneyDeleteDialog() {
           <div className="w-10 h-10 rounded-full bg-destructive/10 text-destructive flex items-center justify-center">
             <AlertTriangle className="w-5 h-5" />
           </div>
-          <DialogTitle className="text-lg font-bold">Delete Add Money</DialogTitle>
+          <DialogTitle className="text-lg font-bold">Delete Wallet Type</DialogTitle>
           <DialogDescription>
             Are you sure you want to delete{" "}
             <span className="font-semibold text-foreground">
-              {deletingName ?? "this record"}
+              {deletingName ?? "this wallet type"}
             </span>{" "}
-            ? This action cannot be undone.
+            ? This action cannot be undone and will remove this type option from balances.
           </DialogDescription>
         </DialogHeader>
 

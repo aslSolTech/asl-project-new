@@ -17,7 +17,7 @@ export type FieldType =
 
 export interface SelectOption {
   readonly label: string;
-  readonly value: string | number;
+  readonly value: string | number | boolean;
 }
 
 export interface FormFieldConfig {

@@ -1,12 +1,13 @@
 "use client";
-
 import { useAppForm } from "@/components/form_builder/form";
 import { FormField } from "@/components/form_builder/fields/FormFields";
 import { balanceSchema, BalanceFormInput } from "../validations";
-import { balanceFieldsConfig } from "../constants";
-import { useCreateBalanceMutation, useUpdateBalanceMutation } from "../hooks";
-import { BalanceRecord } from "../types";
+import { balanceFieldsConfig, DEFAULT_WALLET_TYPES } from "../constants";
+import { useCreateBalanceMutation, useUpdateBalanceMutation, useWalletTypeListQuery } from "../hooks";
+import { BalanceRecord, WalletTypeRecord } from "../types";
 import { Save } from "lucide-react";
+
+import { useMemo } from "react";
 
 export interface BalanceFormProps {
   readonly mode: "create" | "edit";
@@ -17,13 +18,23 @@ export interface BalanceFormProps {
 export function BalanceForm({ mode, initialData, onSuccess }: BalanceFormProps) {
   const createMutation = useCreateBalanceMutation();
   const updateMutation = useUpdateBalanceMutation();
+  const { data: typeListData } = useWalletTypeListQuery();
+  
+  const walletTypes = useMemo<WalletTypeRecord[]>(() => {
+    if (typeListData && typeListData.length > 0) {
+      return typeListData;
+    }
+    return DEFAULT_WALLET_TYPES;
+  }, [typeListData]);
+
   const isPending = createMutation.isPending || updateMutation.isPending;
 
   const form = useAppForm({
     defaultValues: {
-      balance: initialData?.balance ?? "",
-      currency: initialData?.currency ?? "",
-      status: initialData?.status ?? "",
+      walletType: initialData?.walletType ?? "",
+      balance: initialData?.balance,
+      trxnDescription: initialData?.trxnDescription ?? "",
+      trxnDate: initialData?.trxnDate ?? ""
     } as BalanceFormInput,
     onSubmit: async ({ value }) => {
       const parsed = balanceSchema.safeParse(value);
@@ -41,6 +52,24 @@ export function BalanceForm({ mode, initialData, onSuccess }: BalanceFormProps) 
     },
   });
 
+  const fieldsConfig = useMemo(() => {
+    return balanceFieldsConfig.map((field) => {
+      if (field.key === "walletType") {
+        const dynamicOptions = walletTypes
+          .filter((wt) => wt.status)
+          .map((wt) => ({
+            label: wt.name,
+            value: wt.code,
+          }));
+        return {
+          ...field,
+          options: dynamicOptions,
+        };
+      }
+      return field;
+    });
+  }, [walletTypes]);
+
   return (
     <form.AppForm>
       <form
@@ -51,8 +80,8 @@ export function BalanceForm({ mode, initialData, onSuccess }: BalanceFormProps) 
         }}
         className="space-y-5"
       >
-        <div className="grid grid-cols-1 gap-4">
-          {balanceFieldsConfig.map((field) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {fieldsConfig.map((field) => (
             <div key={field.key}>
               <form.AppField
                 name={field.key}
@@ -73,8 +102,9 @@ export function BalanceForm({ mode, initialData, onSuccess }: BalanceFormProps) 
                     name={field.key}
                     label={field.label}
                     type={field.type}
-                    placeholder={field.placeholder}
+                    placeholder={"placeholder" in field ? field.placeholder : undefined}
                     required={field.required}
+                    options={"options" in field ? field.options : undefined}
                     value={fieldState.state.value ?? ""}
                     onChange={(val) => fieldState.handleChange(val as Parameters<typeof fieldState.handleChange>[0])}
                     onBlur={fieldState.handleBlur}

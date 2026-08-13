@@ -24,7 +24,7 @@ export function BalanceModal() {
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && close()}>
-      <DialogContent className="max-w-xl">
+      <DialogContent className="max-w-2xl">
         <DialogHeader className="border-b border-border pb-4">
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-xl bg-primary/10 text-primary">
@@ -32,10 +32,10 @@ export function BalanceModal() {
             </div>
             <div>
               <DialogTitle className="text-xl font-bold">
-                {mode === "create" ? "Add New Wallet Balance" : "Edit Wallet Balance"}
+                {mode === "create" ? "Add Wallet Balance" : "Edit Wallet Balance"}
               </DialogTitle>
               <DialogDescription className="text-xs">
-                {mode === "create" ? "Enter details to create a new wallet balance." : "Update details for the selected wallet balance."}
+                {mode === "create" ? "Enter to add wallet balance." : "Update wallet for the selected wallet balance."}
               </DialogDescription>
             </div>
           </div>

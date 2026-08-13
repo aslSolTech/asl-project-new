@@ -106,7 +106,6 @@ export const menuItems: MenuItem[] = [
       {
         title: "Wallet",
         items: [
-          { title: "Add Money", href: "/dashboard/account/wallet/add-money" },
           { title: "Wallet Balance", href: "/dashboard/account/wallet/balance" },
           { title: "Wallet Transactions", href: "/dashboard/account/wallet/transactions" },
         ],

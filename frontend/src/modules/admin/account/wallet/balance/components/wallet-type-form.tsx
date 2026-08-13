@@ -2,31 +2,31 @@
 
 import { useAppForm } from "@/components/form_builder/form";
 import { FormField } from "@/components/form_builder/fields/FormFields";
-import { addMoneySchema, AddMoneyFormInput } from "../validations";
-import { addMoneyFieldsConfig } from "../constants";
-import { useCreateAddMoneyMutation, useUpdateAddMoneyMutation } from "../hooks";
-import { AddMoneyRecord } from "../types";
+import { walletTypeSchema, WalletTypeFormInput } from "../validations";
+import { useCreateWalletTypeMutation, useUpdateWalletTypeMutation } from "../hooks";
+import { WalletTypeRecord } from "../types";
 import { Save } from "lucide-react";
+import { walletTypeFieldsConfig } from "../constants";
 
-export interface AddMoneyFormProps {
+export interface WalletTypeFormProps {
   readonly mode: "create" | "edit";
-  readonly initialData?: AddMoneyRecord | null;
+  readonly initialData?: WalletTypeRecord | null;
   readonly onSuccess?: () => void;
 }
 
-export function AddMoneyForm({ mode, initialData, onSuccess }: AddMoneyFormProps) {
-  const createMutation = useCreateAddMoneyMutation();
-  const updateMutation = useUpdateAddMoneyMutation();
+export function WalletTypeForm({ mode, initialData, onSuccess }: WalletTypeFormProps) {
+  const createMutation = useCreateWalletTypeMutation();
+  const updateMutation = useUpdateWalletTypeMutation();
   const isPending = createMutation.isPending || updateMutation.isPending;
 
   const form = useAppForm({
     defaultValues: {
-      amount: initialData?.amount ?? "",
-      paymentMethod: initialData?.paymentMethod ?? "",
-      status: initialData?.status ?? "",
-    } as AddMoneyFormInput,
+      name: initialData?.name ?? "",
+      code: initialData?.code ?? "",
+      status: initialData?.status ?? true,
+    } as WalletTypeFormInput,
     onSubmit: async ({ value }) => {
-      const parsed = addMoneySchema.safeParse(value);
+      const parsed = walletTypeSchema.safeParse(value);
       if (!parsed.success) return;
 
       if (mode === "create") {
@@ -51,14 +51,14 @@ export function AddMoneyForm({ mode, initialData, onSuccess }: AddMoneyFormProps
         }}
         className="space-y-5"
       >
-        <div className="grid grid-cols-1 gap-4">
-          {addMoneyFieldsConfig.map((field) => (
-            <div key={field.key}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {walletTypeFieldsConfig.map((field) => (
+            <div key={field.key} className="md:col-span-1">
               <form.AppField
                 name={field.key}
                 validators={{
                   onChange: ({ value }) => {
-                    const shape = addMoneySchema.shape[field.key as keyof typeof addMoneySchema.shape];
+                    const shape = walletTypeSchema.shape[field.key as keyof typeof walletTypeSchema.shape];
                     if (!shape) return undefined;
                     const res = shape.safeParse(value);
                     if (!res.success) {
@@ -73,9 +73,11 @@ export function AddMoneyForm({ mode, initialData, onSuccess }: AddMoneyFormProps
                     name={field.key}
                     label={field.label}
                     type={field.type}
-                    placeholder={field.placeholder}
+                    placeholder={"placeholder" in field ? field.placeholder : undefined}
                     required={field.required}
-                    value={fieldState.state.value ?? ""}
+                    options={"options" in field ? field.options : undefined}
+                    textTransform={"textTransform" in field ? field.textTransform : undefined}
+                    value={fieldState.state.value}
                     onChange={(val) => fieldState.handleChange(val as Parameters<typeof fieldState.handleChange>[0])}
                     onBlur={fieldState.handleBlur}
                     error={fieldState.state.meta.errors.join(", ")}

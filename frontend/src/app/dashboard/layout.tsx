@@ -16,14 +16,10 @@ export const metadata: Metadata = {
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <SidebarProvider>
-      <div className="flex h-screen flex-col md:flex-row md:overflow-hidden w-full">
-        <div className="w-full flex-none md:w-64">
-          <DashboardSidebar />
-        </div>
-        <div className="flex flex-col flex-1">
-          <DashboardHeader />
-          <div className="grow p-6 md:overflow-y-auto">{children}</div>
-        </div>
+      <DashboardSidebar />
+      <div className="flex flex-col flex-1 min-h-screen overflow-hidden">
+        <DashboardHeader />
+        <div className="grow p-6 md:overflow-y-auto">{children}</div>
       </div>
     </SidebarProvider>
   );
