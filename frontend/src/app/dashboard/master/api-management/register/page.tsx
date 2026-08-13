@@ -196,7 +196,7 @@ export default function ApiRegisterPage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
-              API Register Setup
+              API Register
             </h1>
             <p className="text-xs sm:text-sm text-muted-foreground">
               Manage all official api register configurations.

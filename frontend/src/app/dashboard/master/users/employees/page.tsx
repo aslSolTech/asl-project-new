@@ -196,7 +196,7 @@ export default function EmployeeRegisterPage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
-              Employee Register Setup
+              Employee Register
             </h1>
             <p className="text-xs sm:text-sm text-muted-foreground">
               Manage all official employee register configurations.

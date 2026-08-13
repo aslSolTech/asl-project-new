@@ -180,7 +180,7 @@ export default function SystemSettingPage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
-              System Setting Setup
+              System Setting
             </h1>
             <p className="text-xs sm:text-sm text-muted-foreground">
               Manage all official system setting configurations.

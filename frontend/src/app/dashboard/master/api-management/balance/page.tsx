@@ -174,7 +174,7 @@ export default function ApiBalancePage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
-              Balance API Setup
+              Balance API
             </h1>
             <p className="text-xs sm:text-sm text-muted-foreground">
               Manage all official balance api configurations.

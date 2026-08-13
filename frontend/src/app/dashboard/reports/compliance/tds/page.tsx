@@ -154,7 +154,7 @@ export default function TdsPage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
-              TDS Statement Setup
+              TDS Statement
             </h1>
             <p className="text-xs sm:text-sm text-muted-foreground">
               Manage all official tds statement configurations.
@@ -168,7 +168,7 @@ export default function TdsPage() {
             size="sm"
             onClick={() => void refetch()}
             disabled={isLoading}
-            className="flex items-center gap-2 bg-white"
+            className="flex items-center gap-2"
           >
             <RefreshCw className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`} />
             Refresh

@@ -174,7 +174,7 @@ export default function RegistrationChargesPage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
-              Registration Charges Setup
+              Registration Charges
             </h1>
             <p className="text-xs sm:text-sm text-muted-foreground">
               Manage all official registration charges configurations.

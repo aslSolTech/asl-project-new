@@ -174,7 +174,7 @@ export default function OperatorTypePage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
-              Operator Type Setup
+              Operator Type
             </h1>
             <p className="text-xs sm:text-sm text-muted-foreground">
               Manage all official operator type configurations.

@@ -196,7 +196,7 @@ export default function UserRegisterPage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
-              User Register Setup
+              User Register
             </h1>
             <p className="text-xs sm:text-sm text-muted-foreground">
               Manage all official user register configurations.

@@ -176,7 +176,7 @@ export default function UserAmountPage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
-              User Amount Wise Routing Setup
+              User Amount Wise Routing
             </h1>
             <p className="text-xs sm:text-sm text-muted-foreground">
               Manage all official user amount wise routing configurations.
@@ -190,7 +190,7 @@ export default function UserAmountPage() {
             size="sm"
             onClick={() => void refetch()}
             disabled={isLoading}
-            className="flex items-center gap-2 bg-white"
+            className="flex items-center gap-2"
           >
             <RefreshCw className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`} />
             Refresh

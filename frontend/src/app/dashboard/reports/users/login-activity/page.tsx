@@ -176,7 +176,7 @@ export default function LoginActivityPage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
-              User Login Activity Setup
+              User Login Activity
             </h1>
             <p className="text-xs sm:text-sm text-muted-foreground">
               Manage all official user login activity configurations.
@@ -190,7 +190,7 @@ export default function LoginActivityPage() {
             size="sm"
             onClick={() => void refetch()}
             disabled={isLoading}
-            className="flex items-center gap-2 bg-white"
+            className="flex items-center gap-2"
           >
             <RefreshCw className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`} />
             Refresh

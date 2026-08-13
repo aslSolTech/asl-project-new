@@ -176,7 +176,7 @@ export default function UpiVerifyPage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
-              UPI Verify API Setup
+              UPI Verify API
             </h1>
             <p className="text-xs sm:text-sm text-muted-foreground">
               Manage all official upi verify api configurations.
@@ -190,7 +190,7 @@ export default function UpiVerifyPage() {
             size="sm"
             onClick={() => void refetch()}
             disabled={isLoading}
-            className="flex items-center gap-2 bg-white"
+            className="flex items-center gap-2"
           >
             <RefreshCw className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`} />
             Refresh

@@ -176,7 +176,7 @@ export default function SettingsPage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
-              API Settings Setup
+              API Settings
             </h1>
             <p className="text-xs sm:text-sm text-muted-foreground">
               Manage all official api settings configurations.
@@ -190,7 +190,7 @@ export default function SettingsPage() {
             size="sm"
             onClick={() => void refetch()}
             disabled={isLoading}
-            className="flex items-center gap-2 bg-white"
+            className="flex items-center gap-2"
           >
             <RefreshCw className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`} />
             Refresh
