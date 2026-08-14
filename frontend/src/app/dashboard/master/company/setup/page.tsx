@@ -86,14 +86,18 @@ function ContactCell({ row }: Readonly<{ row: Row<AppTableFeatures, CompanyRecor
   const company = row.original;
   return (
     <div className="flex flex-col gap-1 text-xs text-muted-foreground">
-      <div className="flex items-center gap-1.5 truncate">
-        <Mail className="h-3.5 w-3.5 text-primary/70 shrink-0" />
-        <span className="truncate">{company.companyEmail}</span>
-      </div>
-      <div className="flex items-center gap-1.5 truncate">
-        <Phone className="h-3.5 w-3.5 text-primary/70 shrink-0" />
-        <span>{company.companyPhone}</span>
-      </div>
+      {company.emailForInvoice && (
+        <div className="flex items-center gap-1.5 truncate">
+          <Mail className="h-3.5 w-3.5 text-primary/70 shrink-0" />
+          <span className="truncate">{company.emailForInvoice}</span>
+        </div>
+      )}
+      {company.contactNumber1 && (
+        <div className="flex items-center gap-1.5 truncate">
+          <Phone className="h-3.5 w-3.5 text-primary/70 shrink-0" />
+          <span>{company.contactNumber1}</span>
+        </div>
+      )}
     </div>
   );
 }
@@ -103,16 +107,23 @@ function TaxHeader({ column }: Readonly<{ column: Column<AppTableFeatures, Compa
 }
 
 function TaxCell({ row }: Readonly<{ row: Row<AppTableFeatures, CompanyRecord> }>) {
-  const gst = row.original.gstNumber;
+  const { gstNo, gstPer, panNo } = row.original;
   return (
-    <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-      <FileText className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-      {gst ? (
-        <Badge variant="outline" className="font-mono text-[11px]">
-          {gst}
-        </Badge>
-      ) : (
-        <span className="italic text-muted-foreground/60">Not specified</span>
+    <div className="flex flex-col gap-1 text-xs text-muted-foreground">
+      <div className="flex items-center gap-1.5">
+        <FileText className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+        {gstNo ? (
+          <Badge variant="outline" className="font-mono text-[11px] font-semibold text-foreground">
+            {gstNo} ({gstPer ?? 18}%)
+          </Badge>
+        ) : (
+          <span className="italic text-muted-foreground/60">No GST</span>
+        )}
+      </div>
+      {panNo && (
+        <span className="font-mono text-[11px] text-muted-foreground pl-5">
+          PAN: {panNo}
+        </span>
       )}
     </div>
   );
@@ -123,10 +134,12 @@ function AddressHeader({ column }: Readonly<{ column: Column<AppTableFeatures, C
 }
 
 function AddressCell({ row }: Readonly<{ row: Row<AppTableFeatures, CompanyRecord> }>) {
+  const { address1, address2, address3, state, country } = row.original;
+  const fullAddress = [address1, address2, address3, state, country].filter(Boolean).join(", ");
   return (
-    <div className="flex items-start gap-1.5 text-xs text-muted-foreground max-w-[220px]">
+    <div className="flex items-start gap-1.5 text-xs text-muted-foreground max-w-[240px]">
       <MapPin className="h-3.5 w-3.5 shrink-0 mt-0.5 text-muted-foreground" />
-      <span className="line-clamp-2">{row.original.address}</span>
+      <span className="line-clamp-2">{fullAddress}</span>
     </div>
   );
 }
@@ -177,29 +190,42 @@ export default function CompanySetupPage() {
       {
         id: "CMP-1001",
         companyName: "Payzones Tech Solutions Pvt Ltd",
-        companyEmail: "info@payzones.com",
-        companyPhone: "+91 9876543210",
+        printName: "PAYZONES TECH SOLUTIONS",
+        billnoPrefix: "PZ-2026-",
+        beginingFrom: "2026-04-01",
+        commencingFrom: "2026-04-01",
+        address1: "701, Apex Towers",
+        address2: "Bandra Kurla Complex",
+        address3: "Mumbai - 400051",
+        country: "India",
+        state: "Maharashtra",
+        contactNumber1: "+91 9876543210",
+        emailForInvoice: "billing@payzones.com",
+        emailForService: "support@payzones.com",
         website: "https://payzones.com",
-        gstNumber: "22AAAAA0000A1Z5",
-        address: "701, Apex Towers, Bandra Kurla Complex, Mumbai, MH - 400051",
+        gstNo: "27AAAAA0000A1Z5",
+        gstPer: 18,
+        panNo: "ABCDE1234F",
+        declaration: "We declare that this invoice shows the actual price of the goods/services described.",
       },
       {
         id: "CMP-1002",
         companyName: "Apex Cyber Systems Ltd",
-        companyEmail: "contact@apexsystems.io",
-        companyPhone: "+91 9123456789",
+        printName: "APEX CYBER SYSTEMS",
+        billnoPrefix: "ACS-",
+        beginingFrom: "2026-01-01",
+        commencingFrom: "2026-01-01",
+        address1: "402, Cyber Heights",
+        address2: "HITEC City",
+        address3: "Hyderabad - 500081",
+        country: "India",
+        state: "Telangana",
+        contactNumber1: "+91 9123456789",
+        emailForInvoice: "accounts@apexsystems.io",
         website: "https://apexsystems.io",
-        gstNumber: "27BBBCC1111B2Z8",
-        address: "402, Cyber Heights, HITEC City, Hyderabad, TS - 500081",
-      },
-      {
-        id: "CMP-1003",
-        companyName: "Vortex Global Networks",
-        companyEmail: "admin@vortexnetworks.com",
-        companyPhone: "+91 9988776655",
-        website: "https://vortexnetworks.com",
-        gstNumber: "33DDDEE3333D4Z2",
-        address: "105, Tech Park, Indiranagar, Bengaluru, KA - 560038",
+        gstNo: "36BBBCC1111B2Z8",
+        gstPer: 18,
+        panNo: "FGHIJ5678K",
       },
     ];
   }, [companiesData]);
@@ -217,17 +243,17 @@ export default function CompanySetupPage() {
         cell: NameCell,
       },
       {
-        accessorKey: "companyEmail",
+        accessorKey: "contactNumber1",
         header: ContactHeader,
         cell: ContactCell,
       },
       {
-        accessorKey: "gstNumber",
+        accessorKey: "gstNo",
         header: TaxHeader,
         cell: TaxCell,
       },
       {
-        accessorKey: "address",
+        accessorKey: "address1",
         header: AddressHeader,
         cell: AddressCell,
       },

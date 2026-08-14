@@ -1,24 +1,64 @@
 export interface CompanyRecord {
   id: string;
-  companyName: string;
   companyLogo?: string | null;
-  companyEmail: string;
-  companyPhone: string;
+  companyName: string;
+  printName: string;
+  billnoPrefix: string;
+  beginingFrom: string;
+  commencingFrom?: string | null;
+  address1: string;
+  address2?: string | null;
+  address3?: string | null;
+  country: string;
+  state: string;
+  contactNumber1: string;
+  contactNumber2?: string | null;
+  callbackNumber?: string | null;
+  landNumber?: string | null;
+  emailForService?: string | null;
+  emailForInvoice?: string | null;
   website?: string | null;
-  address: string;
-  gstNumber?: string | null;
+  faxNo?: string | null;
+  tinNo?: string | null;
+  cstNo?: string | null;
+  taxNo?: string | null;
+  panNo?: string | null;
+  cinNo?: string | null;
+  gstNo: string;
+  gstPer: number;
+  declaration?: string | null;
   createdAt?: string;
   updatedAt?: string;
 }
 
 export interface CreateCompanyPayload {
-  companyName: string;
   companyLogo?: File | string | null;
-  companyEmail: string;
-  companyPhone: string;
-  website?: string;
-  address: string;
-  gstNumber?: string;
+  companyName: string;
+  printName: string;
+  billnoPrefix: string;
+  beginingFrom: string;
+  commencingFrom?: string | null;
+  address1: string;
+  address2?: string | null;
+  address3?: string | null;
+  country: string;
+  state: string;
+  contactNumber1: string;
+  contactNumber2?: string | null;
+  callbackNumber?: string | null;
+  landNumber?: string | null;
+  emailForService?: string | null;
+  emailForInvoice?: string | null;
+  website?: string | null;
+  faxNo?: string | null;
+  tinNo?: string | null;
+  cstNo?: string | null;
+  taxNo?: string | null;
+  panNo?: string | null;
+  cinNo?: string | null;
+  gstNo: string;
+  gstPer: number;
+  declaration?: string | null;
 }
 
 export interface UpdateCompanyPayload extends Partial<CreateCompanyPayload> {

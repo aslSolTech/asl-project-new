@@ -119,7 +119,7 @@ export function UploadField(props: Readonly<UploadFieldProps>) {
             onDragLeave={handleDragLeave}
             onDrop={handleDrop}
             className={cn(
-              "group relative flex items-center justify-center overflow-hidden border-2 border-dashed transition-all duration-200 cursor-pointer shadow-sm hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+              "group relative flex items-center justify-center overflow-hidden border-1 border-dashed transition-all duration-200 cursor-pointer shadow-sm hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
               rounded ? "rounded-2xl" : "rounded-full",
               avatarSizeClasses,
               isDragging
@@ -167,9 +167,9 @@ export function UploadField(props: Readonly<UploadFieldProps>) {
                 variant="link"
                 size="sm"
                 onClick={() => setModalIndex(0)}
-                className="hover:font-medium text-secondary transition-all duration-200 text-xs font-normal hover:no-underline p-0"
+                className="hover:font-medium text-secondary dark:text-secondary-foreground transition-all duration-200 text-xs font-normal hover:no-underline p-0"
               >
-                View Avatar
+                View
               </Button>
               {showRemove && (
                 <>

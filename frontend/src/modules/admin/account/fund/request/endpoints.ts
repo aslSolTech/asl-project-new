@@ -1,7 +1,9 @@
 export const REQUEST_API_ENDPOINTS = {
-  LIST: "/request",
-  DETAIL: (id: string) => "/request/" + id,
-  CREATE: "/request",
-  UPDATE: (id: string) => "/request/" + id,
-  DELETE: (id: string) => "/request/" + id,
+  LIST: "/account/fund/request",
+  DETAIL: (id: string) => `/account/fund/request/${id}`,
+  CREATE: "/account/fund/request",
+  UPDATE: (id: string) => `/account/fund/request/${id}`,
+  DELETE: (id: string) => `/account/fund/request/${id}`,
+  APPROVE: (id: string) => `/account/fund/request/${id}/approve`,
+  DECLINE: (id: string) => `/account/fund/request/${id}/decline`,
 } as const;

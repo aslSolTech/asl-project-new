@@ -24,7 +24,7 @@ export function CronSettingModal() {
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && close()}>
-      <DialogContent className="max-w-xl">
+      <DialogContent className="max-w-3xl">
         <DialogHeader className="border-b border-border pb-4">
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-xl bg-primary/10 text-primary">
@@ -32,10 +32,10 @@ export function CronSettingModal() {
             </div>
             <div>
               <DialogTitle className="text-xl font-bold">
-                {mode === "create" ? "Add New Cron Setting" : "Edit Cron Setting"}
+                {mode === "create" ? "Add New Cron Scheduler" : "Edit Cron Scheduler"}
               </DialogTitle>
               <DialogDescription className="text-xs">
-                {mode === "create" ? "Enter details to create a new cron setting." : "Update details for the selected cron setting."}
+                {mode === "create" ? "Enter details to create a new cron scheduler." : "Update details for the selected cron scheduler."}
               </DialogDescription>
             </div>
           </div>

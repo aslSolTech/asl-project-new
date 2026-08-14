@@ -97,38 +97,13 @@ export const menuItems: MenuItem[] = [
     title: "Account",
     icon: Wallet,
     items: [
-      {
-        title: "Banking",
-        items: [
-          { title: "Add Bank", href: "/dashboard/account/bank/add" },
-        ],
-      },
-      {
-        title: "Wallet",
-        items: [
-          { title: "Wallet Balance", href: "/dashboard/account/wallet/balance" },
-          { title: "Wallet Transactions", href: "/dashboard/account/wallet/transactions" },
-        ],
-      },
-      {
-        title: "API Wallet",
-        items: [
-          { title: "API Balance", href: "/dashboard/account/api/balance" },
-        ],
-      },
+      { title: "Add Bank", href: "/dashboard/account/add-bank" },
+      { title: "Wallet Balance", href: "/dashboard/account/wallet-balance" },
       {
         title: "Fund Management",
         items: [
-          { title: "Fund Transfer", href: "/dashboard/account/fund/transfer" },
           { title: "Fund Request", href: "/dashboard/account/fund/request" },
-          { title: "Fund Request History", href: "/dashboard/account/fund/request-history" },
-          { title: "Deduct Wallet Balance", href: "/dashboard/account/fund/deduct" },
-        ],
-      },
-      {
-        title: "Refund",
-        items: [
-          { title: "Failed Transaction Refund", href: "/dashboard/account/refund/failed" },
+          { title: "Fund Transfer", href: "/dashboard/account/fund/transfer" },
         ],
       },
     ],
@@ -424,7 +399,7 @@ export const menuItems: MenuItem[] = [
         title: "Company",
         items: [
           { title: "Company Setup", href: "/dashboard/master/company/setup" },
-          { title: "System Setting", href: "/dashboard/master/company/system-setting" },
+          { title: "Service Status Control", href: "/dashboard/master/company/service-control" },
           { title: "Cron Setting", href: "/dashboard/master/company/cron-setting" },
         ],
       },
@@ -451,7 +426,6 @@ export const menuItems: MenuItem[] = [
       {
         title: "Operator",
         items: [
-          { title: "Category", href: "/dashboard/master/operator/category" },
           { title: "Operator Type", href: "/dashboard/master/operator/operator-type" },
           { title: "Operator Register", href: "/dashboard/master/operator/register" },
           { title: "Operator Code", href: "/dashboard/master/operator/code" },
@@ -476,13 +450,7 @@ export const menuItems: MenuItem[] = [
     icon: ShieldCheck,
     items: [
       {
-        title: "Access Control",
-        items: [
-          {
-            title: "Privilege Settings",
-            href: "/dashboard/privileges/settings",
-          },
-        ],
+        title: "Settings", href: "/dashboard/privileges"
       },
     ],
   },
@@ -491,18 +459,9 @@ export const menuItems: MenuItem[] = [
     icon: Bell,
     items: [
       {
-        title: "Notification Management",
-        items: [
-          {
-            title: "Create Notification",
-            href: "/dashboard/notifications/create",
-          },
-          {
-            title: "Notification List",
-            href: "/dashboard/notifications/list",
-          },
-        ],
-      },
+        title: "Notifications",
+        href: "/dashboard/notifications",
+      }
     ],
   },
   {
@@ -633,7 +592,7 @@ export const menuItems: MenuItem[] = [
       },
     ],
   },
-   {
+  {
     title: "Documentation",
     icon: FileText,
     items: [
@@ -646,19 +605,19 @@ export const menuItems: MenuItem[] = [
   {
     title: "Help Center",
     icon: CircleHelp,
-      items: [
-          {
-            title: "Help Articles",
-            href: "/dashboard/help/articles",
-          },
-          {
-            title: "Announcements",
-            href: "/dashboard/help/notifications",
-          },
-          {
-            title: "Contact Support",
-            href: "/dashboard/help/contact",
-          },
-      ],
+    items: [
+      {
+        title: "Help Articles",
+        href: "/dashboard/help/articles",
+      },
+      {
+        title: "Announcements",
+        href: "/dashboard/help/notifications",
+      },
+      {
+        title: "Contact Support",
+        href: "/dashboard/help/contact",
+      },
+    ],
   },
 ];

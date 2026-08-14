@@ -21,9 +21,11 @@ export function TransferForm({ mode, initialData, onSuccess }: TransferFormProps
 
   const form = useAppForm({
     defaultValues: {
-      recipient: initialData?.recipient ?? "",
-      amount: initialData?.amount ?? "",
-      status: initialData?.status ?? "",
+      apiUserId: initialData?.apiUserId ?? "",
+      trxnDate: initialData?.trxnDate ?? "",
+      transferType: initialData?.transferType ?? "",
+      walletType: initialData?.walletType ?? "",
+      amount: initialData?.amount ?? 0,
     } as TransferFormInput,
     onSubmit: async ({ value }) => {
       const parsed = transferSchema.safeParse(value);
@@ -51,7 +53,7 @@ export function TransferForm({ mode, initialData, onSuccess }: TransferFormProps
         }}
         className="space-y-5"
       >
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {transferFieldsConfig.map((field) => (
             <div key={field.key}>
               <form.AppField
@@ -73,8 +75,10 @@ export function TransferForm({ mode, initialData, onSuccess }: TransferFormProps
                     name={field.key}
                     label={field.label}
                     type={field.type}
-                    placeholder={field.placeholder}
+                    placeholder={"placeholder" in field ? field.placeholder : undefined}
                     required={field.required}
+                    options={"options" in field ? field.options : undefined}
+                    textTransform={"textTransform" in field ? field.textTransform : undefined}
                     value={fieldState.state.value ?? ""}
                     onChange={(val) => fieldState.handleChange(val as Parameters<typeof fieldState.handleChange>[0])}
                     onBlur={fieldState.handleBlur}

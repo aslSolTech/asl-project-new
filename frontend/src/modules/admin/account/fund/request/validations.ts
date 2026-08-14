@@ -1,9 +1,7 @@
 import { z } from "zod";
 
-export const requestSchema = z.object({
-  bankName: z.string().min(1, "Bank is required"),
-  amount: z.string().min(1, "Amount is required"),
-  status: z.string().min(1, "Status is required"),
+export const declineRequestSchema = z.object({
+  reason: z.string().min(1, "Reason is required to decline request"),
 });
 
-export type RequestFormInput = z.infer<typeof requestSchema>;
+export type DeclineRequestFormInput = z.infer<typeof declineRequestSchema>;

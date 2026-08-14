@@ -5,9 +5,11 @@ import { ColumnDef, Column, Row } from "@tanstack/react-table";
 import { DataTable, DataTableColumnHeader, AppTableFeatures } from "@/components/shared/data-table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useCronSettingListQuery } from "@/modules/admin/master/cronSetting/hooks";
+import { Switch } from "@/components/ui/switch";
+import { useCronSettingListQuery, useUpdateCronSettingMutation } from "@/modules/admin/master/cronSetting/hooks";
 import { useCronSettingModalStore } from "@/modules/admin/master/cronSetting/stores/useCronSettingModalStore";
 import { CronSettingRecord } from "@/modules/admin/master/cronSetting/types";
+import { DEFAULT_CRON_SETTING_LIST } from "@/modules/admin/master/cronSetting/constants";
 import { CronSettingModal } from "@/modules/admin/master/cronSetting/components/cron-setting-modal";
 import { CronSettingDeleteDialog } from "@/modules/admin/master/cronSetting/components/cron-setting-delete-dialog";
 import {
@@ -16,6 +18,7 @@ import {
   Edit2,
   Trash2,
   RefreshCw,
+  Zap,
 } from "lucide-react";
 
 // Columns helper components
@@ -32,38 +35,38 @@ function IdCell({ row }: Readonly<{ row: Row<AppTableFeatures, CronSettingRecord
   );
 }
 
-
 function CronNameHeader({ column }: Readonly<{ column: Column<AppTableFeatures, CronSettingRecord, unknown> }>) {
-  return <DataTableColumnHeader column={column} title="Cron Name" />;
+  return <DataTableColumnHeader column={column} title="Cron / Service Name" />;
 }
 
 function CronNameCell({ row }: Readonly<{ row: Row<AppTableFeatures, CronSettingRecord> }>) {
-  const val = row.original.cronName;
-  if (val === "active" || val === "true") {
-    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">{val}</Badge>;
-  }
-  if (val === "inactive" || val === "false") {
-    return <Badge variant="outline" className="text-xs uppercase">{val}</Badge>;
-  }
-  return <span className="text-sm font-medium text-foreground">{val || "-"}</span>;
+  const { cronName, serviceKey } = row.original;
+  return (
+    <div className="flex flex-col gap-0.5">
+      <div className="flex items-center gap-2">
+        <span className="text-sm font-semibold text-foreground">{cronName || "-"}</span>
+        {serviceKey && (
+          <Badge variant="secondary" className="text-[10px] font-mono px-1.5 py-0 uppercase">
+            {serviceKey}
+          </Badge>
+        )}
+      </div>
+    </div>
+  );
 }
 
-
 function ScheduleHeader({ column }: Readonly<{ column: Column<AppTableFeatures, CronSettingRecord, unknown> }>) {
-  return <DataTableColumnHeader column={column} title="Schedule" />;
+  return <DataTableColumnHeader column={column} title="Schedule (Cron)" />;
 }
 
 function ScheduleCell({ row }: Readonly<{ row: Row<AppTableFeatures, CronSettingRecord> }>) {
   const val = row.original.schedule;
-  if (val === "active" || val === "true") {
-    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">{val}</Badge>;
-  }
-  if (val === "inactive" || val === "false") {
-    return <Badge variant="outline" className="text-xs uppercase">{val}</Badge>;
-  }
-  return <span className="text-sm font-medium text-foreground">{val || "-"}</span>;
+  return (
+    <span className="font-mono text-xs px-2 py-1 rounded bg-secondary text-secondary-foreground font-medium">
+      {val || "-"}
+    </span>
+  );
 }
-
 
 function EndpointHeader({ column }: Readonly<{ column: Column<AppTableFeatures, CronSettingRecord, unknown> }>) {
   return <DataTableColumnHeader column={column} title="Target Endpoint" />;
@@ -71,15 +74,12 @@ function EndpointHeader({ column }: Readonly<{ column: Column<AppTableFeatures, 
 
 function EndpointCell({ row }: Readonly<{ row: Row<AppTableFeatures, CronSettingRecord> }>) {
   const val = row.original.endpoint;
-  if (val === "active" || val === "true") {
-    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">{val}</Badge>;
-  }
-  if (val === "inactive" || val === "false") {
-    return <Badge variant="outline" className="text-xs uppercase">{val}</Badge>;
-  }
-  return <span className="text-sm font-medium text-foreground">{val || "-"}</span>;
+  return (
+    <span className="font-mono text-xs text-muted-foreground">
+      {val || "-"}
+    </span>
+  );
 }
-
 
 function DescriptionHeader({ column }: Readonly<{ column: Column<AppTableFeatures, CronSettingRecord, unknown> }>) {
   return <DataTableColumnHeader column={column} title="Description" />;
@@ -87,15 +87,47 @@ function DescriptionHeader({ column }: Readonly<{ column: Column<AppTableFeature
 
 function DescriptionCell({ row }: Readonly<{ row: Row<AppTableFeatures, CronSettingRecord> }>) {
   const val = row.original.description;
-  if (val === "active" || val === "true") {
-    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">{val}</Badge>;
-  }
-  if (val === "inactive" || val === "false") {
-    return <Badge variant="outline" className="text-xs uppercase">{val}</Badge>;
-  }
-  return <span className="text-sm font-medium text-foreground">{val || "-"}</span>;
+  return <span className="text-xs text-muted-foreground line-clamp-2 max-w-sm">{val || "-"}</span>;
 }
 
+function StatusHeader({ column }: Readonly<{ column: Column<AppTableFeatures, CronSettingRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Status" />;
+}
+
+function StatusCell({ row }: Readonly<{ row: Row<AppTableFeatures, CronSettingRecord> }>) {
+  const updateMutation = useUpdateCronSettingMutation();
+  const record = row.original;
+  const isActive = record.isActive ?? true;
+
+  const handleToggle = () => {
+    updateMutation.mutate({
+      ...record,
+      isActive: !isActive,
+    });
+  };
+
+  return (
+    <div className="flex items-center gap-2.5">
+      <Switch
+        checked={isActive}
+        onCheckedChange={handleToggle}
+        disabled={updateMutation.isPending}
+        size="sm"
+        aria-label={`Toggle ${record.cronName} status`}
+      />
+      <Badge
+        variant={isActive ? "default" : "outline"}
+        className={`text-[11px] font-medium ${
+          isActive
+            ? "bg-emerald-500/15 text-emerald-600 hover:bg-emerald-500/25 border-emerald-500/30 dark:text-emerald-400"
+            : "text-muted-foreground border-border"
+        }`}
+      >
+        {isActive ? "Active" : "Inactive"}
+      </Badge>
+    </div>
+  );
+}
 
 function ActionsHeader() {
   return <span className="text-xs font-semibold">Actions</span>;
@@ -138,15 +170,7 @@ export default function CronSettingPage() {
     if (listData && listData.length > 0) {
       return listData;
     }
-    return [
-  {
-    "id": "CRN-001",
-    "cronName": "Transaction Requery",
-    "schedule": "*/5 * * * *",
-    "endpoint": "/cron/requery",
-    "description": "Pulls status of pending transactions"
-  }
-];
+    return [...DEFAULT_CRON_SETTING_LIST];
   }, [listData]);
 
   const columns = useMemo<ColumnDef<AppTableFeatures, CronSettingRecord, unknown>[]>(
@@ -177,6 +201,11 @@ export default function CronSettingPage() {
         cell: DescriptionCell,
       },
       {
+        accessorKey: "isActive",
+        header: StatusHeader,
+        cell: StatusCell,
+      },
+      {
         id: "actions",
         header: ActionsHeader,
         cell: ActionsCell,
@@ -187,7 +216,7 @@ export default function CronSettingPage() {
   );
 
   return (
-    <div className="mx-auto w-full">
+    <div className="mx-auto w-full space-y-6">
       {/* Header Banner */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-border pb-6">
         <div className="flex items-center gap-3">
@@ -196,10 +225,10 @@ export default function CronSettingPage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
-              Cron Setting
+              Cron Setting & Services
             </h1>
             <p className="text-xs sm:text-sm text-muted-foreground">
-              Manage all official cron setting configurations.
+              Manage automatic background cron jobs (DMT, UPI, AEPS, BBPS, Recharge, PAN, Payout) and toggle active/inactive status.
             </p>
           </div>
         </div>
@@ -210,7 +239,7 @@ export default function CronSettingPage() {
             size="sm"
             onClick={() => void refetch()}
             disabled={isLoading}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 cursor-pointer"
           >
             <RefreshCw className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`} />
             Refresh
@@ -220,14 +249,26 @@ export default function CronSettingPage() {
             className="flex items-center gap-2 shadow-sm font-semibold cursor-pointer"
           >
             <Plus className="w-4 h-4" />
-            Add Cron Setting
+            Add a Cron Scheduler
           </Button>
         </div>
       </div>
 
+      {/* Quick Summary Badges */}
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="text-xs font-semibold text-muted-foreground flex items-center gap-1.5 mr-1">
+          <Zap className="w-3.5 h-3.5 text-primary" /> Supported Services:
+        </span>
+        {["DMT", "UPI", "AEPS", "BBPS", "Recharge", "PAN", "Payout", "Wallet"].map((svc) => (
+          <Badge key={svc} variant="outline" className="text-xs bg-muted/30">
+            {svc}
+          </Badge>
+        ))}
+      </div>
+
       {isError && (
-        <div className="p-4 mt-2 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive text-sm flex items-center justify-between">
-          <span>Failed to connect to backend server. Showing active local master data.</span>
+        <div className="p-4 rounded-xl bg-destructive/10 border border-destructive/20 text-destructive text-sm flex items-center justify-between">
+          <span>Failed to connect to backend server. Showing active master constant services data.</span>
           <Button variant="ghost" size="sm" onClick={() => void refetch()}>
             Retry
           </Button>
@@ -239,7 +280,7 @@ export default function CronSettingPage() {
         columns={columns}
         data={displayData}
         loading={isLoading}
-        searchPlaceholder="Search..."
+        searchPlaceholder="Search cron services..."
         searchDebounceMs={300}
         containerHeight="580px"
       />

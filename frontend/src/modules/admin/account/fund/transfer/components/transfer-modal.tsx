@@ -24,7 +24,7 @@ export function TransferModal() {
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && close()}>
-      <DialogContent className="max-w-xl">
+      <DialogContent className="max-w-2xl">
         <DialogHeader className="border-b border-border pb-4">
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-xl bg-primary/10 text-primary">
@@ -32,10 +32,10 @@ export function TransferModal() {
             </div>
             <div>
               <DialogTitle className="text-xl font-bold">
-                {mode === "create" ? "Add New Fund Transfer" : "Edit Fund Transfer"}
+                {mode === "create" ? "New" : "Edit"} Fund Transfer
               </DialogTitle>
               <DialogDescription className="text-xs">
-                {mode === "create" ? "Enter details to create a new fund transfer." : "Update details for the selected fund transfer."}
+                {mode === "create" ? "New" : "Edit"} Fund Transfer to Users
               </DialogDescription>
             </div>
           </div>

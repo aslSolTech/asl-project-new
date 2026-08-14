@@ -2,10 +2,16 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useApiQuery, useApiMutation } from "@/hooks/useTanstackApiHook";
 import { REQUEST_API_ENDPOINTS } from "./endpoints";
-import { RequestRecord, CreateRequestPayload, UpdateRequestPayload } from "./types";
+import {
+  RequestRecord,
+  CreateRequestPayload,
+  UpdateRequestPayload,
+  ApproveRequestPayload,
+  DeclineRequestPayload,
+} from "./types";
 
 export const requestKeys = {
-  all: ["request"] as const,
+  all: ["account-fund-request"] as const,
   lists: () => [...requestKeys.all, "list"] as const,
   list: (params?: Record<string, unknown>) => [...requestKeys.lists(), params] as const,
   details: () => [...requestKeys.all, "detail"] as const,
@@ -59,6 +65,44 @@ export function useUpdateRequestMutation() {
         },
         onError: (error: Error) => {
           toast.error(error.message || "Failed to update");
+        },
+      },
+    }
+  );
+}
+
+export function useApproveRequestMutation() {
+  const queryClient = useQueryClient();
+  return useApiMutation<{ success: boolean; message?: string }, Error, ApproveRequestPayload>(
+    (payload) => REQUEST_API_ENDPOINTS.APPROVE(payload.id),
+    {
+      method: "POST",
+      options: {
+        onSuccess: () => {
+          toast.success("Fund Request approved successfully!");
+          void queryClient.invalidateQueries({ queryKey: requestKeys.all });
+        },
+        onError: (error: Error) => {
+          toast.error(error.message || "Failed to approve fund request");
+        },
+      },
+    }
+  );
+}
+
+export function useDeclineRequestMutation() {
+  const queryClient = useQueryClient();
+  return useApiMutation<{ success: boolean; message?: string }, Error, DeclineRequestPayload>(
+    (payload) => REQUEST_API_ENDPOINTS.DECLINE(payload.id),
+    {
+      method: "POST",
+      options: {
+        onSuccess: () => {
+          toast.success("Fund Request declined successfully!");
+          void queryClient.invalidateQueries({ queryKey: requestKeys.all });
+        },
+        onError: (error: Error) => {
+          toast.error(error.message || "Failed to decline fund request");
         },
       },
     }

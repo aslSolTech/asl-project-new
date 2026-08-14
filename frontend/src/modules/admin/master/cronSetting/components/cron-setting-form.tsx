@@ -7,6 +7,7 @@ import { cronSettingFieldsConfig } from "../constants";
 import { useCreateCronSettingMutation, useUpdateCronSettingMutation } from "../hooks";
 import { CronSettingRecord } from "../types";
 import { Save } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export interface CronSettingFormProps {
   readonly mode: "create" | "edit";
@@ -25,6 +26,7 @@ export function CronSettingForm({ mode, initialData, onSuccess }: CronSettingFor
       schedule: initialData?.schedule ?? "",
       endpoint: initialData?.endpoint ?? "",
       description: initialData?.description ?? "",
+      isActive: initialData?.isActive ?? true,
     } as CronSettingFormInput,
     onSubmit: async ({ value }) => {
       const parsed = cronSettingSchema.safeParse(value);
@@ -52,9 +54,15 @@ export function CronSettingForm({ mode, initialData, onSuccess }: CronSettingFor
         }}
         className="space-y-5"
       >
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {cronSettingFieldsConfig.map((field) => (
-            <div key={field.key}>
+            <div
+              key={field.key}
+              className={cn(
+                field.key === "description" || field.type === "textarea" ? "md:col-span-2" : "",
+                field.type === "switch" ? "flex items-center h-full pt-6 md:pt-7" : ""
+              )}
+            >
               <form.AppField
                 name={field.key}
                 validators={{

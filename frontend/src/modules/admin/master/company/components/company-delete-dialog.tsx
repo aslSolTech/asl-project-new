@@ -32,7 +32,7 @@ export function CompanyDeleteDialog() {
   return (
     <Dialog open={isDeleteOpen} onOpenChange={(open) => !open && closeDeleteDialog()}>
       <DialogContent className="max-w-md">
-        <DialogHeader className="space-y-2">
+        <DialogHeader className="flex flex-col items-center space-y-3">
           <div className="w-10 h-10 rounded-full bg-destructive/10 text-destructive flex items-center justify-center">
             <AlertTriangle className="w-5 h-5" />
           </div>
@@ -46,7 +46,7 @@ export function CompanyDeleteDialog() {
           </DialogDescription>
         </DialogHeader>
 
-        <DialogFooter className="gap-2 sm:gap-0 mt-4">
+        <DialogFooter className="gap-2">
           <Button
             variant="outline"
             onClick={closeDeleteDialog}

@@ -31,54 +31,76 @@ function IdCell({ row }: Readonly<{ row: Row<AppTableFeatures, TransferRecord> }
   );
 }
 
-
-function RecipientHeader({ column }: Readonly<{ column: Column<AppTableFeatures, TransferRecord, unknown> }>) {
-  return <DataTableColumnHeader column={column} title="Recipient" />;
+function ApiUserIdHeader({ column }: Readonly<{ column: Column<AppTableFeatures, TransferRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="API User" />;
 }
 
-function RecipientCell({ row }: Readonly<{ row: Row<AppTableFeatures, TransferRecord> }>) {
-  const val = row.original.recipient;
-  if (val === "active" || val === "true") {
-    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">{val}</Badge>;
-  }
-  if (val === "inactive" || val === "false") {
-    return <Badge variant="outline" className="text-xs uppercase">{val}</Badge>;
-  }
-  return <span className="text-sm font-medium text-foreground">{val || "-"}</span>;
+function ApiUserIdCell({ row }: Readonly<{ row: Row<AppTableFeatures, TransferRecord> }>) {
+  return (
+    <Badge variant="outline" className="text-xs font-mono">
+      User #{row.original.apiUserId}
+    </Badge>
+  );
 }
 
+function TrxnDateHeader({ column }: Readonly<{ column: Column<AppTableFeatures, TransferRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Trxn Date" />;
+}
+
+function TrxnDateCell({ row }: Readonly<{ row: Row<AppTableFeatures, TransferRecord> }>) {
+  const dateVal = row.original.trxnDate;
+  if (!dateVal) return <span className="text-muted-foreground">-</span>;
+  try {
+    return (
+      <span className="text-xs text-muted-foreground font-mono">
+        {new Date(dateVal).toLocaleDateString()}
+      </span>
+    );
+  } catch {
+    return <span className="text-xs text-muted-foreground">{String(dateVal)}</span>;
+  }
+}
+
+function TransferTypeHeader({ column }: Readonly<{ column: Column<AppTableFeatures, TransferRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Transfer Type" />;
+}
+
+function TransferTypeCell({ row }: Readonly<{ row: Row<AppTableFeatures, TransferRecord> }>) {
+  const type = row.original.transferType;
+  return (
+    <Badge
+      variant={type?.toLowerCase() === "transfer" ? "default" : "secondary"}
+      className="capitalize text-xs"
+    >
+      {type || "-"}
+    </Badge>
+  );
+}
+
+function WalletTypeHeader({ column }: Readonly<{ column: Column<AppTableFeatures, TransferRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Wallet Type" />;
+}
+
+function WalletTypeCell({ row }: Readonly<{ row: Row<AppTableFeatures, TransferRecord> }>) {
+  return (
+    <Badge variant="outline" className="capitalize text-xs">
+      {row.original.walletType || "-"}
+    </Badge>
+  );
+}
 
 function AmountHeader({ column }: Readonly<{ column: Column<AppTableFeatures, TransferRecord, unknown> }>) {
   return <DataTableColumnHeader column={column} title="Amount" />;
 }
 
 function AmountCell({ row }: Readonly<{ row: Row<AppTableFeatures, TransferRecord> }>) {
-  const val = row.original.amount;
-  if (val === "active" || val === "true") {
-    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">{val}</Badge>;
-  }
-  if (val === "inactive" || val === "false") {
-    return <Badge variant="outline" className="text-xs uppercase">{val}</Badge>;
-  }
-  return <span className="text-sm font-medium text-foreground">{val || "-"}</span>;
+  const val = Number(row.original.amount || 0);
+  return (
+    <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
+      ₹{val.toLocaleString("en-IN")}
+    </span>
+  );
 }
-
-
-function StatusHeader({ column }: Readonly<{ column: Column<AppTableFeatures, TransferRecord, unknown> }>) {
-  return <DataTableColumnHeader column={column} title="Status" />;
-}
-
-function StatusCell({ row }: Readonly<{ row: Row<AppTableFeatures, TransferRecord> }>) {
-  const val = row.original.status;
-  if (val === "active" || val === "true") {
-    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">{val}</Badge>;
-  }
-  if (val === "inactive" || val === "false") {
-    return <Badge variant="outline" className="text-xs uppercase">{val}</Badge>;
-  }
-  return <span className="text-sm font-medium text-foreground">{val || "-"}</span>;
-}
-
 
 function ActionsHeader() {
   return <span className="text-xs font-semibold">Actions</span>;
@@ -102,7 +124,7 @@ function ActionsCell({ row }: Readonly<{ row: Row<AppTableFeatures, TransferReco
       <Button
         variant="ghost"
         size="icon-sm"
-        onClick={() => openDelete(record.id, record.recipient || record.id)}
+        onClick={() => openDelete(record.id, `Transfer #${record.id}`)}
         title="Delete"
         className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
       >
@@ -123,12 +145,14 @@ export default function TransferPage() {
     }
     
     // Fallback data
-    const mock = [
+    const mock: TransferRecord[] = [
       {
-        id: "REC-101",
-        recipient: "Recipient Val 1",
-        amount: "Amount Val 2",
-        status: "Status Val 3"
+        id: "TRF-101",
+        apiUserId: 1,
+        trxnDate: new Date().toISOString(),
+        transferType: "transfer",
+        walletType: "bank",
+        amount: 5000,
       }
     ];
     return mock;
@@ -142,19 +166,29 @@ export default function TransferPage() {
         cell: IdCell,
       },
       {
-        accessorKey: "recipient",
-        header: RecipientHeader,
-        cell: RecipientCell,
+        accessorKey: "apiUserId",
+        header: ApiUserIdHeader,
+        cell: ApiUserIdCell,
+      },
+      {
+        accessorKey: "trxnDate",
+        header: TrxnDateHeader,
+        cell: TrxnDateCell,
+      },
+      {
+        accessorKey: "transferType",
+        header: TransferTypeHeader,
+        cell: TransferTypeCell,
+      },
+      {
+        accessorKey: "walletType",
+        header: WalletTypeHeader,
+        cell: WalletTypeCell,
       },
       {
         accessorKey: "amount",
         header: AmountHeader,
         cell: AmountCell,
-      },
-      {
-        accessorKey: "status",
-        header: StatusHeader,
-        cell: StatusCell,
       },
       {
         id: "actions",

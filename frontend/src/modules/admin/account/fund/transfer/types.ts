@@ -1,8 +1,10 @@
 export interface TransferRecord {
   id: string;
-  recipient: string;
-  amount: string;
-  status: string;
+  apiUserId: number;
+  trxnDate: string | Date;
+  transferType: string;
+  walletType: string;
+  amount: number;
 }
 
 export type CreateTransferPayload = Omit<TransferRecord, "id">;

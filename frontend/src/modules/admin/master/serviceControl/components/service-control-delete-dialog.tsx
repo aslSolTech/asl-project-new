@@ -1,0 +1,60 @@
+"use client";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { useServiceControlModalStore } from "../stores/useServiceControlModalStore";
+import { useDeleteServiceControlMutation } from "../hooks";
+import { AlertTriangle, Trash2 } from "lucide-react";
+
+export function ServiceControlDeleteDialog() {
+  const { isDeleteOpen, deletingId, deletingName, closeDelete } = useServiceControlModalStore();
+  const deleteMutation = useDeleteServiceControlMutation();
+
+  const handleDelete = async () => {
+    if (!deletingId) return;
+    await deleteMutation.mutateAsync(deletingId);
+    closeDelete();
+  };
+
+  return (
+    <Dialog open={isDeleteOpen} onOpenChange={(open) => !open && closeDelete()}>
+      <DialogContent className="max-w-md">
+        <DialogHeader className="space-y-2 flex flex-col items-center">
+          <div className="w-10 h-10 rounded-full bg-destructive/10 text-destructive flex items-center justify-center">
+            <AlertTriangle className="w-5 h-5" />
+          </div>
+          <DialogTitle className="text-lg font-bold">Delete Service Status Control</DialogTitle>
+          <DialogDescription>
+            Are you sure you want to delete{" "}
+            <span className="font-semibold text-foreground">
+              {deletingName ?? "this record"}
+            </span>{" "}
+            ? This action cannot be undone.
+          </DialogDescription>
+        </DialogHeader>
+
+        <DialogFooter className="gap-3">
+          <Button variant="outline" onClick={closeDelete} disabled={deleteMutation.isPending}>
+            Cancel
+          </Button>
+          <Button
+            variant="destructive"
+            onClick={handleDelete}
+            disabled={deleteMutation.isPending}
+            className="flex items-center gap-2"
+          >
+            <Trash2 className="w-4 h-4" />
+            {deleteMutation.isPending ? "Deleting..." : "Delete"}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}

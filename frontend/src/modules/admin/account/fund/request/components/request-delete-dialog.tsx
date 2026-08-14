@@ -11,37 +11,45 @@ import {
 import { Button } from "@/components/ui/button";
 import { useRequestModalStore } from "../stores/useRequestModalStore";
 import { useDeleteRequestMutation } from "../hooks";
-import { AlertTriangle, Trash2 } from "lucide-react";
+import { AlertTriangle, Trash2, Loader2 } from "lucide-react";
 
 export function RequestDeleteDialog() {
-  const { isDeleteOpen, deletingId, deletingName, closeDelete } = useRequestModalStore();
+  const { isDeleteOpen, deletingRecord, closeDelete } = useRequestModalStore();
   const deleteMutation = useDeleteRequestMutation();
 
   const handleDelete = async () => {
-    if (!deletingId) return;
-    await deleteMutation.mutateAsync(deletingId);
-    closeDelete();
+    if (!deletingRecord) return;
+    try {
+      await deleteMutation.mutateAsync(deletingRecord.id);
+      closeDelete();
+    } catch {
+      // Handled in onError
+    }
   };
 
   return (
     <Dialog open={isDeleteOpen} onOpenChange={(open) => !open && closeDelete()}>
       <DialogContent className="max-w-md">
-        <DialogHeader className="space-y-2">
-          <div className="w-10 h-10 rounded-full bg-destructive/10 text-destructive flex items-center justify-center">
-            <AlertTriangle className="w-5 h-5" />
+        <DialogHeader className="flex flex-col items-center space-y-1">
+          <div className="w-12 h-12 rounded-full bg-destructive/10 text-destructive flex items-center justify-center">
+            <AlertTriangle className="w-6 h-6" />
           </div>
           <DialogTitle className="text-lg font-bold">Delete Fund Request</DialogTitle>
-          <DialogDescription>
-            Are you sure you want to delete{" "}
+          <DialogDescription className="text-sm text-muted-foreground leading-relaxed">
+            Are you sure you want to delete the fund request for{" "}
             <span className="font-semibold text-foreground">
-              {deletingName ?? "this record"}
+              {deletingRecord?.userName ?? deletingRecord?.regNo ?? "this record"}
             </span>{" "}
-            ? This action cannot be undone.
+            (Amount: ₹{deletingRecord?.requestAmount ?? "-"})? This action cannot be undone.
           </DialogDescription>
         </DialogHeader>
 
-        <DialogFooter className="gap-3 mt-4">
-          <Button variant="outline" onClick={closeDelete} disabled={deleteMutation.isPending}>
+        <DialogFooter className="gap-2 mt-4">
+          <Button
+            variant="outline"
+            onClick={closeDelete}
+            disabled={deleteMutation.isPending}
+          >
             Cancel
           </Button>
           <Button
@@ -50,8 +58,17 @@ export function RequestDeleteDialog() {
             disabled={deleteMutation.isPending}
             className="flex items-center gap-2"
           >
-            <Trash2 className="w-4 h-4" />
-            {deleteMutation.isPending ? "Deleting..." : "Delete"}
+            {deleteMutation.isPending ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Deleting...
+              </>
+            ) : (
+              <>
+                <Trash2 className="w-4 h-4" />
+                Delete
+              </>
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>
