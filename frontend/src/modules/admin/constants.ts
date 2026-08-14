@@ -24,6 +24,15 @@ export const DEFAULT_USER_PROFILE: UserProfile = {
   role: "Admin",
 };
 
+export const AVATAR_OPTIONS = [
+  "https://api.dicebear.com/7.x/avataaars/svg?seed=Rolex",
+  "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix",
+  "https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka",
+  "https://api.dicebear.com/7.x/avataaars/svg?seed=Milo",
+  "https://api.dicebear.com/7.x/avataaars/svg?seed=Zoe",
+  "https://api.dicebear.com/7.x/avataaars/svg?seed=Leo",
+];
+
 export const BREADCRUMB_LABEL_MAP: Record<string, string> = {
   overview: "Overview",
   daily: "Daily Summary",
