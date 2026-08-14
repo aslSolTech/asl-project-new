@@ -415,7 +415,6 @@ export const menuItems: MenuItem[] = [
       {
         title: "User Management",
         items: [
-          { title: "Admin Register", href: "/dashboard/master/users/admin" },
           { title: "Employee Register", href: "/dashboard/master/users/employees" },
           { title: "Employee Permission", href: "/dashboard/master/users/permissions" },
           { title: "User Register", href: "/dashboard/master/users/register" },
