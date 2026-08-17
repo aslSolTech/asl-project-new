@@ -1,0 +1,60 @@
+"use client";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { useIsVerifyModalStore } from "../stores/useIsVerifyModalStore";
+import { useDeleteIsVerifyMutation } from "../hooks";
+import { AlertTriangle, Trash2 } from "lucide-react";
+
+export function IsVerifyDeleteDialog() {
+  const { isDeleteOpen, deletingId, deletingName, closeDelete } = useIsVerifyModalStore();
+  const deleteMutation = useDeleteIsVerifyMutation();
+
+  const handleDelete = async () => {
+    if (!deletingId) return;
+    await deleteMutation.mutateAsync(deletingId);
+    closeDelete();
+  };
+
+  return (
+    <Dialog open={isDeleteOpen} onOpenChange={(open) => !open && closeDelete()}>
+      <DialogContent className="max-w-md">
+        <DialogHeader className="space-y-2">
+          <div className="w-10 h-10 rounded-full bg-destructive/10 text-destructive flex items-center justify-center">
+            <AlertTriangle className="w-5 h-5" />
+          </div>
+          <DialogTitle className="text-lg font-bold">Delete Verification Option</DialogTitle>
+          <DialogDescription>
+            Are you sure you want to delete{" "}
+            <span className="font-semibold text-foreground">
+              {deletingName ?? "this option"}
+            </span>{" "}
+            ? This action cannot be undone.
+          </DialogDescription>
+        </DialogHeader>
+
+        <DialogFooter className="gap-3 mt-4">
+          <Button variant="outline" onClick={closeDelete} disabled={deleteMutation.isPending}>
+            Cancel
+          </Button>
+          <Button
+            variant="destructive"
+            onClick={handleDelete}
+            disabled={deleteMutation.isPending}
+            className="flex items-center gap-2"
+          >
+            <Trash2 className="w-4 h-4" />
+            {deleteMutation.isPending ? "Deleting..." : "Delete"}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}

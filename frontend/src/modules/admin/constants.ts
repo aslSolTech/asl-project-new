@@ -4,7 +4,6 @@ import {
   Settings,
   Database,
   FileText,
-  Bell,
   Package,
   Route,
   ShieldCheck,
@@ -393,12 +392,7 @@ export const menuItems: MenuItem[] = [
   {
     title: "Merchant API",
     icon: Plug,
-    items: [
-      {
-        title: "API Settings",
-        href: "/dashboard/merchant-api/settings"
-      },
-    ],
+    href: "/dashboard/merchant-api/settings"
   },
   {
     title: "Master",
@@ -431,24 +425,11 @@ export const menuItems: MenuItem[] = [
           { title: "Callback API", href: "/dashboard/master/api-management/callback" },
         ],
       },
-      {
-        title: "Operator",
-        items: [
-          { title: "Operator Type", href: "/dashboard/master/operator/operator-type" },
-          { title: "Operator Register", href: "/dashboard/master/operator/register" },
-          { title: "Operator Code", href: "/dashboard/master/operator/code" },
-        ],
-      },
+   
       {
         title: "Banking",
         items: [
           { title: "AEPS Bank", href: "/dashboard/master/banking/aeps-bank" },
-        ],
-      },
-      {
-        title: "Charges",
-        items: [
-          { title: "Registration Charges", href: "/dashboard/master/charges/registration" },
         ],
       },
     ],
@@ -456,20 +437,53 @@ export const menuItems: MenuItem[] = [
   {
     title: "Privilege",
     icon: ShieldCheck,
+    href: "/dashboard/privileges"
+  },
+   {
+    title: "Settings",
+    icon: Settings,
     items: [
       {
-        title: "Settings", href: "/dashboard/privileges"
+        title: "Gender",
+        href: "/dashboard/settings/gender-types",
       },
-    ],
-  },
-  {
-    title: "Notification",
-    icon: Bell,
-    items: [
+      {
+        title: "Is Verify",
+        href: "/dashboard/settings/is-verify-types",
+      },
+      {
+        title: "Login Status",
+        href: "/dashboard/settings/login-status-types",
+      },
       {
         title: "Notifications",
-        href: "/dashboard/notifications",
-      }
+        href: "/dashboard/settings/notifications",
+      },
+      {
+        title: "Operator Type",
+        href: "/dashboard/settings/operator-types",
+      },
+      {
+        title: "Registration Charges",
+        href: "/dashboard/settings/registration-charges",
+      },
+      {
+        title: "Request Types",
+        href: "/dashboard/settings/request-types",
+      },
+      {
+        title: "Response Type", href: "/dashboard/settings/response-types",
+      },
+      {
+        title: "User Type", href: "/dashboard/settings/user-types",
+      },
+      {
+        title: "API Operator Code",
+        items: [
+          { title: "Operator Code Type", href: "/dashboard/settings/operator-code-types" },
+          { title: "API Operator Code", href: "/dashboard/settings/operator-codes" },
+        ],
+      },
     ],
   },
   {
@@ -574,28 +588,6 @@ export const menuItems: MenuItem[] = [
             title: "Contact Messages",
             href: "/dashboard/contact/messages",
           },
-        ],
-      },
-    ],
-  },
-  {
-    title: "Settings",
-    icon: Settings,
-    items: [
-      {
-        title: "Profile",
-        items: [
-          { title: "Profile Info", href: "/dashboard/settings/account/profile" },
-          { title: "KYC Verification", href: "/dashboard/settings/account/kyc" },
-          { title: "Notifications", href: "/dashboard/settings/account/notifications" },
-        ],
-      },
-      {
-        title: "Security",
-        items: [
-          { title: "Two-Factor Auth", href: "/dashboard/settings/security/2fa" },
-          { title: "API Keys", href: "/dashboard/settings/security/api-keys" },
-          { title: "Login History", href: "/dashboard/settings/security/history" },
         ],
       },
     ],
