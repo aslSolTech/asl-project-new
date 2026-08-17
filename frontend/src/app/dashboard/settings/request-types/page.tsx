@@ -44,17 +44,12 @@ import {
   RefreshCw,
 } from "lucide-react";
 
-type TabType = "request-type" | "request-parameter" | "parameter-status";
+type TabType = "request-type" | "parameter-type" | "parameter-status";
 
+// -------------------------------------------------------------
+// Request Type Columns & Cell Functions
+// -------------------------------------------------------------
 function RequestTypeIdHeader({ column }: Readonly<{ column: Column<AppTableFeatures, RequestTypeRecord, unknown> }>) {
-  return <DataTableColumnHeader column={column} title="ID" />;
-}
-
-function RequestParamIdHeader({ column }: Readonly<{ column: Column<AppTableFeatures, RequestParamRecord, unknown> }>) {
-  return <DataTableColumnHeader column={column} title="ID" />;
-}
-
-function ParamStatusIdHeader({ column }: Readonly<{ column: Column<AppTableFeatures, ParamStatusRecord, unknown> }>) {
   return <DataTableColumnHeader column={column} title="ID" />;
 }
 
@@ -66,23 +61,194 @@ function RequestTypeIdCell({ row }: Readonly<{ row: Row<AppTableFeatures, Reques
   );
 }
 
-function RequestParamIdCell({ row }: Readonly<{ row: Row<AppTableFeatures, RequestParamRecord> }>) {
+function RequestTypeNameHeader({ column }: Readonly<{ column: Column<AppTableFeatures, RequestTypeRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Type Name" />;
+}
+
+function RequestTypeNameCell({ row }: Readonly<{ row: Row<AppTableFeatures, RequestTypeRecord> }>) {
+  return <span className="text-sm font-semibold text-foreground">{row.original.typeName}</span>;
+}
+
+function RequestTypeCodeHeader({ column }: Readonly<{ column: Column<AppTableFeatures, RequestTypeRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Request Code" />;
+}
+
+function RequestTypeCodeCell({ row }: Readonly<{ row: Row<AppTableFeatures, RequestTypeRecord> }>) {
+  return <span className="text-xs font-mono font-medium text-muted-foreground uppercase">{row.original.requestCode}</span>;
+}
+
+function RequestTypeMethodHeader({ column }: Readonly<{ column: Column<AppTableFeatures, RequestTypeRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="HTTP Method" />;
+}
+
+function RequestTypeMethodCell({ row }: Readonly<{ row: Row<AppTableFeatures, RequestTypeRecord> }>) {
+  return <Badge variant="secondary" className="text-xs font-mono font-bold">{row.original.httpMethod}</Badge>;
+}
+
+function RequestTypeStatusHeader({ column }: Readonly<{ column: Column<AppTableFeatures, RequestTypeRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Status" />;
+}
+
+function RequestTypeStatusCell({ row }: Readonly<{ row: Row<AppTableFeatures, RequestTypeRecord> }>) {
+  return <StatusBadge status={row.original.status} />;
+}
+
+function RequestTypeActionsCell({ row }: Readonly<{ row: Row<AppTableFeatures, RequestTypeRecord> }>) {
+  const { openEdit, openDelete } = useRequestTypeModalStore();
+  const record = row.original;
   return (
-    <span className="font-mono text-xs font-semibold px-2 py-0.5 rounded bg-muted/60 text-muted-foreground border border-border/50">
+    <div className="flex items-center gap-1.5">
+      <Button
+        variant="ghost"
+        size="icon-sm"
+        onClick={() => openEdit(record.id, record)}
+        title="Edit"
+        className="h-8 w-8 hover:text-primary"
+      >
+        <Edit2 className="w-3.5 h-3.5" />
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon-sm"
+        onClick={() => openDelete(record.id, record.typeName)}
+        title="Delete"
+        className="h-8 w-8 hover:text-destructive"
+      >
+        <Trash2 className="w-3.5 h-3.5" />
+      </Button>
+    </div>
+  );
+}
+
+// -------------------------------------------------------------
+// Parameter Type Columns & Cell Functions
+// -------------------------------------------------------------
+function ParameterTypeIdHeader({ column }: Readonly<{ column: Column<AppTableFeatures, RequestParamRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="ID" />;
+}
+
+function ParameterTypeIdCell({ row }: Readonly<{ row: Row<AppTableFeatures, RequestParamRecord> }>) {
+  return (
+    <span className="font-mono text-xs font-semibold px-2 py-0.5 rounded bg-primary/5 text-primary border border-primary/20">
       {String(row.getValue?.("id"))}
     </span>
   );
+}
+
+function ParameterTypeNameHeader({ column }: Readonly<{ column: Column<AppTableFeatures, RequestParamRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Parameter Name" />;
+}
+
+function ParameterTypeNameCell({ row }: Readonly<{ row: Row<AppTableFeatures, RequestParamRecord> }>) {
+  return <span className="text-sm font-semibold text-foreground">{row.original.paramName}</span>;
+}
+
+function ParameterTypeSlugHeader({ column }: Readonly<{ column: Column<AppTableFeatures, RequestParamRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Slug" />;
+}
+
+function ParameterTypeSlugCell({ row }: Readonly<{ row: Row<AppTableFeatures, RequestParamRecord> }>) {
+  return <span className="text-xs font-mono font-medium text-muted-foreground">{row.original.slug}</span>;
+}
+
+function ParameterTypeActionsCell({ row }: Readonly<{ row: Row<AppTableFeatures, RequestParamRecord> }>) {
+  const { openEdit, openDelete } = useRequestParamModalStore();
+  const record = row.original;
+  return (
+    <div className="flex items-center gap-1.5">
+      <Button
+        variant="ghost"
+        size="icon-sm"
+        onClick={() => openEdit(record.id, record)}
+        title="Edit"
+        className="h-8 w-8 hover:text-primary"
+      >
+        <Edit2 className="w-3.5 h-3.5" />
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon-sm"
+        onClick={() => openDelete(record.id, record.paramName)}
+        title="Delete"
+        className="h-8 w-8 hover:text-destructive"
+      >
+        <Trash2 className="w-3.5 h-3.5" />
+      </Button>
+    </div>
+  );
+}
+
+// -------------------------------------------------------------
+// Parameter Status Columns & Cell Functions
+// -------------------------------------------------------------
+function ParamStatusIdHeader({ column }: Readonly<{ column: Column<AppTableFeatures, ParamStatusRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="ID" />;
 }
 
 function ParamStatusIdCell({ row }: Readonly<{ row: Row<AppTableFeatures, ParamStatusRecord> }>) {
   return (
-    <span className="font-mono text-xs font-semibold px-2 py-0.5 rounded bg-muted/60 text-muted-foreground border border-border/50">
+    <span className="font-mono text-xs font-semibold px-2 py-0.5 rounded bg-secondary/70 text-secondary-foreground border border-secondary">
       {String(row.getValue?.("id"))}
     </span>
   );
 }
 
-function StatusBadge({ status }: { status: string }) {
+function ParamStatusNameHeader({ column }: Readonly<{ column: Column<AppTableFeatures, ParamStatusRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Status Name" />;
+}
+
+function ParamStatusNameCell({ row }: Readonly<{ row: Row<AppTableFeatures, ParamStatusRecord> }>) {
+  return <span className="text-sm font-semibold text-foreground">{row.original.statusName}</span>;
+}
+
+function ParamStatusCodeHeader({ column }: Readonly<{ column: Column<AppTableFeatures, ParamStatusRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Status Code" />;
+}
+
+function ParamStatusCodeCell({ row }: Readonly<{ row: Row<AppTableFeatures, ParamStatusRecord> }>) {
+  return <span className="text-xs font-mono font-medium text-muted-foreground uppercase">{row.original.statusCode}</span>;
+}
+
+function ParamStatusStatusHeader({ column }: Readonly<{ column: Column<AppTableFeatures, ParamStatusRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Status" />;
+}
+
+function ParamStatusStatusCell({ row }: Readonly<{ row: Row<AppTableFeatures, ParamStatusRecord> }>) {
+  return <StatusBadge status={row.original.status} />;
+}
+
+function ParamStatusActionsCell({ row }: Readonly<{ row: Row<AppTableFeatures, ParamStatusRecord> }>) {
+  const { openEdit, openDelete } = useParamStatusModalStore();
+  const record = row.original;
+  return (
+    <div className="flex items-center gap-1.5">
+      <Button
+        variant="ghost"
+        size="icon-sm"
+        onClick={() => openEdit(record.id, record)}
+        title="Edit"
+        className="h-8 w-8 hover:text-primary"
+      >
+        <Edit2 className="w-3.5 h-3.5" />
+      </Button>
+      <Button
+        variant="ghost"
+        size="icon-sm"
+        onClick={() => openDelete(record.id, record.statusName)}
+        title="Delete"
+        className="h-8 w-8 hover:text-destructive"
+      >
+        <Trash2 className="w-3.5 h-3.5" />
+      </Button>
+    </div>
+  );
+}
+
+function ActionsHeader() {
+  return <span className="text-xs font-semibold">Actions</span>;
+}
+
+function StatusBadge({ status }: Readonly<{ status: string }>) {
   const val = String(status).toLowerCase();
   if (val === "active" || val === "true") {
     return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">Active</Badge>;
@@ -98,7 +264,7 @@ export default function RequestTypesPage() {
   const [activeTab, setActiveTab] = useState<TabType>(tabParam || "request-type");
 
   useEffect(() => {
-    if (tabParam && (tabParam === "request-type" || tabParam === "request-parameter" || tabParam === "parameter-status")) {
+    if (tabParam && (tabParam === "request-type" || tabParam === "parameter-type" || tabParam === "parameter-status")) {
       setActiveTab(tabParam);
     }
   }, [tabParam]);
@@ -110,7 +276,7 @@ export default function RequestTypesPage() {
 
   // 1. Request Type Data & Queries
   const { data: requestTypesData, isLoading: isRTLoading, refetch: refetchRT } = useRequestTypeListQuery();
-  const { openCreate: openRTCreate, openEdit: openRTEdit, openDelete: openRTDelete } = useRequestTypeModalStore();
+  const { openCreate: openRTCreate } = useRequestTypeModalStore();
 
   const displayRequestTypes = useMemo<RequestTypeRecord[]>(() => {
     if (requestTypesData && requestTypesData.length > 0) return requestTypesData;
@@ -120,48 +286,23 @@ export default function RequestTypesPage() {
   const requestTypeColumns = useMemo<ColumnDef<AppTableFeatures, RequestTypeRecord, unknown>[]>(
     () => [
       { accessorKey: "id", header: RequestTypeIdHeader, cell: RequestTypeIdCell },
-      {
-        accessorKey: "typeName",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Type Name" />,
-        cell: ({ row }) => <span className="text-sm font-semibold text-foreground">{row.original.typeName}</span>,
-      },
-      {
-        accessorKey: "requestCode",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Request Code" />,
-        cell: ({ row }) => <span className="text-xs font-mono font-medium text-muted-foreground uppercase">{row.original.requestCode}</span>,
-      },
-      {
-        accessorKey: "httpMethod",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="HTTP Method" />,
-        cell: ({ row }) => <Badge variant="secondary" className="text-xs font-mono font-bold">{row.original.httpMethod}</Badge>,
-      },
-      {
-        accessorKey: "status",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
-        cell: ({ row }) => <StatusBadge status={row.original.status} />,
-      },
+      { accessorKey: "typeName", header: RequestTypeNameHeader, cell: RequestTypeNameCell },
+      { accessorKey: "requestCode", header: RequestTypeCodeHeader, cell: RequestTypeCodeCell },
+      { accessorKey: "httpMethod", header: RequestTypeMethodHeader, cell: RequestTypeMethodCell },
+      { accessorKey: "status", header: RequestTypeStatusHeader, cell: RequestTypeStatusCell },
       {
         id: "actions",
-        header: () => <span className="text-xs font-semibold">Actions</span>,
+        header: ActionsHeader,
+        cell: RequestTypeActionsCell,
         enableSorting: false,
-        cell: ({ row }) => (
-          <div className="flex items-center gap-1.5">
-            <Button variant="ghost" size="icon-sm" onClick={() => openRTEdit(row.original.id, row.original)} className="h-8 w-8 hover:text-primary">
-              <Edit2 className="w-3.5 h-3.5" />
-            </Button>
-            <Button variant="ghost" size="icon-sm" onClick={() => openRTDelete(row.original.id, row.original.typeName)} className="h-8 w-8 hover:text-destructive">
-              <Trash2 className="w-3.5 h-3.5" />
-            </Button>
-          </div>
-        ),
       },
     ],
-    [openRTEdit, openRTDelete]
+    []
   );
 
-  // 2. Request Parameter Data & Queries
+  // 2. Parameter Type Data & Queries
   const { data: requestParamsData, isLoading: isRPLoading, refetch: refetchRP } = useRequestParamListQuery();
-  const { openCreate: openRPCreate, openEdit: openRPEdit, openDelete: openRPDelete } = useRequestParamModalStore();
+  const { openCreate: openRPCreate } = useRequestParamModalStore();
 
   const displayRequestParams = useMemo<RequestParamRecord[]>(() => {
     if (requestParamsData && requestParamsData.length > 0) return requestParamsData;
@@ -170,56 +311,22 @@ export default function RequestTypesPage() {
 
   const requestParamColumns = useMemo<ColumnDef<AppTableFeatures, RequestParamRecord, unknown>[]>(
     () => [
-      { accessorKey: "id", header: RequestParamIdHeader, cell: RequestParamIdCell },
-      {
-        accessorKey: "paramName",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Parameter Name" />,
-        cell: ({ row }) => <span className="text-sm font-semibold text-foreground font-mono">{row.original.paramName}</span>,
-      },
-      {
-        accessorKey: "paramType",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Data Type" />,
-        cell: ({ row }) => <Badge variant="secondary" className="text-xs font-medium">{row.original.paramType}</Badge>,
-      },
-      {
-        accessorKey: "isRequired",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Required?" />,
-        cell: ({ row }) => {
-          const req = String(row.original.isRequired).toLowerCase() === "true" || row.original.isRequired === "Yes";
-          return req ? (
-            <Badge variant="default" className="text-xs bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20">Required</Badge>
-          ) : (
-            <Badge variant="outline" className="text-xs">Optional</Badge>
-          );
-        },
-      },
-      {
-        accessorKey: "status",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
-        cell: ({ row }) => <StatusBadge status={row.original.status} />,
-      },
+      { accessorKey: "id", header: ParameterTypeIdHeader, cell: ParameterTypeIdCell },
+      { accessorKey: "paramName", header: ParameterTypeNameHeader, cell: ParameterTypeNameCell },
+      { accessorKey: "slug", header: ParameterTypeSlugHeader, cell: ParameterTypeSlugCell },
       {
         id: "actions",
-        header: () => <span className="text-xs font-semibold">Actions</span>,
+        header: ActionsHeader,
+        cell: ParameterTypeActionsCell,
         enableSorting: false,
-        cell: ({ row }) => (
-          <div className="flex items-center gap-1.5">
-            <Button variant="ghost" size="icon-sm" onClick={() => openRPEdit(row.original.id, row.original)} className="h-8 w-8 hover:text-primary">
-              <Edit2 className="w-3.5 h-3.5" />
-            </Button>
-            <Button variant="ghost" size="icon-sm" onClick={() => openRPDelete(row.original.id, row.original.paramName)} className="h-8 w-8 hover:text-destructive">
-              <Trash2 className="w-3.5 h-3.5" />
-            </Button>
-          </div>
-        ),
       },
     ],
-    [openRPEdit, openRPDelete]
+    []
   );
 
   // 3. Parameter Status Data & Queries
   const { data: paramStatusesData, isLoading: isPSLoading, refetch: refetchPS } = useParamStatusListQuery();
-  const { openCreate: openPSCreate, openEdit: openPSEdit, openDelete: openPSDelete } = useParamStatusModalStore();
+  const { openCreate: openPSCreate } = useParamStatusModalStore();
 
   const displayParamStatuses = useMemo<ParamStatusRecord[]>(() => {
     if (paramStatusesData && paramStatusesData.length > 0) return paramStatusesData;
@@ -229,38 +336,17 @@ export default function RequestTypesPage() {
   const paramStatusColumns = useMemo<ColumnDef<AppTableFeatures, ParamStatusRecord, unknown>[]>(
     () => [
       { accessorKey: "id", header: ParamStatusIdHeader, cell: ParamStatusIdCell },
-      {
-        accessorKey: "statusName",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Status Name" />,
-        cell: ({ row }) => <span className="text-sm font-semibold text-foreground">{row.original.statusName}</span>,
-      },
-      {
-        accessorKey: "statusCode",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Status Code" />,
-        cell: ({ row }) => <span className="text-xs font-mono font-medium text-muted-foreground uppercase">{row.original.statusCode}</span>,
-      },
-      {
-        accessorKey: "status",
-        header: ({ column }) => <DataTableColumnHeader column={column} title="Status" />,
-        cell: ({ row }) => <StatusBadge status={row.original.status} />,
-      },
+      { accessorKey: "statusName", header: ParamStatusNameHeader, cell: ParamStatusNameCell },
+      { accessorKey: "statusCode", header: ParamStatusCodeHeader, cell: ParamStatusCodeCell },
+      { accessorKey: "status", header: ParamStatusStatusHeader, cell: ParamStatusStatusCell },
       {
         id: "actions",
-        header: () => <span className="text-xs font-semibold">Actions</span>,
+        header: ActionsHeader,
+        cell: ParamStatusActionsCell,
         enableSorting: false,
-        cell: ({ row }) => (
-          <div className="flex items-center gap-1.5">
-            <Button variant="ghost" size="icon-sm" onClick={() => openPSEdit(row.original.id, row.original)} className="h-8 w-8 hover:text-primary">
-              <Edit2 className="w-3.5 h-3.5" />
-            </Button>
-            <Button variant="ghost" size="icon-sm" onClick={() => openPSDelete(row.original.id, row.original.statusName)} className="h-8 w-8 hover:text-destructive">
-              <Trash2 className="w-3.5 h-3.5" />
-            </Button>
-          </div>
-        ),
       },
     ],
-    [openPSEdit, openPSDelete]
+    []
   );
 
   return (
@@ -276,7 +362,7 @@ export default function RequestTypesPage() {
               Request Types & Parameters
             </h1>
             <p className="text-xs sm:text-sm text-muted-foreground">
-              Configure API request types, dynamic parameters, and status codes.
+              Configure API request types, parameter types, and status codes.
             </p>
           </div>
         </div>
@@ -295,7 +381,7 @@ export default function RequestTypesPage() {
             </>
           )}
 
-          {activeTab === "request-parameter" && (
+          {activeTab === "parameter-type" && (
             <>
               <Button variant="outline" size="sm" onClick={() => void refetchRP()} disabled={isRPLoading} className="flex items-center gap-2">
                 <RefreshCw className={`w-4 h-4 ${isRPLoading ? "animate-spin" : ""}`} />
@@ -303,7 +389,7 @@ export default function RequestTypesPage() {
               </Button>
               <Button onClick={openRPCreate} className="flex items-center gap-2 shadow-sm font-semibold cursor-pointer">
                 <Plus className="w-4 h-4" />
-                Add Request Parameter
+                Add Parameter Type
               </Button>
             </>
           )}
@@ -340,15 +426,15 @@ export default function RequestTypesPage() {
 
         <button
           type="button"
-          onClick={() => handleTabChange("request-parameter")}
+          onClick={() => handleTabChange("parameter-type")}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer ${
-            activeTab === "request-parameter"
+            activeTab === "parameter-type"
               ? "bg-white dark:bg-slate-800 text-foreground shadow-xs"
               : "text-muted-foreground hover:text-foreground"
           }`}
         >
           <Sliders className="w-4 h-4" />
-          Request Parameters
+          Parameter Types
         </button>
 
         <button
@@ -377,12 +463,12 @@ export default function RequestTypesPage() {
         />
       )}
 
-      {activeTab === "request-parameter" && (
+      {activeTab === "parameter-type" && (
         <DataTable
           columns={requestParamColumns}
           data={displayRequestParams}
           loading={isRPLoading}
-          searchPlaceholder="Search parameters..."
+          searchPlaceholder="Search parameter types..."
           searchDebounceMs={300}
           containerHeight="580px"
         />
@@ -393,7 +479,7 @@ export default function RequestTypesPage() {
           columns={paramStatusColumns}
           data={displayParamStatuses}
           loading={isPSLoading}
-          searchPlaceholder="Search statuses..."
+          searchPlaceholder="Search parameter statuses..."
           searchDebounceMs={300}
           containerHeight="580px"
         />

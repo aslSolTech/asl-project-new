@@ -18,9 +18,7 @@ export type RequestTypeMultiFormInput = z.infer<typeof requestTypeMultiSchema>;
 // Single & Multiple Request Parameter Schemas
 export const requestParamItemSchema = z.object({
   paramName: z.string().min(1, "Parameter name is required"),
-  paramType: z.string().min(1, "Parameter type is required"),
-  isRequired: z.string().min(1, "Is required flag is required"),
-  status: z.string().min(1, "Status is required"),
+  slug: z.string().min(1, "Slug is required"),
 });
 
 export const requestParamMultiSchema = z.object({

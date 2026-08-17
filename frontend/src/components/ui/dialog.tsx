@@ -18,7 +18,7 @@ function DialogPortal({ ...props }: Readonly<DialogPrimitive.Portal.Props>) {
 }
 
 function DialogClose({ ...props }: Readonly<DialogPrimitive.Close.Props>) {
-  return <DialogPrimitive.Close data-slot="dialog-close" {...props} />;
+  return <DialogPrimitive.Close type="button" data-slot="dialog-close" {...props} />;
 }
 
 function DialogOverlay({ className, ...props }: Readonly<DialogPrimitive.Backdrop.Props>) {
@@ -54,6 +54,7 @@ function DialogContent({
         {children}
         {showCloseButton && (
           <DialogPrimitive.Close
+            type="button"
             data-slot="dialog-close"
             className="absolute right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:outline-hidden disabled:pointer-events-none p-1 text-muted-foreground hover:text-foreground cursor-pointer"
           >

@@ -109,7 +109,10 @@ export const FormField = forwardRef<HTMLInputElement | HTMLTextAreaElement, Text
             }}
             onBlur={() => {
               if (typeof value === "string") {
-                onChange?.(value.trim());
+                const trimmed = value.trim();
+                if (trimmed !== value) {
+                  onChange?.(trimmed);
+                }
               }
               onBlur?.();
             }}
@@ -280,7 +283,10 @@ export const FormField = forwardRef<HTMLInputElement | HTMLTextAreaElement, Text
           }}
           onBlur={() => {
             if (typeof value === "string") {
-              onChange?.(value.trim());
+              const trimmed = value.trim();
+              if (trimmed !== value) {
+                onChange?.(trimmed);
+              }
             }
             onBlur?.();
           }}

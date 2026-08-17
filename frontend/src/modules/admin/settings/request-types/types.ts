@@ -14,9 +14,7 @@ export type UpdateRequestTypePayload = RequestTypeRecord;
 export interface RequestParamRecord {
   id: string;
   paramName: string;
-  paramType: string;
-  isRequired: string;
-  status: string;
+  slug: string;
 }
 
 export type CreateRequestParamPayload = Omit<RequestParamRecord, "id">;

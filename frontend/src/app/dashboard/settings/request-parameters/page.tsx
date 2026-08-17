@@ -7,7 +7,7 @@ export default function RequestParametersRedirectPage() {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace("/dashboard/settings/request-types?tab=request-parameter");
+    router.replace("/dashboard/settings/request-types?tab=parameter-type");
   }, [router]);
 
   return (

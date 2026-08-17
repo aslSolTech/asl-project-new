@@ -32,10 +32,10 @@ export const DEFAULT_REQUEST_TYPES = [
 ];
 
 export const DEFAULT_REQUEST_PARAMS = [
-  { id: "PAR-001", paramName: "username", paramType: "String", isRequired: "true", status: "active" },
-  { id: "PAR-002", paramName: "password", paramType: "String", isRequired: "true", status: "active" },
-  { id: "PAR-003", paramName: "amount", paramType: "Number", isRequired: "true", status: "active" },
-  { id: "PAR-004", paramName: "callbackUrl", paramType: "String", isRequired: "false", status: "active" },
+  { id: "PAR-001", paramName: "Username", slug: "username" },
+  { id: "PAR-002", paramName: "Password", slug: "password" },
+  { id: "PAR-003", paramName: "Amount", slug: "amount" },
+  { id: "PAR-004", paramName: "Callback URL", slug: "callback_url" },
 ];
 
 export const DEFAULT_PARAM_STATUSES = [
