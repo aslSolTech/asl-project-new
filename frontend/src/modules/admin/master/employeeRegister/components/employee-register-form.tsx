@@ -21,10 +21,13 @@ export function EmployeeRegisterForm({ mode, initialData, onSuccess }: EmployeeR
 
   const form = useAppForm({
     defaultValues: {
-      name: initialData?.name ?? "",
+      firstName: initialData?.firstName ?? "",
+      lastName: initialData?.lastName ?? "",
+      mobile: initialData?.mobile ?? "",
       email: initialData?.email ?? "",
-      department: initialData?.department ?? "",
-      designation: initialData?.designation ?? "",
+      address: initialData?.address ?? "",
+      isOtpVerify: initialData?.isOtpVerify ?? "N",
+      status: initialData?.status ?? "Y",
     } as EmployeeRegisterFormInput,
     onSubmit: async ({ value }) => {
       const parsed = employeeRegisterSchema.safeParse(value);
@@ -50,47 +53,59 @@ export function EmployeeRegisterForm({ mode, initialData, onSuccess }: EmployeeR
           e.stopPropagation();
           void form.handleSubmit();
         }}
-        className="space-y-5"
+        className="space-y-6"
       >
-        <div className="grid grid-cols-1 gap-4">
-          {employeeRegisterFieldsConfig.map((field) => (
-            <div key={field.key}>
-              <form.AppField
-                name={field.key}
-                validators={{
-                  onChange: ({ value }) => {
-                    const shape = employeeRegisterSchema.shape[field.key as keyof typeof employeeRegisterSchema.shape];
-                    if (!shape) return undefined;
-                    const res = shape.safeParse(value);
-                    if (!res.success) {
-                      return res.error.issues[0]?.message;
-                    }
-                    return undefined;
-                  },
-                }}
+        <div className="space-y-4 max-h-[64vh] overflow-y-auto pr-1">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 gap-y-4 items-start">
+            {employeeRegisterFieldsConfig.map((field) => (
+              <div
+                key={field.key}
+                className={field.colSpan === 2 ? "col-span-1 md:col-span-2" : "col-span-1"}
               >
-                {(fieldState) => (
-                  <FormField
-                    name={field.key}
-                    label={field.label}
-                    type={field.type}
-                    placeholder={field.placeholder}
-                    required={field.required}
-                    value={fieldState.state.value ?? ""}
-                    onChange={(val) => fieldState.handleChange(val as Parameters<typeof fieldState.handleChange>[0])}
-                    onBlur={fieldState.handleBlur}
-                    error={fieldState.state.meta.errors.join(", ")}
-                  />
-                )}
-              </form.AppField>
-            </div>
-          ))}
+                <form.AppField
+                  name={field.key}
+                  validators={{
+                    onChange: ({ value }) => {
+                      const shape =
+                        employeeRegisterSchema.shape[
+                          field.key as keyof typeof employeeRegisterSchema.shape
+                        ];
+                      if (!shape) return undefined;
+                      const res = shape.safeParse(value);
+                      if (!res.success) {
+                        return res.error.issues[0]?.message;
+                      }
+                      return undefined;
+                    },
+                  }}
+                >
+                  {(fieldState) => (
+                    <FormField
+                      name={field.key}
+                      label={field.label}
+                      type={field.type}
+                      placeholder={field.placeholder}
+                      required={field.required}
+                      textTransform={field.textTransform}
+                      options={field.options}
+                      value={fieldState.state.value ?? ""}
+                      onChange={(val) =>
+                        fieldState.handleChange(val as Parameters<typeof fieldState.handleChange>[0])
+                      }
+                      onBlur={fieldState.handleBlur}
+                      error={fieldState.state.meta.errors.join(", ")}
+                    />
+                  )}
+                </form.AppField>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="flex items-center justify-end gap-3 pt-4 border-t border-border">
+        <div className="flex items-center justify-end gap-3 pt-4 border-t border-border bg-background">
           <form.SubscribeButton
-            icon={<Save className="w-5 h-5" />}
-            label={mode === "create" ? "Save" : "Save Changes"}
+            icon={<Save className="w-4 h-4" />}
+            label={mode === "create" ? "Register Employee" : "Save Changes"}
             loadingLabel="Saving..."
             isLoading={isPending}
             disabled={isPending}

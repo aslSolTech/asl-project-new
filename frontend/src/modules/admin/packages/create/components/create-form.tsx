@@ -14,16 +14,18 @@ export interface CreateFormProps {
   readonly onSuccess?: () => void;
 }
 
-export function CreateForm({ mode, initialData, onSuccess }: CreateFormProps) {
+export function CreateForm({ mode, initialData, onSuccess }: Readonly<CreateFormProps>) {
   const createMutation = useCreateCreateMutation();
   const updateMutation = useUpdateCreateMutation();
   const isPending = createMutation.isPending || updateMutation.isPending;
 
   const form = useAppForm({
     defaultValues: {
-      name: initialData?.name ?? "",
-      price: initialData?.price ?? "",
-      status: initialData?.status ?? "",
+      packageName: initialData?.packageName ?? "",
+      trialPeriod: initialData?.trialPeriod ?? 0,
+      packageCharge: initialData?.packageCharge ?? 0,
+      isDefault: initialData?.isDefault ?? "N",
+      status: initialData?.status ?? "active",
     } as CreateFormInput,
     onSubmit: async ({ value }) => {
       const parsed = createSchema.safeParse(value);
@@ -51,7 +53,7 @@ export function CreateForm({ mode, initialData, onSuccess }: CreateFormProps) {
         }}
         className="space-y-5"
       >
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {createFieldsConfig.map((field) => (
             <div key={field.key}>
               <form.AppField
@@ -75,6 +77,9 @@ export function CreateForm({ mode, initialData, onSuccess }: CreateFormProps) {
                     type={field.type}
                     placeholder={field.placeholder}
                     required={field.required}
+                    textTransform={"textTransform" in field ? (field.textTransform as "uppercase" | "lowercase" | "capitalize") : undefined}
+                    options={"options" in field ? field.options : undefined}
+                    options={"options" in field ? field.options : undefined}
                     value={fieldState.state.value ?? ""}
                     onChange={(val) => fieldState.handleChange(val as Parameters<typeof fieldState.handleChange>[0])}
                     onBlur={fieldState.handleBlur}

@@ -35,11 +35,11 @@ export function useCreateCreateMutation() {
       method: "POST",
       options: {
         onSuccess: () => {
-          toast.success("Create Package created successfully!");
+          toast.success("Package created successfully!");
           void queryClient.invalidateQueries({ queryKey: createKeys.all });
         },
         onError: (error: Error) => {
-          toast.error(error.message || "Failed to create");
+          toast.error(error.message || "Failed to create package");
         },
       },
     }
@@ -54,11 +54,11 @@ export function useUpdateCreateMutation() {
       method: "PUT",
       options: {
         onSuccess: () => {
-          toast.success("Create Package updated successfully!");
+          toast.success("Package updated successfully!");
           void queryClient.invalidateQueries({ queryKey: createKeys.all });
         },
         onError: (error: Error) => {
-          toast.error(error.message || "Failed to update");
+          toast.error(error.message || "Failed to update package");
         },
       },
     }
@@ -73,11 +73,11 @@ export function useDeleteCreateMutation() {
       method: "DELETE",
       options: {
         onSuccess: () => {
-          toast.success("Create Package deleted successfully!");
+          toast.success("Package deleted successfully!");
           void queryClient.invalidateQueries({ queryKey: createKeys.all });
         },
         onError: (error: Error) => {
-          toast.error(error.message || "Failed to delete");
+          toast.error(error.message || "Failed to delete package");
         },
       },
     }

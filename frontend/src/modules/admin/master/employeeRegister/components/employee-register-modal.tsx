@@ -32,10 +32,10 @@ export function EmployeeRegisterModal() {
             </div>
             <div>
               <DialogTitle className="text-xl font-bold">
-                {mode === "create" ? "Add New Employee Register" : "Edit Employee Register"}
+                {mode === "create" ? "Add New" : "Edit"} Employee
               </DialogTitle>
               <DialogDescription className="text-xs">
-                {mode === "create" ? "Enter details to create a new employee register." : "Update details for the selected employee register."}
+                {mode === "create" ? "Enter details to add a new employee." : "Update details for the selected employee."}
               </DialogDescription>
             </div>
           </div>

@@ -22,7 +22,6 @@ export function ResponseTypeForm({ mode, initialData, onSuccess }: ResponseTypeF
   const form = useAppForm({
     defaultValues: {
       responseFormat: initialData?.responseFormat ?? "",
-      code: initialData?.code ?? "",
     } as ResponseTypeFormInput,
     onSubmit: async ({ value }) => {
       const parsed = responseTypeSchema.safeParse(value);

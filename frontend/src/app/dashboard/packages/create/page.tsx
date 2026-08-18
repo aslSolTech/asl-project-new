@@ -32,53 +32,53 @@ function IdCell({ row }: Readonly<{ row: Row<AppTableFeatures, CreateRecord> }>)
 }
 
 
-function NameHeader({ column }: Readonly<{ column: Column<AppTableFeatures, CreateRecord, unknown> }>) {
+function PackageNameHeader({ column }: Readonly<{ column: Column<AppTableFeatures, CreateRecord, unknown> }>) {
   return <DataTableColumnHeader column={column} title="Package Name" />;
 }
 
-function NameCell({ row }: Readonly<{ row: Row<AppTableFeatures, CreateRecord> }>) {
-  const val = row.original.name;
-  if (val === "active" || val === "true") {
-    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">{val}</Badge>;
-  }
-  if (val === "inactive" || val === "false") {
-    return <Badge variant="outline" className="text-xs uppercase">{val}</Badge>;
-  }
-  return <span className="text-sm font-medium text-foreground">{val || "-"}</span>;
+function PackageNameCell({ row }: Readonly<{ row: Row<AppTableFeatures, CreateRecord> }>) {
+  return <span className="text-sm font-medium text-foreground">{row.original.packageName || "-"}</span>;
 }
 
-
-function PriceHeader({ column }: Readonly<{ column: Column<AppTableFeatures, CreateRecord, unknown> }>) {
-  return <DataTableColumnHeader column={column} title="Price" />;
+function TrialPeriodHeader({ column }: Readonly<{ column: Column<AppTableFeatures, CreateRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Trial Periods (Days)" />;
 }
 
-function PriceCell({ row }: Readonly<{ row: Row<AppTableFeatures, CreateRecord> }>) {
-  const val = row.original.price;
-  if (val === "active" || val === "true") {
-    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">{val}</Badge>;
-  }
-  if (val === "inactive" || val === "false") {
-    return <Badge variant="outline" className="text-xs uppercase">{val}</Badge>;
-  }
-  return <span className="text-sm font-medium text-foreground">{val || "-"}</span>;
+function TrialPeriodCell({ row }: Readonly<{ row: Row<AppTableFeatures, CreateRecord> }>) {
+  return <span className="text-sm text-foreground">{row.original.trialPeriod ?? 0}</span>;
 }
 
+function PackageChargeHeader({ column }: Readonly<{ column: Column<AppTableFeatures, CreateRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Package Charge" />;
+}
+
+function PackageChargeCell({ row }: Readonly<{ row: Row<AppTableFeatures, CreateRecord> }>) {
+  return <span className="text-sm font-semibold text-foreground">₹{row.original.packageCharge ?? 0}</span>;
+}
+
+function IsDefaultHeader({ column }: Readonly<{ column: Column<AppTableFeatures, CreateRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Is Default" />;
+}
+
+function IsDefaultCell({ row }: Readonly<{ row: Row<AppTableFeatures, CreateRecord> }>) {
+  const val = String(row.original.isDefault || "").toUpperCase();
+  if (val === "Y" || val === "YES") {
+    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">YES (Y)</Badge>;
+  }
+  return <Badge variant="outline" className="text-xs uppercase">NO (N)</Badge>;
+}
 
 function StatusHeader({ column }: Readonly<{ column: Column<AppTableFeatures, CreateRecord, unknown> }>) {
   return <DataTableColumnHeader column={column} title="Status" />;
 }
 
 function StatusCell({ row }: Readonly<{ row: Row<AppTableFeatures, CreateRecord> }>) {
-  const val = row.original.status;
-  if (val === "active" || val === "true") {
-    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">{val}</Badge>;
+  const val = row.original.status?.toLowerCase();
+  if (val === "active") {
+    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">Active</Badge>;
   }
-  if (val === "inactive" || val === "false") {
-    return <Badge variant="outline" className="text-xs uppercase">{val}</Badge>;
-  }
-  return <span className="text-sm font-medium text-foreground">{val || "-"}</span>;
+  return <Badge variant="outline" className="text-xs uppercase">{row.original.status || "Inactive"}</Badge>;
 }
-
 
 function ActionsHeader() {
   return <span className="text-xs font-semibold">Actions</span>;
@@ -102,7 +102,7 @@ function ActionsCell({ row }: Readonly<{ row: Row<AppTableFeatures, CreateRecord
       <Button
         variant="ghost"
         size="icon-sm"
-        onClick={() => openDelete(record.id, record.name || record.id)}
+        onClick={() => openDelete(record.id, record.packageName || record.id)}
         title="Delete"
         className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
       >
@@ -123,12 +123,22 @@ export default function CreatePage() {
     }
     
     // Fallback data
-    const mock = [
+    const mock: CreateRecord[] = [
       {
-        id: "REC-101",
-        name: "Package Name Val 1",
-        price: "Price Val 2",
-        status: "Status Val 3"
+        id: "PKG-101",
+        packageName: "Basic Starter",
+        trialPeriod: 7,
+        packageCharge: 499,
+        isDefault: "N",
+        status: "active"
+      },
+      {
+        id: "PKG-102",
+        packageName: "Standard Plan",
+        trialPeriod: 14,
+        packageCharge: 999,
+        isDefault: "Y",
+        status: "active"
       }
     ];
     return mock;
@@ -142,14 +152,24 @@ export default function CreatePage() {
         cell: IdCell,
       },
       {
-        accessorKey: "name",
-        header: NameHeader,
-        cell: NameCell,
+        accessorKey: "packageName",
+        header: PackageNameHeader,
+        cell: PackageNameCell,
       },
       {
-        accessorKey: "price",
-        header: PriceHeader,
-        cell: PriceCell,
+        accessorKey: "trialPeriod",
+        header: TrialPeriodHeader,
+        cell: TrialPeriodCell,
+      },
+      {
+        accessorKey: "packageCharge",
+        header: PackageChargeHeader,
+        cell: PackageChargeCell,
+      },
+      {
+        accessorKey: "isDefault",
+        header: IsDefaultHeader,
+        cell: IsDefaultCell,
       },
       {
         accessorKey: "status",
@@ -176,10 +196,10 @@ export default function CreatePage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
-              Create Package
+           Package
             </h1>
             <p className="text-xs sm:text-sm text-muted-foreground">
-              Manage all official create package configurations.
+              Manage all package configurations.
             </p>
           </div>
         </div>
@@ -200,7 +220,7 @@ export default function CreatePage() {
             className="flex items-center gap-2 shadow-sm font-semibold cursor-pointer"
           >
             <Plus className="w-4 h-4" />
-            Add Create Package
+            Create Package
           </Button>
         </div>
       </div>

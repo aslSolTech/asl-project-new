@@ -33,53 +33,57 @@ function IdCell({ row }: Readonly<{ row: Row<AppTableFeatures, ApiBalanceRecord>
 }
 
 
-function ProviderHeader({ column }: Readonly<{ column: Column<AppTableFeatures, ApiBalanceRecord, unknown> }>) {
-  return <DataTableColumnHeader column={column} title="Provider Name" />;
+function ApiNameHeader({ column }: Readonly<{ column: Column<AppTableFeatures, ApiBalanceRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="API Name" />;
 }
 
-function ProviderCell({ row }: Readonly<{ row: Row<AppTableFeatures, ApiBalanceRecord> }>) {
-  const val = row.original.provider;
-  if (val === "active" || val === "true") {
-    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">{val}</Badge>;
-  }
-  if (val === "inactive" || val === "false") {
-    return <Badge variant="outline" className="text-xs uppercase">{val}</Badge>;
-  }
-  return <span className="text-sm font-medium text-foreground">{val || "-"}</span>;
+function ApiNameCell({ row }: Readonly<{ row: Row<AppTableFeatures, ApiBalanceRecord> }>) {
+  const { apiName, provider, apiRemarks } = row.original;
+  const name = apiName || provider || "-";
+  return (
+    <div className="flex flex-col">
+      <span className="text-sm font-semibold text-foreground">{name}</span>
+      {apiRemarks && <span className="text-[11px] text-muted-foreground line-clamp-1">{apiRemarks}</span>}
+    </div>
+  );
 }
 
-
-function EndpointHeader({ column }: Readonly<{ column: Column<AppTableFeatures, ApiBalanceRecord, unknown> }>) {
-  return <DataTableColumnHeader column={column} title="Balance Endpoint" />;
+function UrlHeader({ column }: Readonly<{ column: Column<AppTableFeatures, ApiBalanceRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Endpoint URL" />;
 }
 
-function EndpointCell({ row }: Readonly<{ row: Row<AppTableFeatures, ApiBalanceRecord> }>) {
-  const val = row.original.endpoint;
-  if (val === "active" || val === "true") {
-    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">{val}</Badge>;
-  }
-  if (val === "inactive" || val === "false") {
-    return <Badge variant="outline" className="text-xs uppercase">{val}</Badge>;
-  }
-  return <span className="text-sm font-medium text-foreground">{val || "-"}</span>;
+function UrlCell({ row }: Readonly<{ row: Row<AppTableFeatures, ApiBalanceRecord> }>) {
+  const url = row.original.url || row.original.endpoint || "-";
+  return (
+    <span className="font-mono text-xs text-muted-foreground line-clamp-1 max-w-[200px]" title={url}>
+      {url}
+    </span>
+  );
 }
 
-
-function CurrencyHeader({ column }: Readonly<{ column: Column<AppTableFeatures, ApiBalanceRecord, unknown> }>) {
-  return <DataTableColumnHeader column={column} title="Currency Code" />;
+function RequestTypeHeader({ column }: Readonly<{ column: Column<AppTableFeatures, ApiBalanceRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Request Type" />;
 }
 
-function CurrencyCell({ row }: Readonly<{ row: Row<AppTableFeatures, ApiBalanceRecord> }>) {
-  const val = row.original.currency;
-  if (val === "active" || val === "true") {
-    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">{val}</Badge>;
-  }
-  if (val === "inactive" || val === "false") {
-    return <Badge variant="outline" className="text-xs uppercase">{val}</Badge>;
-  }
-  return <span className="text-sm font-medium text-foreground">{val || "-"}</span>;
+function RequestTypeCell({ row }: Readonly<{ row: Row<AppTableFeatures, ApiBalanceRecord> }>) {
+  return (
+    <span className="text-xs font-medium text-foreground">
+      {row.original.requestType || "GET"}
+    </span>
+  );
 }
 
+function ResponseTypeHeader({ column }: Readonly<{ column: Column<AppTableFeatures, ApiBalanceRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Response Type" />;
+}
+
+function ResponseTypeCell({ row }: Readonly<{ row: Row<AppTableFeatures, ApiBalanceRecord> }>) {
+  return (
+    <Badge variant="outline" className="text-xs font-mono uppercase bg-muted/60 text-muted-foreground border-border">
+      {row.original.responseType || "JSON"}
+    </Badge>
+  );
+}
 
 function ActionsHeader() {
   return <span className="text-xs font-semibold">Actions</span>;
@@ -103,7 +107,7 @@ function ActionsCell({ row }: Readonly<{ row: Row<AppTableFeatures, ApiBalanceRe
       <Button
         variant="ghost"
         size="icon-sm"
-        onClick={() => openDelete(record.id, record.provider || record.id)}
+        onClick={() => openDelete(record.id, record.apiName || record.provider || record.id)}
         title="Delete"
         className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
       >
@@ -123,13 +127,20 @@ export default function ApiBalancePage() {
       return listData;
     }
     return [
-  {
-    "id": "BAL-001",
-    "provider": "Payzones",
-    "endpoint": "/v1/balance",
-    "currency": "INR"
-  }
-];
+      {
+        id: "BAL-001",
+        apiName: "Payzones Balance API",
+        url: "https://api.cashfree.com/payout/v1/getBalance",
+        requestType: "QUERY_GET",
+        responseType: "json",
+        apiRemarks: "Production main balance inquiry API",
+        requestParameters: [],
+        responseParameters: [
+          { paramName: "balance", paramValue: "50000", paramFor: "BAL" },
+          { paramName: "status", paramValue: "SUCCESS", paramFor: "STATUS" },
+        ],
+      },
+    ];
   }, [listData]);
 
   const columns = useMemo<ColumnDef<AppTableFeatures, ApiBalanceRecord, unknown>[]>(
@@ -140,19 +151,24 @@ export default function ApiBalancePage() {
         cell: IdCell,
       },
       {
-        accessorKey: "provider",
-        header: ProviderHeader,
-        cell: ProviderCell,
+        accessorKey: "apiName",
+        header: ApiNameHeader,
+        cell: ApiNameCell,
       },
       {
-        accessorKey: "endpoint",
-        header: EndpointHeader,
-        cell: EndpointCell,
+        accessorKey: "url",
+        header: UrlHeader,
+        cell: UrlCell,
       },
       {
-        accessorKey: "currency",
-        header: CurrencyHeader,
-        cell: CurrencyCell,
+        accessorKey: "requestType",
+        header: RequestTypeHeader,
+        cell: RequestTypeCell,
+      },
+      {
+        accessorKey: "responseType",
+        header: ResponseTypeHeader,
+        cell: ResponseTypeCell,
       },
       {
         id: "actions",
@@ -174,10 +190,10 @@ export default function ApiBalancePage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
-              Balance API
+              Balance APIs
             </h1>
             <p className="text-xs sm:text-sm text-muted-foreground">
-              Manage all official balance api configurations.
+              Manage all official balance APIs configurations.
             </p>
           </div>
         </div>

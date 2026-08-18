@@ -32,21 +32,20 @@ export function CompanyDeleteDialog() {
   return (
     <Dialog open={isDeleteOpen} onOpenChange={(open) => !open && closeDeleteDialog()}>
       <DialogContent className="max-w-md">
-        <DialogHeader className="flex flex-col items-center space-y-3">
+        <DialogHeader className="flex flex-col items-center gap-2">
           <div className="w-10 h-10 rounded-full bg-destructive/10 text-destructive flex items-center justify-center">
             <AlertTriangle className="w-5 h-5" />
           </div>
           <DialogTitle className="text-lg font-bold">Delete Company</DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-center">
             Are you sure you want to delete{" "}
             <span className="font-semibold text-foreground">
-              {deletingName ?? "this company"}
-            </span>{" "}
-            ? This action cannot be undone.
+              {deletingName ?? "this record"}
+            </span>{""}? <br /> This action cannot be undone.
           </DialogDescription>
         </DialogHeader>
 
-        <DialogFooter className="gap-2">
+        <DialogFooter className="gap-3 mt-1">
           <Button
             variant="outline"
             onClick={closeDeleteDialog}

@@ -7,19 +7,18 @@ export const responseTypeFieldsConfig = [
     required: true,
     textTransform: "uppercase",
   },
-  {
-    key: "code",
-    label: "Response Code Identifier",
-    type: "text",
-    placeholder: "e.g. RES_JSON, RES_XML...",
-    required: true,
-    textTransform: "uppercase",
-  },
 ] as const;
 
 export const DEFAULT_RESPONSE_TYPES = [
-  { id: "RSP-001", responseFormat: "JSON", code: "RES_JSON" },
-  { id: "RSP-002", responseFormat: "XML", code: "RES_XML" },
-  { id: "RSP-003", responseFormat: "TEXT", code: "RES_TEXT" },
-  { id: "RSP-004", responseFormat: "CSV", code: "RES_CSV" },
+  { id: "RSP-001", responseFormat: "JSON" },
+  { id: "RSP-002", responseFormat: "XML" },
+  { id: "RSP-003", responseFormat: "TEXT" },
+  { id: "RSP-004", responseFormat: "CSV" },
+];
+
+export const DEFAULT_RESPONSE_PARAMS = [
+  { id: "RSP-PAR-001", paramName: "Status Code", slug: "status_code" },
+  { id: "RSP-PAR-002", paramName: "Response Message", slug: "message" },
+  { id: "RSP-PAR-003", paramName: "Transaction ID", slug: "txn_id" },
+  { id: "RSP-PAR-004", paramName: "Data Payload", slug: "data" },
 ];

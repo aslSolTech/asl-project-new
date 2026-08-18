@@ -277,7 +277,7 @@ export default function CompanySetupPage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
-              Company Master
+              Company
             </h1>
             <p className="text-xs sm:text-sm text-muted-foreground">
               Manage organization profiles, tax identifiers, and official master contact details.

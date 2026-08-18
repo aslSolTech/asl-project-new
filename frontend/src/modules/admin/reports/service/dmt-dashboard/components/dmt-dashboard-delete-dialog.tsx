@@ -26,21 +26,20 @@ export function DmtDashboardDeleteDialog() {
   return (
     <Dialog open={isDeleteOpen} onOpenChange={(open) => !open && closeDelete()}>
       <DialogContent className="max-w-md">
-        <DialogHeader className="space-y-2">
+        <DialogHeader className="flex flex-col items-center gap-2">
           <div className="w-10 h-10 rounded-full bg-destructive/10 text-destructive flex items-center justify-center">
             <AlertTriangle className="w-5 h-5" />
           </div>
           <DialogTitle className="text-lg font-bold">Delete DMT Dashboard</DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-center">
             Are you sure you want to delete{" "}
             <span className="font-semibold text-foreground">
               {deletingName ?? "this record"}
-            </span>{" "}
-            ? This action cannot be undone.
+            </span>{""}? <br /> This action cannot be undone.
           </DialogDescription>
         </DialogHeader>
 
-        <DialogFooter className="gap-3 mt-4">
+        <DialogFooter className="gap-3 mt-1">
           <Button variant="outline" onClick={closeDelete} disabled={deleteMutation.isPending}>
             Cancel
           </Button>

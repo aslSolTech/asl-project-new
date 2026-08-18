@@ -1,30 +1,18 @@
-export const apiStatusFieldsConfig = [
-  {
-    key: "apiName",
-    label: "API Name",
-    type: "text",
-    placeholder: "Payzones Status",
-    required: true
-  },
-  {
-    key: "endpoint",
-    label: "Status Endpoint",
-    type: "text",
-    placeholder: "/v1/payout/status",
-    required: true
-  },
-  {
-    key: "method",
-    label: "HTTP Method",
-    type: "text",
-    placeholder: "GET",
-    required: true
-  },
-  {
-    key: "successCode",
-    label: "Success Code",
-    type: "text",
-    placeholder: "SUCCESS",
-    required: true
-  }
+export const statusForOptions = [
+  { label: "Payout", value: "payout" },
+  { label: "Collection", value: "collection" },
+  { label: "BBPS", value: "bbps" },
+  { label: "Recharge", value: "recharge" },
+  { label: "Verification", value: "verification" },
 ] as const;
+
+export interface ApiStatusFieldConfig {
+  readonly key: string;
+  readonly label: string;
+  readonly type: "text" | "email" | "tel" | "url" | "number" | "textarea" | "select";
+  readonly placeholder?: string;
+  readonly required?: boolean;
+  readonly textTransform?: "uppercase" | "lowercase" | "capitalize";
+  readonly colSpan?: 1 | 2;
+}
+

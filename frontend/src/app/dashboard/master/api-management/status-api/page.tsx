@@ -32,70 +32,68 @@ function IdCell({ row }: Readonly<{ row: Row<AppTableFeatures, ApiStatusRecord> 
   );
 }
 
-
 function ApiNameHeader({ column }: Readonly<{ column: Column<AppTableFeatures, ApiStatusRecord, unknown> }>) {
   return <DataTableColumnHeader column={column} title="API Name" />;
 }
 
 function ApiNameCell({ row }: Readonly<{ row: Row<AppTableFeatures, ApiStatusRecord> }>) {
-  const val = row.original.apiName;
-  if (val === "active" || val === "true") {
-    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">{val}</Badge>;
-  }
-  if (val === "inactive" || val === "false") {
-    return <Badge variant="outline" className="text-xs uppercase">{val}</Badge>;
-  }
-  return <span className="text-sm font-medium text-foreground">{val || "-"}</span>;
+  const { apiName, apiRemarks } = row.original;
+  return (
+    <div className="flex flex-col">
+      <span className="text-sm font-semibold text-foreground">{apiName || "-"}</span>
+      {apiRemarks && <span className="text-[11px] text-muted-foreground line-clamp-1">{apiRemarks}</span>}
+    </div>
+  );
 }
 
-
-function EndpointHeader({ column }: Readonly<{ column: Column<AppTableFeatures, ApiStatusRecord, unknown> }>) {
-  return <DataTableColumnHeader column={column} title="Status Endpoint" />;
+function StatusForHeader({ column }: Readonly<{ column: Column<AppTableFeatures, ApiStatusRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Status For" />;
 }
 
-function EndpointCell({ row }: Readonly<{ row: Row<AppTableFeatures, ApiStatusRecord> }>) {
-  const val = row.original.endpoint;
-  if (val === "active" || val === "true") {
-    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">{val}</Badge>;
-  }
-  if (val === "inactive" || val === "false") {
-    return <Badge variant="outline" className="text-xs uppercase">{val}</Badge>;
-  }
-  return <span className="text-sm font-medium text-foreground">{val || "-"}</span>;
+function StatusForCell({ row }: Readonly<{ row: Row<AppTableFeatures, ApiStatusRecord> }>) {
+  return (
+    <Badge variant="outline" className="text-xs font-semibold uppercase bg-primary/5 text-primary border-primary/20">
+      {row.original.statusFor || row.original.method || "-"}
+    </Badge>
+  );
 }
 
-
-function MethodHeader({ column }: Readonly<{ column: Column<AppTableFeatures, ApiStatusRecord, unknown> }>) {
-  return <DataTableColumnHeader column={column} title="HTTP Method" />;
+function UrlHeader({ column }: Readonly<{ column: Column<AppTableFeatures, ApiStatusRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Endpoint URL" />;
 }
 
-function MethodCell({ row }: Readonly<{ row: Row<AppTableFeatures, ApiStatusRecord> }>) {
-  const val = row.original.method;
-  if (val === "active" || val === "true") {
-    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">{val}</Badge>;
-  }
-  if (val === "inactive" || val === "false") {
-    return <Badge variant="outline" className="text-xs uppercase">{val}</Badge>;
-  }
-  return <span className="text-sm font-medium text-foreground">{val || "-"}</span>;
+function UrlCell({ row }: Readonly<{ row: Row<AppTableFeatures, ApiStatusRecord> }>) {
+  const url = row.original.url || row.original.endpoint || "-";
+  return (
+    <span className="font-mono text-xs text-muted-foreground line-clamp-1 max-w-[200px]" title={url}>
+      {url}
+    </span>
+  );
 }
 
-
-function SuccessCodeHeader({ column }: Readonly<{ column: Column<AppTableFeatures, ApiStatusRecord, unknown> }>) {
-  return <DataTableColumnHeader column={column} title="Success Code" />;
+function RequestTypeHeader({ column }: Readonly<{ column: Column<AppTableFeatures, ApiStatusRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Request Type" />;
 }
 
-function SuccessCodeCell({ row }: Readonly<{ row: Row<AppTableFeatures, ApiStatusRecord> }>) {
-  const val = row.original.successCode;
-  if (val === "active" || val === "true") {
-    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">{val}</Badge>;
-  }
-  if (val === "inactive" || val === "false") {
-    return <Badge variant="outline" className="text-xs uppercase">{val}</Badge>;
-  }
-  return <span className="text-sm font-medium text-foreground">{val || "-"}</span>;
+function RequestTypeCell({ row }: Readonly<{ row: Row<AppTableFeatures, ApiStatusRecord> }>) {
+  return (
+    <span className="text-xs font-medium text-foreground">
+      {row.original.requestType || row.original.method || "-"}
+    </span>
+  );
 }
 
+function ResponseTypeHeader({ column }: Readonly<{ column: Column<AppTableFeatures, ApiStatusRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Response Type" />;
+}
+
+function ResponseTypeCell({ row }: Readonly<{ row: Row<AppTableFeatures, ApiStatusRecord> }>) {
+  return (
+    <Badge variant="outline" className="text-xs font-mono uppercase bg-muted/60 text-muted-foreground border-border">
+      {row.original.responseType || "JSON"}
+    </Badge>
+  );
+}
 
 function ActionsHeader() {
   return <span className="text-xs font-semibold">Actions</span>;
@@ -139,14 +137,23 @@ export default function ApiStatusPage() {
       return listData;
     }
     return [
-  {
-    "id": "ST-001",
-    "apiName": "Payzones Status",
-    "endpoint": "/v1/payout/status",
-    "method": "GET",
-    "successCode": "SUCCESS"
-  }
-];
+      {
+        id: "ST-001",
+        apiName: "Payzones Status",
+        statusFor: "payout",
+        url: "https://api.cashfree.com/payout/v1/getTransferStatus",
+        requestType: "JSON_POST",
+        responseType: "json",
+        apiRemarks: "Production payout transfer status check",
+        requestParameters: [
+          { paramName: "transferId", paramType: "string", paramValue: "{transfer_id}" },
+        ],
+        responseParameters: [
+          { paramName: "status", paramValue: "SUCCESS", paramFor: "STATUS" },
+          { paramName: "utr", paramValue: "UTR12345", paramFor: "TXN_ID" },
+        ],
+      },
+    ];
   }, [listData]);
 
   const columns = useMemo<ColumnDef<AppTableFeatures, ApiStatusRecord, unknown>[]>(
@@ -162,19 +169,24 @@ export default function ApiStatusPage() {
         cell: ApiNameCell,
       },
       {
-        accessorKey: "endpoint",
-        header: EndpointHeader,
-        cell: EndpointCell,
+        accessorKey: "statusFor",
+        header: StatusForHeader,
+        cell: StatusForCell,
       },
       {
-        accessorKey: "method",
-        header: MethodHeader,
-        cell: MethodCell,
+        accessorKey: "url",
+        header: UrlHeader,
+        cell: UrlCell,
       },
       {
-        accessorKey: "successCode",
-        header: SuccessCodeHeader,
-        cell: SuccessCodeCell,
+        accessorKey: "requestType",
+        header: RequestTypeHeader,
+        cell: RequestTypeCell,
+      },
+      {
+        accessorKey: "responseType",
+        header: ResponseTypeHeader,
+        cell: ResponseTypeCell,
       },
       {
         id: "actions",
@@ -196,10 +208,10 @@ export default function ApiStatusPage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
-              Status API
+              Status APIs
             </h1>
             <p className="text-xs sm:text-sm text-muted-foreground">
-              Manage all official status api configurations.
+              Manage all official status APIs configurations.
             </p>
           </div>
         </div>

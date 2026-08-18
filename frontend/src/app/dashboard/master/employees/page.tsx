@@ -34,68 +34,86 @@ function IdCell({ row }: Readonly<{ row: Row<AppTableFeatures, EmployeeRegisterR
 
 
 function NameHeader({ column }: Readonly<{ column: Column<AppTableFeatures, EmployeeRegisterRecord, unknown> }>) {
-  return <DataTableColumnHeader column={column} title="Full Name" />;
+  return <DataTableColumnHeader column={column} title="Employee Name" />;
 }
 
 function NameCell({ row }: Readonly<{ row: Row<AppTableFeatures, EmployeeRegisterRecord> }>) {
-  const val = row.original.name;
-  if (val === "active" || val === "true") {
-    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">{val}</Badge>;
-  }
-  if (val === "inactive" || val === "false") {
-    return <Badge variant="outline" className="text-xs uppercase">{val}</Badge>;
-  }
-  return <span className="text-sm font-medium text-foreground">{val || "-"}</span>;
+  const { firstName, lastName, name } = row.original;
+  const fullName = [firstName, lastName].filter(Boolean).join(" ") || name || "-";
+  return (
+    <div className="flex flex-col">
+      <span className="text-sm font-semibold text-foreground">{fullName}</span>
+    </div>
+  );
 }
 
+function MobileHeader({ column }: Readonly<{ column: Column<AppTableFeatures, EmployeeRegisterRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Mobile" />;
+}
+
+function MobileCell({ row }: Readonly<{ row: Row<AppTableFeatures, EmployeeRegisterRecord> }>) {
+  return <span className="font-mono text-xs text-foreground">{row.original.mobile || "-"}</span>;
+}
 
 function EmailHeader({ column }: Readonly<{ column: Column<AppTableFeatures, EmployeeRegisterRecord, unknown> }>) {
   return <DataTableColumnHeader column={column} title="Email Address" />;
 }
 
 function EmailCell({ row }: Readonly<{ row: Row<AppTableFeatures, EmployeeRegisterRecord> }>) {
-  const val = row.original.email;
-  if (val === "active" || val === "true") {
-    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">{val}</Badge>;
-  }
-  if (val === "inactive" || val === "false") {
-    return <Badge variant="outline" className="text-xs uppercase">{val}</Badge>;
-  }
-  return <span className="text-sm font-medium text-foreground">{val || "-"}</span>;
+  return <span className="text-sm text-muted-foreground">{row.original.email || "-"}</span>;
 }
 
-
-function DepartmentHeader({ column }: Readonly<{ column: Column<AppTableFeatures, EmployeeRegisterRecord, unknown> }>) {
-  return <DataTableColumnHeader column={column} title="Department" />;
+function AddressHeader({ column }: Readonly<{ column: Column<AppTableFeatures, EmployeeRegisterRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Address" />;
 }
 
-function DepartmentCell({ row }: Readonly<{ row: Row<AppTableFeatures, EmployeeRegisterRecord> }>) {
-  const val = row.original.department;
-  if (val === "active" || val === "true") {
-    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">{val}</Badge>;
-  }
-  if (val === "inactive" || val === "false") {
-    return <Badge variant="outline" className="text-xs uppercase">{val}</Badge>;
-  }
-  return <span className="text-sm font-medium text-foreground">{val || "-"}</span>;
+function AddressCell({ row }: Readonly<{ row: Row<AppTableFeatures, EmployeeRegisterRecord> }>) {
+  return (
+    <span className="text-xs text-muted-foreground line-clamp-1 max-w-[220px]" title={row.original.address}>
+      {row.original.address || "-"}
+    </span>
+  );
 }
 
-
-function DesignationHeader({ column }: Readonly<{ column: Column<AppTableFeatures, EmployeeRegisterRecord, unknown> }>) {
-  return <DataTableColumnHeader column={column} title="Designation" />;
+function OtpVerifyHeader({ column }: Readonly<{ column: Column<AppTableFeatures, EmployeeRegisterRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="OTP Verify" />;
 }
 
-function DesignationCell({ row }: Readonly<{ row: Row<AppTableFeatures, EmployeeRegisterRecord> }>) {
-  const val = row.original.designation;
-  if (val === "active" || val === "true") {
-    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">{val}</Badge>;
-  }
-  if (val === "inactive" || val === "false") {
-    return <Badge variant="outline" className="text-xs uppercase">{val}</Badge>;
-  }
-  return <span className="text-sm font-medium text-foreground">{val || "-"}</span>;
+function OtpVerifyCell({ row }: Readonly<{ row: Row<AppTableFeatures, EmployeeRegisterRecord> }>) {
+  const isVerify = (row.original.isOtpVerify || "N").toUpperCase() === "Y";
+  return (
+    <Badge
+      variant="outline"
+      className={`text-xs uppercase font-medium ${
+        isVerify
+          ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20"
+          : "bg-muted/50 text-muted-foreground border-border"
+      }`}
+    >
+      {isVerify ? "Verified" : "No"}
+    </Badge>
+  );
 }
 
+function StatusHeader({ column }: Readonly<{ column: Column<AppTableFeatures, EmployeeRegisterRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Status" />;
+}
+
+function StatusCell({ row }: Readonly<{ row: Row<AppTableFeatures, EmployeeRegisterRecord> }>) {
+  const isActive = (row.original.status || "Y").toUpperCase() === "Y";
+  return (
+    <Badge
+      variant="outline"
+      className={`text-xs uppercase font-medium ${
+        isActive
+          ? "bg-emerald-500/10 text-emerald-600 border-emerald-500/20"
+          : "bg-destructive/10 text-destructive border-destructive/20"
+      }`}
+    >
+      {isActive ? "Active" : "Inactive"}
+    </Badge>
+  );
+}
 
 function ActionsHeader() {
   return <span className="text-xs font-semibold">Actions</span>;
@@ -104,6 +122,7 @@ function ActionsHeader() {
 function ActionsCell({ row }: Readonly<{ row: Row<AppTableFeatures, EmployeeRegisterRecord> }>) {
   const { openEdit, openDelete } = useEmployeeRegisterModalStore();
   const record = row.original;
+  const displayName = [record.firstName, record.lastName].filter(Boolean).join(" ") || record.name || record.id;
   return (
     <div className="flex items-center gap-1.5">
       <Button
@@ -119,7 +138,7 @@ function ActionsCell({ row }: Readonly<{ row: Row<AppTableFeatures, EmployeeRegi
       <Button
         variant="ghost"
         size="icon-sm"
-        onClick={() => openDelete(record.id, record.name || record.id)}
+        onClick={() => openDelete(record.id, displayName)}
         title="Delete"
         className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
       >
@@ -139,14 +158,17 @@ export default function EmployeeRegisterPage() {
       return listData;
     }
     return [
-  {
-    "id": "EMP-001",
-    "name": "John Doe",
-    "email": "john.doe@payzones.com",
-    "department": "Support",
-    "designation": "L2 Support Executive"
-  }
-];
+      {
+        id: "EMP-001",
+        firstName: "Rahul",
+        lastName: "Sharma",
+        mobile: "9876543210",
+        email: "rahul.sharma@payzones.com",
+        address: "123 Commercial Plaza, Tech Zone, Mumbai",
+        isOtpVerify: "Y",
+        status: "Y",
+      },
+    ];
   }, [listData]);
 
   const columns = useMemo<ColumnDef<AppTableFeatures, EmployeeRegisterRecord, unknown>[]>(
@@ -157,9 +179,14 @@ export default function EmployeeRegisterPage() {
         cell: IdCell,
       },
       {
-        accessorKey: "name",
+        id: "fullName",
         header: NameHeader,
         cell: NameCell,
+      },
+      {
+        accessorKey: "mobile",
+        header: MobileHeader,
+        cell: MobileCell,
       },
       {
         accessorKey: "email",
@@ -167,14 +194,19 @@ export default function EmployeeRegisterPage() {
         cell: EmailCell,
       },
       {
-        accessorKey: "department",
-        header: DepartmentHeader,
-        cell: DepartmentCell,
+        accessorKey: "address",
+        header: AddressHeader,
+        cell: AddressCell,
       },
       {
-        accessorKey: "designation",
-        header: DesignationHeader,
-        cell: DesignationCell,
+        accessorKey: "isOtpVerify",
+        header: OtpVerifyHeader,
+        cell: OtpVerifyCell,
+      },
+      {
+        accessorKey: "status",
+        header: StatusHeader,
+        cell: StatusCell,
       },
       {
         id: "actions",
@@ -196,10 +228,10 @@ export default function EmployeeRegisterPage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
-              Employee Register
+              Employee&apos;s
             </h1>
             <p className="text-xs sm:text-sm text-muted-foreground">
-              Manage all official employee register configurations.
+              Manage all official employee&apos;s configurations.
             </p>
           </div>
         </div>
@@ -220,7 +252,7 @@ export default function EmployeeRegisterPage() {
             className="flex items-center gap-2 shadow-sm font-semibold cursor-pointer"
           >
             <Plus className="w-4 h-4" />
-            Add Employee Register
+            Add Employee
           </Button>
         </div>
       </div>

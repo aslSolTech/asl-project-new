@@ -75,6 +75,8 @@ export function LoanForm({ mode, initialData, onSuccess }: LoanFormProps) {
                     type={field.type}
                     placeholder={field.placeholder}
                     required={field.required}
+                    textTransform={"textTransform" in field ? (field.textTransform as "uppercase" | "lowercase" | "capitalize") : undefined}
+                    options={"options" in field ? field.options : undefined}
                     value={fieldState.state.value ?? ""}
                     onChange={(val) => fieldState.handleChange(val as Parameters<typeof fieldState.handleChange>[0])}
                     onBlur={fieldState.handleBlur}

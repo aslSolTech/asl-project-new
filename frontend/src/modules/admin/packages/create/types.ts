@@ -1,7 +1,9 @@
 export interface CreateRecord {
   id: string;
-  name: string;
-  price: string;
+  packageName: string;
+  trialPeriod: number | string;
+  packageCharge: number | string;
+  isDefault: string;
   status: string;
 }
 

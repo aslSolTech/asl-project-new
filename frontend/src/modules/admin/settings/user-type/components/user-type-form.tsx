@@ -77,6 +77,8 @@ export function UserTypeForm({ mode, initialData, onSuccess }: UserTypeFormProps
                       type={field.type}
                       placeholder={field.placeholder}
                       required={field.required}
+                    textTransform={"textTransform" in field ? (field.textTransform as "uppercase" | "lowercase" | "capitalize") : undefined}
+                    options={"options" in field ? field.options : undefined}
                       options={fieldOptions}
                       value={fieldState.state.value ?? ""}
                       onChange={(val) => {

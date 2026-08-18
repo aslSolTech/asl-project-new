@@ -293,13 +293,8 @@ export const menuItems: MenuItem[] = [
     icon: Package,
     items: [
       {
-        title: "Package Management",
-        items: [
-          {
-            title: "Create Package",
-            href: "/dashboard/packages/create",
-          },
-        ],
+        title: "Package",
+        href: "/dashboard/packages/create",
       },
       {
         title: "Commission",
@@ -392,7 +387,7 @@ export const menuItems: MenuItem[] = [
   {
     title: "Merchant API",
     icon: Plug,
-    href: "/dashboard/merchant-api/settings"
+    href: "/dashboard/merchant-api"
   },
   {
     title: "Master",
@@ -409,27 +404,18 @@ export const menuItems: MenuItem[] = [
       {
         title: "User Management",
         items: [
-          { title: "Employee Register", href: "/dashboard/master/users/employees" },
-          { title: "Employee Permission", href: "/dashboard/master/users/permissions" },
-          { title: "User Register", href: "/dashboard/master/users/register" },
+          { title: "Employee", href: "/dashboard/master/employees" },
+          { title: "Employee Permission", href: "/dashboard/master/emp-permission" },
+          { title: "Users", href: "/dashboard/master/users" },
         ],
       },
       {
-        title: "API Management",
+        title: "APIs Management",
         items: [
-          { title: "API Type", href: "/dashboard/master/api-management/type" },
-          { title: "API Register", href: "/dashboard/master/api-management/register" },
-          { title: "Request Parameter", href: "/dashboard/master/api-management/request-parameter" },
-          { title: "Status API", href: "/dashboard/master/api-management/status" },
-          { title: "Balance API", href: "/dashboard/master/api-management/balance" },
-          { title: "Callback API", href: "/dashboard/master/api-management/callback" },
-        ],
-      },
-   
-      {
-        title: "Banking",
-        items: [
-          { title: "AEPS Bank", href: "/dashboard/master/banking/aeps-bank" },
+          { title: "Register APIs", href: "/dashboard/master/api-management/register-api" },
+          { title: "Status APIs", href: "/dashboard/master/api-management/status-api" },
+          { title: "Balance APIs", href: "/dashboard/master/api-management/balance-api" },
+          { title: "Callback APIs", href: "/dashboard/master/api-management/callback-url-api" },
         ],
       },
     ],
@@ -460,10 +446,6 @@ export const menuItems: MenuItem[] = [
         href: "/dashboard/settings/notifications",
       },
       {
-        title: "Operator Type",
-        href: "/dashboard/settings/operator-types",
-      },
-      {
         title: "Registration Charges",
         href: "/dashboard/settings/registration-charges",
       },
@@ -477,11 +459,12 @@ export const menuItems: MenuItem[] = [
       {
         title: "User Type", href: "/dashboard/settings/user-types",
       },
+      { title: "API Type", href: "/dashboard/settings/api-types" },
       {
-        title: "API Operator Code",
+        title: "Operator Setup",
         items: [
-          { title: "Operator Code Type", href: "/dashboard/settings/operator-code-types" },
-          { title: "API Operator Code", href: "/dashboard/settings/operator-codes" },
+          { title: "Operator Type", href: "/dashboard/settings/operator-types" },
+          { title: "Registration", href: "/dashboard/settings/operator-registration"}
         ],
       },
     ],

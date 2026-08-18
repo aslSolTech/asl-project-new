@@ -24,7 +24,7 @@ export function ApiRegisterModal() {
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && close()}>
-      <DialogContent className="max-w-xl">
+      <DialogContent className="max-w-3xl">
         <DialogHeader className="border-b border-border pb-4">
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-xl bg-primary/10 text-primary">
@@ -32,10 +32,10 @@ export function ApiRegisterModal() {
             </div>
             <div>
               <DialogTitle className="text-xl font-bold">
-                {mode === "create" ? "Add New API Register" : "Edit API Register"}
+                {mode === "create" ? "Register new API" : "Edit Registered API"}
               </DialogTitle>
               <DialogDescription className="text-xs">
-                {mode === "create" ? "Enter details to create a new api register." : "Update details for the selected api register."}
+                {mode === "create" ? "Enter details to register a new API." : "Update details for the selected API."}
               </DialogDescription>
             </div>
           </div>

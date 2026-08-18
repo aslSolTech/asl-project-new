@@ -4,14 +4,13 @@ import { useMemo } from "react";
 import { ColumnDef, Column, Row } from "@tanstack/react-table";
 import { DataTable, DataTableColumnHeader, AppTableFeatures } from "@/components/shared/data-table";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { useAepsBankListQuery } from "@/modules/admin/master/banking/hooks";
-import { useAepsBankModalStore } from "@/modules/admin/master/banking/stores/useAepsBankModalStore";
-import { AepsBankRecord } from "@/modules/admin/master/banking/types";
-import { AepsBankModal } from "@/modules/admin/master/banking/components/aeps-bank-modal";
-import { AepsBankDeleteDialog } from "@/modules/admin/master/banking/components/aeps-bank-delete-dialog";
+import { useApiCallbackListQuery } from "@/modules/admin/master/apiCallback/hooks";
+import { useApiCallbackModalStore } from "@/modules/admin/master/apiCallback/stores/useApiCallbackModalStore";
+import { ApiCallbackRecord } from "@/modules/admin/master/apiCallback/types";
+import { ApiCallbackModal } from "@/modules/admin/master/apiCallback/components/api-callback-modal";
+import { ApiCallbackDeleteDialog } from "@/modules/admin/master/apiCallback/components/api-callback-delete-dialog";
 import {
-  Building,
+  Webhook,
   Plus,
   Edit2,
   Trash2,
@@ -19,12 +18,12 @@ import {
 } from "lucide-react";
 
 // Columns helper components
-function IdHeader({ column }: Readonly<{ column: Column<AppTableFeatures, AepsBankRecord, unknown> }>) {
+function IdHeader({ column }: Readonly<{ column: Column<AppTableFeatures, ApiCallbackRecord, unknown> }>) {
   return <DataTableColumnHeader column={column} title="ID" />;
 }
 
 // Helper cells
-function IdCell({ row }: Readonly<{ row: Row<AppTableFeatures, AepsBankRecord> }>) {
+function IdCell({ row }: Readonly<{ row: Row<AppTableFeatures, ApiCallbackRecord> }>) {
   return (
     <span className="font-mono text-xs font-semibold px-2 py-0.5 rounded bg-muted/60 text-muted-foreground border border-border/50">
       {String(row.getValue?.("id"))}
@@ -33,44 +32,35 @@ function IdCell({ row }: Readonly<{ row: Row<AppTableFeatures, AepsBankRecord> }
 }
 
 
-function BankNameHeader({ column }: Readonly<{ column: Column<AppTableFeatures, AepsBankRecord, unknown> }>) {
-  return <DataTableColumnHeader column={column} title="Bank Name" />;
+function ApiNameHeader({ column }: Readonly<{ column: Column<AppTableFeatures, ApiCallbackRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="API Name" />;
 }
 
-function BankNameCell({ row }: Readonly<{ row: Row<AppTableFeatures, AepsBankRecord> }>) {
-  const val = row.original.bankName;
-  if (val === "active" || val === "true") {
-    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">{val}</Badge>;
-  }
-  if (val === "inactive" || val === "false") {
-    return <Badge variant="outline" className="text-xs uppercase">{val}</Badge>;
-  }
-  return <span className="text-sm font-medium text-foreground">{val || "-"}</span>;
+function ApiNameCell({ row }: Readonly<{ row: Row<AppTableFeatures, ApiCallbackRecord> }>) {
+  const { apiName, customerName } = row.original;
+  const name = apiName || customerName || "-";
+  return <span className="text-sm font-semibold text-foreground">{name}</span>;
 }
 
-
-function IinCodeHeader({ column }: Readonly<{ column: Column<AppTableFeatures, AepsBankRecord, unknown> }>) {
-  return <DataTableColumnHeader column={column} title="IIN Code" />;
+function CallbackUrlHeader({ column }: Readonly<{ column: Column<AppTableFeatures, ApiCallbackRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Callback URL" />;
 }
 
-function IinCodeCell({ row }: Readonly<{ row: Row<AppTableFeatures, AepsBankRecord> }>) {
-  const val = row.original.iinCode;
-  if (val === "active" || val === "true") {
-    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">{val}</Badge>;
-  }
-  if (val === "inactive" || val === "false") {
-    return <Badge variant="outline" className="text-xs uppercase">{val}</Badge>;
-  }
-  return <span className="text-sm font-medium text-foreground">{val || "-"}</span>;
+function CallbackUrlCell({ row }: Readonly<{ row: Row<AppTableFeatures, ApiCallbackRecord> }>) {
+  const url = row.original.callbackUrl || row.original.url || "-";
+  return (
+    <span className="font-mono text-xs text-muted-foreground line-clamp-1 max-w-[320px]" title={url}>
+      {url}
+    </span>
+  );
 }
-
 
 function ActionsHeader() {
   return <span className="text-xs font-semibold">Actions</span>;
 }
 
-function ActionsCell({ row }: Readonly<{ row: Row<AppTableFeatures, AepsBankRecord> }>) {
-  const { openEdit, openDelete } = useAepsBankModalStore();
+function ActionsCell({ row }: Readonly<{ row: Row<AppTableFeatures, ApiCallbackRecord> }>) {
+  const { openEdit, openDelete } = useApiCallbackModalStore();
   const record = row.original;
   return (
     <div className="flex items-center gap-1.5">
@@ -87,7 +77,7 @@ function ActionsCell({ row }: Readonly<{ row: Row<AppTableFeatures, AepsBankReco
       <Button
         variant="ghost"
         size="icon-sm"
-        onClick={() => openDelete(record.id, record.bankName || record.id)}
+        onClick={() => openDelete(record.id, record.apiName || record.customerName || record.id)}
         title="Delete"
         className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
       >
@@ -98,24 +88,30 @@ function ActionsCell({ row }: Readonly<{ row: Row<AppTableFeatures, AepsBankReco
   );
 }
 
-export default function AepsBankPage() {
-  const { data: listData, isLoading, isError, refetch } = useAepsBankListQuery();
-  const { openCreate } = useAepsBankModalStore();
+export default function ApiCallbackPage() {
+  const { data: listData, isLoading, isError, refetch } = useApiCallbackListQuery();
+  const { openCreate } = useApiCallbackModalStore();
 
-  const displayData = useMemo<AepsBankRecord[]>(() => {
+  const displayData = useMemo<ApiCallbackRecord[]>(() => {
     if (listData && listData.length > 0) {
       return listData;
     }
     return [
-  {
-    "id": "BNK-001",
-    "bankName": "State Bank of India",
-    "iinCode": "607024"
-  }
-];
+      {
+        id: "CB-001",
+        apiName: "Cashfree Payout",
+        apiId: "API-001",
+        callbackUrl: "https://uat.payzones.net/api/apiservice/cashfree-payout-callback.php",
+        apiRemarks: "Production webhook callback handler",
+        parameters: [
+          { paramName: "status", paramValue: "SUCCESS", paramFor: "STATUS" },
+          { paramName: "utr", paramValue: "", paramFor: "TXN_ID" },
+        ],
+      },
+    ];
   }, [listData]);
 
-  const columns = useMemo<ColumnDef<AppTableFeatures, AepsBankRecord, unknown>[]>(
+  const columns = useMemo<ColumnDef<AppTableFeatures, ApiCallbackRecord, unknown>[]>(
     () => [
       {
         accessorKey: "id",
@@ -123,14 +119,14 @@ export default function AepsBankPage() {
         cell: IdCell,
       },
       {
-        accessorKey: "bankName",
-        header: BankNameHeader,
-        cell: BankNameCell,
+        accessorKey: "apiName",
+        header: ApiNameHeader,
+        cell: ApiNameCell,
       },
       {
-        accessorKey: "iinCode",
-        header: IinCodeHeader,
-        cell: IinCodeCell,
+        accessorKey: "callbackUrl",
+        header: CallbackUrlHeader,
+        cell: CallbackUrlCell,
       },
       {
         id: "actions",
@@ -148,14 +144,14 @@ export default function AepsBankPage() {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-border pb-6">
         <div className="flex items-center gap-3">
           <div className="p-3 rounded-2xl bg-primary/10 text-primary border border-primary/20 shadow-xs">
-            <Building className="w-7 h-7" />
+            <Webhook className="w-7 h-7" />
           </div>
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
-              AEPS Bank
+              Callback URL APIs
             </h1>
             <p className="text-xs sm:text-sm text-muted-foreground">
-              Manage all official aeps bank configurations.
+              Manage all official callback url api configurations.
             </p>
           </div>
         </div>
@@ -176,7 +172,7 @@ export default function AepsBankPage() {
             className="flex items-center gap-2 shadow-sm font-semibold cursor-pointer"
           >
             <Plus className="w-4 h-4" />
-            Add AEPS Bank
+            Add Callback URL
           </Button>
         </div>
       </div>
@@ -201,8 +197,8 @@ export default function AepsBankPage() {
       />
 
       {/* CRUD Modals */}
-      <AepsBankModal />
-      <AepsBankDeleteDialog />
+      <ApiCallbackModal />
+      <ApiCallbackDeleteDialog />
     </div>
   );
 }

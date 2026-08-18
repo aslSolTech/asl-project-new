@@ -30,21 +30,20 @@ export function RequestDeleteDialog() {
   return (
     <Dialog open={isDeleteOpen} onOpenChange={(open) => !open && closeDelete()}>
       <DialogContent className="max-w-md">
-        <DialogHeader className="flex flex-col items-center space-y-1">
+        <DialogHeader className="flex flex-col items-center gap-2">
           <div className="w-12 h-12 rounded-full bg-destructive/10 text-destructive flex items-center justify-center">
             <AlertTriangle className="w-6 h-6" />
           </div>
           <DialogTitle className="text-lg font-bold">Delete Fund Request</DialogTitle>
-          <DialogDescription className="text-sm text-muted-foreground leading-relaxed">
-            Are you sure you want to delete the fund request for{" "}
+          <DialogDescription className="text-center">
+            Are you sure you want to delete{" "}
             <span className="font-semibold text-foreground">
-              {deletingRecord?.userName ?? deletingRecord?.regNo ?? "this record"}
-            </span>{" "}
-            (Amount: ₹{deletingRecord?.requestAmount ?? "-"})? This action cannot be undone.
+              {deletingName ?? "this record"}
+            </span>{""}? <br /> This action cannot be undone.
           </DialogDescription>
         </DialogHeader>
 
-        <DialogFooter className="gap-2 mt-4">
+        <DialogFooter className="gap-3 mt-1">
           <Button
             variant="outline"
             onClick={closeDelete}

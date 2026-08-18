@@ -32,10 +32,10 @@ export function CreateModal() {
             </div>
             <div>
               <DialogTitle className="text-xl font-bold">
-                {mode === "create" ? "Add New Create Package" : "Edit Create Package"}
+                {mode === "create" ? "Add New Package" : "Edit Package"}
               </DialogTitle>
               <DialogDescription className="text-xs">
-                {mode === "create" ? "Enter details to create a new create package." : "Update details for the selected create package."}
+                {mode === "create" ? "Enter details to create a new package." : "Update details for the selected package."}
               </DialogDescription>
             </div>
           </div>

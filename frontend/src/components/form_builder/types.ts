@@ -10,6 +10,8 @@ export type FieldType =
   | "number"
   | "textarea"
   | "select"
+  | "combobox"
+  | "combobox-multi"
   | "checkbox"
   | "switch"
   | "date"

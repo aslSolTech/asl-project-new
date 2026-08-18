@@ -38,64 +38,75 @@ function ApiNameHeader({ column }: Readonly<{ column: Column<AppTableFeatures, A
 }
 
 function ApiNameCell({ row }: Readonly<{ row: Row<AppTableFeatures, ApiRegisterRecord> }>) {
-  const val = row.original.apiName;
-  if (val === "active" || val === "true") {
-    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">{val}</Badge>;
-  }
-  if (val === "inactive" || val === "false") {
-    return <Badge variant="outline" className="text-xs uppercase">{val}</Badge>;
-  }
-  return <span className="text-sm font-medium text-foreground">{val || "-"}</span>;
+  const { apiName, apiRemarks } = row.original;
+  return (
+    <div className="flex flex-col">
+      <span className="text-sm font-semibold text-foreground">{apiName || "-"}</span>
+      {apiRemarks && <span className="text-[11px] text-muted-foreground line-clamp-1">{apiRemarks}</span>}
+    </div>
+  );
 }
 
-
-function ProviderHeader({ column }: Readonly<{ column: Column<AppTableFeatures, ApiRegisterRecord, unknown> }>) {
-  return <DataTableColumnHeader column={column} title="Provider" />;
+function ApiTypeHeader({ column }: Readonly<{ column: Column<AppTableFeatures, ApiRegisterRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="API Type" />;
 }
 
-function ProviderCell({ row }: Readonly<{ row: Row<AppTableFeatures, ApiRegisterRecord> }>) {
-  const val = row.original.provider;
-  if (val === "active" || val === "true") {
-    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">{val}</Badge>;
-  }
-  if (val === "inactive" || val === "false") {
-    return <Badge variant="outline" className="text-xs uppercase">{val}</Badge>;
-  }
-  return <span className="text-sm font-medium text-foreground">{val || "-"}</span>;
+function ApiTypeCell({ row }: Readonly<{ row: Row<AppTableFeatures, ApiRegisterRecord> }>) {
+  return (
+    <Badge variant="outline" className="text-xs font-semibold uppercase bg-primary/5 text-primary border-primary/20">
+      {row.original.apiType || "-"}
+    </Badge>
+  );
 }
 
+function DevTypeHeader({ column }: Readonly<{ column: Column<AppTableFeatures, ApiRegisterRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Dev Type" />;
+}
+
+function DevTypeCell({ row }: Readonly<{ row: Row<AppTableFeatures, ApiRegisterRecord> }>) {
+  const isDev = row.original.developmentType === "developer";
+  return (
+    <Badge variant="outline" className={`text-xs uppercase font-medium ${isDev ? "bg-amber-500/10 text-amber-600 border-amber-500/20" : "bg-blue-500/10 text-blue-600 border-blue-500/20"}`}>
+      {row.original.developmentType || "admin"}
+    </Badge>
+  );
+}
 
 function UrlHeader({ column }: Readonly<{ column: Column<AppTableFeatures, ApiRegisterRecord, unknown> }>) {
   return <DataTableColumnHeader column={column} title="Endpoint URL" />;
 }
 
 function UrlCell({ row }: Readonly<{ row: Row<AppTableFeatures, ApiRegisterRecord> }>) {
-  const val = row.original.url;
-  if (val === "active" || val === "true") {
-    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">{val}</Badge>;
-  }
-  if (val === "inactive" || val === "false") {
-    return <Badge variant="outline" className="text-xs uppercase">{val}</Badge>;
-  }
-  return <span className="text-sm font-medium text-foreground">{val || "-"}</span>;
+  return (
+    <span className="font-mono text-xs text-muted-foreground line-clamp-1 max-w-[200px]" title={row.original.url}>
+      {row.original.url || "-"}
+    </span>
+  );
 }
 
-
-function ApiTypeHeader({ column }: Readonly<{ column: Column<AppTableFeatures, ApiRegisterRecord, unknown> }>) {
-  return <DataTableColumnHeader column={column} title="API Type Code" />;
+function RequestTypeHeader({ column }: Readonly<{ column: Column<AppTableFeatures, ApiRegisterRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Request Type" />;
 }
 
-function ApiTypeCell({ row }: Readonly<{ row: Row<AppTableFeatures, ApiRegisterRecord> }>) {
-  const val = row.original.apiType;
-  if (val === "active" || val === "true") {
-    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">{val}</Badge>;
-  }
-  if (val === "inactive" || val === "false") {
-    return <Badge variant="outline" className="text-xs uppercase">{val}</Badge>;
-  }
-  return <span className="text-sm font-medium text-foreground">{val || "-"}</span>;
+function RequestTypeCell({ row }: Readonly<{ row: Row<AppTableFeatures, ApiRegisterRecord> }>) {
+  return (
+    <span className="text-xs font-medium text-foreground">
+      {row.original.requestType || "-"}
+    </span>
+  );
 }
 
+function ResponseTypeHeader({ column }: Readonly<{ column: Column<AppTableFeatures, ApiRegisterRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Response Type" />;
+}
+
+function ResponseTypeCell({ row }: Readonly<{ row: Row<AppTableFeatures, ApiRegisterRecord> }>) {
+  return (
+    <Badge variant="outline" className="text-xs font-mono uppercase bg-muted/60 text-muted-foreground border-border">
+      {row.original.responseType || "-"}
+    </Badge>
+  );
+}
 
 function ActionsHeader() {
   return <span className="text-xs font-semibold">Actions</span>;
@@ -139,14 +150,25 @@ export default function ApiRegisterPage() {
       return listData;
     }
     return [
-  {
-    "id": "APIR-001",
-    "apiName": "Payzones Payout",
-    "provider": "Payzones",
-    "url": "https://api.payzones.com/v1/payout",
-    "apiType": "PAYOUT"
-  }
-];
+      {
+        id: "API-001",
+        apiName: "Cashfree Payout",
+        apiType: "payout",
+        developmentType: "admin",
+        url: "https://api.cashfree.com/payout/v1/authorize",
+        requestType: "JSON_POST",
+        responseType: "json",
+        apiRemarks: "Production payout gateway for instant bank transfers",
+        requestParameters: [
+          { paramName: "beneId", paramType: "string", paramValue: "{beneficiary_id}" },
+          { paramName: "amount", paramType: "number", paramValue: "{transfer_amount}" },
+        ],
+        responseParameters: [
+          { paramName: "status", paramValue: "SUCCESS", paramFor: "STATUS" },
+          { paramName: "utr", paramValue: "UTR12345", paramFor: "TXN_ID" },
+        ],
+      },
+    ];
   }, [listData]);
 
   const columns = useMemo<ColumnDef<AppTableFeatures, ApiRegisterRecord, unknown>[]>(
@@ -162,9 +184,14 @@ export default function ApiRegisterPage() {
         cell: ApiNameCell,
       },
       {
-        accessorKey: "provider",
-        header: ProviderHeader,
-        cell: ProviderCell,
+        accessorKey: "apiType",
+        header: ApiTypeHeader,
+        cell: ApiTypeCell,
+      },
+      {
+        accessorKey: "developmentType",
+        header: DevTypeHeader,
+        cell: DevTypeCell,
       },
       {
         accessorKey: "url",
@@ -172,9 +199,14 @@ export default function ApiRegisterPage() {
         cell: UrlCell,
       },
       {
-        accessorKey: "apiType",
-        header: ApiTypeHeader,
-        cell: ApiTypeCell,
+        accessorKey: "requestType",
+        header: RequestTypeHeader,
+        cell: RequestTypeCell,
+      },
+      {
+        accessorKey: "responseType",
+        header: ResponseTypeHeader,
+        cell: ResponseTypeCell,
       },
       {
         id: "actions",
@@ -196,10 +228,10 @@ export default function ApiRegisterPage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold tracking-tight text-foreground flex items-center gap-2">
-              API Register
+              Register APIs
             </h1>
             <p className="text-xs sm:text-sm text-muted-foreground">
-              Manage all official api register configurations.
+              Manage all official 3rd parties APIs.
             </p>
           </div>
         </div>
@@ -220,7 +252,7 @@ export default function ApiRegisterPage() {
             className="flex items-center gap-2 shadow-sm font-semibold cursor-pointer"
           >
             <Plus className="w-4 h-4" />
-            Add API Register
+             Register APIs
           </Button>
         </div>
       </div>
