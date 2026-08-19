@@ -9,8 +9,6 @@ import {
   ShieldCheck,
   Plug,
   CircleHelp,
-  Phone,
-  BriefcaseBusiness,
   Globe
 } from "lucide-react";
 import { MenuItem, UserProfile } from "./types";
@@ -418,6 +416,16 @@ export const menuItems: MenuItem[] = [
           { title: "Callback APIs", href: "/dashboard/master/api-management/callback-url-api" },
         ],
       },
+      {
+        title: "Operator",
+        items: [
+          {
+            title: "Charges Code",
+            href: "/dashboard/master/operator-charges-code",
+          }
+         
+        ],
+      },
     ],
   },
   {
@@ -442,10 +450,6 @@ export const menuItems: MenuItem[] = [
         href: "/dashboard/settings/login-status-types",
       },
       {
-        title: "Notifications",
-        href: "/dashboard/settings/notifications",
-      },
-      {
         title: "Registration Charges",
         href: "/dashboard/settings/registration-charges",
       },
@@ -461,12 +465,30 @@ export const menuItems: MenuItem[] = [
       },
       { title: "API Type", href: "/dashboard/settings/api-types" },
       {
+        title: "Notifications",
+        href: "/dashboard/settings/notifications",
+      },
+      {
+        title: "Services",
+        items: [
+          {
+            title: "Settings",
+            href: "/dashboard/settings/service-settings",
+          },
+          {
+            title: "Categories",
+            href: "/dashboard/settings/service-categories",
+          },
+        ],
+      },
+       
+      {
         title: "Operator Setup",
         items: [
           { title: "Operator Type", href: "/dashboard/settings/operator-types" },
           { title: "Registration", href: "/dashboard/settings/operator-registration"}
         ],
-      },
+      }
     ],
   },
   {
@@ -528,48 +550,6 @@ export const menuItems: MenuItem[] = [
           {
             title: "Notice Board",
             href: "/dashboard/website/notice",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    title: "Service Management",
-    icon: BriefcaseBusiness,
-    items: [
-      {
-        title: "Services",
-        items: [
-          {
-            title: "Service Settings",
-            href: "/dashboard/services/settings",
-          },
-          {
-            title: "Service Categories",
-            href: "/dashboard/services/categories",
-          },
-        ],
-      },
-    ],
-  },
-  {
-    title: "Contact Management",
-    icon: Phone,
-    items: [
-      {
-        title: "Inquiries",
-        items: [
-          {
-            title: "Feedback",
-            href: "/dashboard/contact/feedback",
-          },
-          {
-            title: "Callback Requests",
-            href: "/dashboard/contact/callbacks",
-          },
-          {
-            title: "Contact Messages",
-            href: "/dashboard/contact/messages",
           },
         ],
       },

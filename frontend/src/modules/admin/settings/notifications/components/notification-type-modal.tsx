@@ -7,16 +7,16 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { useOperatorCodeModalStore } from "../stores/useOperatorCodeModalStore";
-import { useOperatorCodeDetailQuery } from "../hooks";
-import { OperatorCodeForm } from "./operator-code-form";
-import { QrCode } from "lucide-react";
+import { useNotificationTypeModalStore } from "../stores/useNotificationTypeModalStore";
+import { useNotificationTypeDetailQuery } from "../hooks";
+import { NotificationTypeForm } from "./notification-type-form";
+import { Tag } from "lucide-react";
 
-export function OperatorCodeModal() {
-  const { isOpen, mode, selectedId, selectedData, close } = useOperatorCodeModalStore();
+export function NotificationTypeModal() {
+  const { isOpen, mode, selectedId, selectedData, close } = useNotificationTypeModalStore();
 
   const shouldFetchDetail = mode === "edit" && Boolean(selectedId) && !selectedData;
-  const { data: fetchedData, isLoading } = useOperatorCodeDetailQuery(
+  const { data: fetchedData, isLoading } = useNotificationTypeDetailQuery(
     shouldFetchDetail ? selectedId : undefined
   );
 
@@ -27,15 +27,17 @@ export function OperatorCodeModal() {
       <DialogContent className="max-w-xl">
         <DialogHeader className="border-b border-border pb-4">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-primary/10 text-primary">
-              <QrCode className="w-5 h-5" />
+            <div className="p-2.5 rounded-xl bg-primary/10 text-primary border border-primary/20">
+              <Tag className="w-5 h-5" />
             </div>
             <div>
               <DialogTitle className="text-xl font-bold">
-                {mode === "create" ? "Add New Operator Code" : "Edit Operator Code"}
+                {mode === "create" ? "Add Notification Type" : "Edit Notification Type"}
               </DialogTitle>
               <DialogDescription className="text-xs">
-                {mode === "create" ? "Enter details to create a new operator code." : "Update details for the selected operator code."}
+                {mode === "create"
+                  ? "Define a new category type for broadcasts (e.g. Promotional, System Alert)."
+                  : "Update category name, slug code, badge color, and status."}
               </DialogDescription>
             </div>
           </div>
@@ -43,11 +45,11 @@ export function OperatorCodeModal() {
 
         {isLoading ? (
           <div className="p-8 text-center text-sm text-muted-foreground animate-pulse">
-            Loading...
+            Loading type configuration...
           </div>
         ) : (
-          <OperatorCodeForm
-            key={selectedId ?? "create-mode"}
+          <NotificationTypeForm
+            key={selectedId ?? "create-type-mode"}
             mode={mode}
             initialData={activeData}
             onSuccess={close}

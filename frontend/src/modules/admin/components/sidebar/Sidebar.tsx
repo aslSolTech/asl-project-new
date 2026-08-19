@@ -16,21 +16,73 @@ import {
 } from "@/components/ui/sidebar";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { NavbarLogo } from "@/components/ui/resizable-navbar";
-import { useState, memo } from "react";
+import { useState, useMemo, memo } from "react";
 import { menuItems } from "../../constants";
+import { useAdminProfileStore } from "@/stores/useAdminProfileStore";
+import { usePermissionStore } from "@/stores/usePermissionStore";
 
 export const DashboardSidebar = memo(function DashboardSidebar() {
   const pathname = usePathname();
-  
+  const role = useAdminProfileStore((s) => s.profile.role) || "Admin";
+  const isRouteAllowed = usePermissionStore((s) => s.isRouteAllowed);
+
+  // Dynamically filter menu items for Employee role
+  const displayMenuItems = useMemo(() => {
+    const normalizedRole = role.toLowerCase();
+    if (normalizedRole !== "employee") {
+      return menuItems;
+    }
+
+    return menuItems
+      .map((item) => {
+        // If single link with no sub-items
+        if (!item.items || item.items.length === 0) {
+          if (item.href && isRouteAllowed(item.href, role)) {
+            return item;
+          }
+          return null;
+        }
+
+        // Filter sub items
+        const filteredSubs = item.items
+          .map((sub) => {
+            if (!sub.items || sub.items.length === 0) {
+              if (sub.href && isRouteAllowed(sub.href, role)) {
+                return sub;
+              }
+              return null;
+            }
+
+            // Filter subSub items
+            const filteredSubSubs = sub.items.filter(
+              (subSub) => !subSub.href || isRouteAllowed(subSub.href, role)
+            );
+
+            if (filteredSubSubs.length > 0) {
+              return { ...sub, items: filteredSubSubs };
+            }
+            return null;
+          })
+          .filter(Boolean) as typeof item.items;
+
+        if (filteredSubs.length > 0) {
+          return { ...item, items: filteredSubs };
+        }
+        return null;
+      })
+      .filter(Boolean) as typeof menuItems;
+  }, [role, isRouteAllowed]);
+
   // Track open main menu item for accordion behavior (opening 2nd closes 1st)
-  const initialMainOpen = menuItems.find(item => pathname.includes(item.title.toLowerCase()))?.title || "Dashboard";
+  const initialMainOpen = displayMenuItems.find(item => pathname.includes(item.title.toLowerCase()))?.title || "Dashboard";
   const [openMenu, setOpenMenu] = useState<string | null>(initialMainOpen);
 
   // Track open sub menu items (sub-accordion)
-  const initialSubOpen = menuItems
+  const initialSubOpen = displayMenuItems
     .flatMap(m => m.items || [])
     .find(sub => sub.items?.some(subSub => subSub.href === pathname))?.title || null;
   const [openSubMenu, setOpenSubMenu] = useState<string | null>(initialSubOpen);
+
 
   return (
     <Sidebar className="border-r-0 bg-white/60 dark:bg-slate-700/80 backdrop-blur-xl transition-colors">
@@ -44,7 +96,7 @@ export const DashboardSidebar = memo(function DashboardSidebar() {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu className="space-y-1">
-              {menuItems.map((item) => {
+              {displayMenuItems.map((item) => {
                 const isOpen = openMenu === item.title;
                 const hasSubItems = Boolean(item.items && item.items.length > 0);
 

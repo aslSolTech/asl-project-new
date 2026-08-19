@@ -24,18 +24,20 @@ export function EmployeePermissionModal() {
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && close()}>
-      <DialogContent className="max-w-xl">
+      <DialogContent className="max-w-4xl">
         <DialogHeader className="border-b border-border pb-4">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-primary/10 text-primary">
+            <div className="p-2.5 rounded-xl bg-primary/10 text-primary border border-primary/20">
               <Key className="w-5 h-5" />
             </div>
             <div>
               <DialogTitle className="text-xl font-bold">
-                {mode === "create" ? "Add New Employee Permission" : "Edit Employee Permission"}
+                {mode === "create" ? "Assign Employee Permissions & Route Access" : "Edit Employee Permissions & Route Access"}
               </DialogTitle>
               <DialogDescription className="text-xs">
-                {mode === "create" ? "Enter details to create a new employee permission." : "Update details for the selected employee permission."}
+                {mode === "create"
+                  ? "Select an active employee, grant specific module/route access, and configure write & delete privileges."
+                  : "Update allowed routes, module privileges, and action permissions for this employee."}
               </DialogDescription>
             </div>
           </div>
@@ -43,7 +45,7 @@ export function EmployeePermissionModal() {
 
         {isLoading ? (
           <div className="p-8 text-center text-sm text-muted-foreground animate-pulse">
-            Loading...
+            Loading employee permission configuration...
           </div>
         ) : (
           <EmployeePermissionForm

@@ -9,12 +9,12 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { useOperatorCodeModalStore } from "../stores/useOperatorCodeModalStore";
+import { useOperatorChargesCodeModalStore } from "../stores/useOperatorChargesCodeModalStore";
 import { useDeleteOperatorCodeMutation } from "../hooks";
 import { AlertTriangle, Trash2 } from "lucide-react";
 
 export function OperatorCodeDeleteDialog() {
-  const { isDeleteOpen, deletingId, deletingName, closeDelete } = useOperatorCodeModalStore();
+  const { isDeleteOpen, deletingId, deletingName, closeDelete } = useOperatorChargesCodeModalStore();
   const deleteMutation = useDeleteOperatorCodeMutation();
 
   const handleDelete = async () => {
