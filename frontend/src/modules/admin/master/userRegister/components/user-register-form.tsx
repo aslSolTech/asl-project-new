@@ -14,7 +14,7 @@ import { formatISODate } from "@/lib/datefns";
 import { useUserTypeListQuery } from "@/modules/admin/settings/user-type/hooks";
 import { useGenderListQuery } from "@/modules/admin/settings/gender/hooks";
 import { useIsVerifyListQuery } from "@/modules/admin/settings/is-verify/hooks";
-import { usePackageListQuery } from "@/modules/admin/routing/recharge/package/hooks";
+import { usePackageListQuery } from "@/modules/admin/services/recharge/package/hooks";
 import { useLoginStatusListQuery } from "@/modules/admin/settings/login-status/hooks";
 
 export interface UserRegisterFormProps {

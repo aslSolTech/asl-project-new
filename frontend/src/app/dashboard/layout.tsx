@@ -20,7 +20,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
       <DashboardSidebar />
       <div className="flex flex-col flex-1 min-h-screen overflow-hidden">
         <DashboardHeader />
-        <div className="grow p-6 md:overflow-y-auto">
+        <div className="grow px-8 pt-5 md:overflow-y-auto">
           <RoutePermissionGuard>{children}</RoutePermissionGuard>
         </div>
       </div>

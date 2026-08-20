@@ -24,7 +24,7 @@ export function PrivilegeModal() {
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && close()}>
-      <DialogContent className="max-w-xl">
+      <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
         <DialogHeader className="border-b border-border pb-4">
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-xl bg-primary/10 text-primary">
@@ -32,10 +32,10 @@ export function PrivilegeModal() {
             </div>
             <div>
               <DialogTitle className="text-xl font-bold">
-                {mode === "create" ? "Add New" : "Edit"} Privilege
+                Configure User API Privileges
               </DialogTitle>
-              <DialogDescription className="text-xs">
-                {mode === "create" ? "Enter details to create a new" : "Update details for the selected"} privilege.
+              <DialogDescription className="text-xs text-muted-foreground">
+                Enable or disable specific API type features (Recharge, DMT, AEPS, etc.) for this user account.
               </DialogDescription>
             </div>
           </div>
@@ -43,7 +43,7 @@ export function PrivilegeModal() {
 
         {isLoading ? (
           <div className="p-8 text-center text-sm text-muted-foreground animate-pulse">
-            Loading...
+            Loading privilege details...
           </div>
         ) : (
           <PrivilegeForm

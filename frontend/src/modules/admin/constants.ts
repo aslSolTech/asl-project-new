@@ -6,7 +6,6 @@ import {
   FileText,
   Package,
   Route,
-  ShieldCheck,
   Plug,
   CircleHelp,
   Globe
@@ -74,6 +73,8 @@ export const BREADCRUMB_LABEL_MAP: Record<string, string> = {
   security: "Security",
   "2fa": "Two-Factor Auth",
   "api-keys": "API Keys",
+  "service-settings": "Service Settings",
+  "service-types": "Service Types",
 };
 
 export const menuItems: MenuItem[] = [
@@ -292,20 +293,11 @@ export const menuItems: MenuItem[] = [
     items: [
       {
         title: "Package",
-        href: "/dashboard/packages/create",
+        href: "/dashboard/packages",
       },
       {
         title: "Commission",
-        items: [
-          {
-            title: "Recharge Commission",
-            href: "/dashboard/packages/commission/recharge",
-          },
-          {
-            title: "BBPS Commission",
-            href: "/dashboard/packages/commission/bbps",
-          },
-        ],
+        href: "/dashboard/packages/commission"
       },
     ],
   },
@@ -314,7 +306,7 @@ export const menuItems: MenuItem[] = [
     icon: Route,
     items: [
       {
-        title: "Recharge Routing",
+        title: "Recharge",
         items: [
           {
             title: "Operator Wise API",
@@ -339,28 +331,28 @@ export const menuItems: MenuItem[] = [
         ],
       },
       {
-        title: "Service Routing",
+        title: "Services API",
         items: [
           {
-            title: "DMT API",
-            href: "/dashboard/routing/service/dmt",
+            title: "DMT",
+            href: "/dashboard/services/dmt",
           },
           {
-            title: "Payout API",
-            href: "/dashboard/routing/service/payout",
+            title: "Payouts",
+            href: "/dashboard/services/payout-service",
           },
           {
-            title: "Bank Account Verify API",
-            href: "/dashboard/routing/service/bank-verify",
+            title: "Bank Account Verify",
+            href: "/dashboard/services/bank-verify",
           },
           {
-            title: "UPI Verify API",
-            href: "/dashboard/routing/service/upi-verify",
+            title: "UPI Verify",
+            href: "/dashboard/services/upi-verify",
           },
         ],
       },
       {
-        title: "Payout Routing",
+        title: "Payout",
         items: [
           {
             title: "Provider Wise Routing",
@@ -383,7 +375,7 @@ export const menuItems: MenuItem[] = [
     ],
   },
   {
-    title: "Merchant API",
+    title: "Merchant KYC",
     icon: Plug,
     href: "/dashboard/merchant-api"
   },
@@ -428,11 +420,6 @@ export const menuItems: MenuItem[] = [
       },
     ],
   },
-  {
-    title: "Privilege",
-    icon: ShieldCheck,
-    href: "/dashboard/privileges"
-  },
    {
     title: "Settings",
     icon: Settings,
@@ -469,19 +456,8 @@ export const menuItems: MenuItem[] = [
         href: "/dashboard/settings/notifications",
       },
       {
-        title: "Services",
-        items: [
-          {
-            title: "Settings",
-            href: "/dashboard/settings/service-settings",
-          },
-          {
-            title: "Categories",
-            href: "/dashboard/settings/service-categories",
-          },
-        ],
+        title: "Service Settings", href: "/dashboard/settings/service-settings"
       },
-       
       {
         title: "Operator Setup",
         items: [

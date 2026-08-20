@@ -1,0 +1,51 @@
+export const serviceApiFieldsConfig = [
+  {
+    key: "providerName",
+    label: "API / Provider Name",
+    type: "text",
+    placeholder: "Enter Provider / Service / Bank name...",
+    required: true,
+  },
+  {
+    key: "apiName",
+    label: "API Name",
+    type: "text",
+    placeholder: "Enter API name...",
+    required: true,
+  },
+  {
+    key: "apiType",
+    label: "API Type",
+    type: "select",
+    placeholder: "Select API Type...",
+    required: true,
+    options: [
+      { label: "Payout", value: "Payout" },
+      { label: "Verification", value: "Verification" },
+      { label: "Bank Account Verify", value: "Bank Account Verify" },
+      { label: "UPI Verify", value: "UPI Verify" },
+      { label: "DMT (Money Transfer)", value: "DMT (Money Transfer)" },
+      { label: "Recharge", value: "Recharge" },
+      { label: "Bill Payment", value: "Bill Payment" },
+      { label: "AEPS", value: "AEPS" },
+    ],
+  },
+  {
+    key: "apiKey",
+    label: "API Key (Number)",
+    type: "number",
+    placeholder: "Enter API Key as number (e.g. 10293847)...",
+    required: true,
+  },
+  {
+    key: "status",
+    label: "Status",
+    type: "select",
+    placeholder: "Select status...",
+    required: true,
+    options: [
+      { label: "Active", value: "active" },
+      { label: "Inactive", value: "inactive" },
+    ],
+  },
+] as const;

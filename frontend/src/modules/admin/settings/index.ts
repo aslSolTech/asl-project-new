@@ -7,3 +7,5 @@ export * from "./registration-charges/types";
 export * from "./request-types/types";
 export * from "./response-type/types";
 export * from "./user-type/types";
+export * from "./services/categories/types";
+export * from "./services/settings/types";
