@@ -14,8 +14,9 @@ import { formatISODate } from "@/lib/datefns";
 import { useUserTypeListQuery } from "@/modules/admin/settings/user-type/hooks";
 import { useGenderListQuery } from "@/modules/admin/settings/gender/hooks";
 import { useIsVerifyListQuery } from "@/modules/admin/settings/is-verify/hooks";
-import { usePackageListQuery } from "@/modules/admin/services/recharge/package/hooks";
+import { usePackageListQuery } from "@/modules/admin/packages/hooks";
 import { useLoginStatusListQuery } from "@/modules/admin/settings/login-status/hooks";
+
 
 export interface UserRegisterFormProps {
   readonly mode: "create" | "edit";
@@ -85,8 +86,8 @@ export function UserRegisterForm({ mode, initialData, onSuccess }: UserRegisterF
   const packageOptions = useMemo(() => {
     if (packages.length > 0) {
       return packages.map((p) => ({
-        label: p.package,
-        value: p.id || p.package,
+        label: p.packageName,
+        value: p.id || p.packageName,
       }));
     }
     return [
