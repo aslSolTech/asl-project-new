@@ -38,9 +38,10 @@ export function RequestDeleteDialog() {
           <DialogDescription className="text-center">
             Are you sure you want to delete{" "}
             <span className="font-semibold text-foreground">
-              {deletingName ?? "this record"}
-            </span>{""}? <br /> This action cannot be undone.
+              {deletingRecord?.userName ?? "this record"}
+            </span>? <br /> This action cannot be undone.
           </DialogDescription>
+
         </DialogHeader>
 
         <DialogFooter className="gap-3 mt-1">

@@ -43,14 +43,17 @@ export interface TextFieldProps extends Omit<React.ComponentProps<"input">, "nam
   readonly disabled?: boolean;
   readonly readOnly?: boolean;
   readonly rows?: number;
-  readonly options?: readonly FieldOption[];
+  readonly options?: unknown;
   readonly value?: unknown;
+
   readonly onChange?: (value: unknown) => void;
   readonly onBlur?: () => void;
   readonly className?: string;
   readonly wrapperClassName?: string;
   readonly textTransform?: "uppercase" | "lowercase" | "capitalize";
 }
+
+
 
 function transformText(val: string, textTransform?: "uppercase" | "lowercase" | "capitalize"): string {
   if (textTransform === "uppercase") return val.toUpperCase();
@@ -146,16 +149,35 @@ function TextareaField({
   );
 }
 
+function normalizeOptions(options?: unknown): SelectOption[] {
+  if (!Array.isArray(options)) return [];
+  return options.map((opt) => {
+    if (typeof opt === "object" && opt !== null && "label" in opt) {
+      const optionObj = opt as { label: unknown; value?: unknown };
+      return {
+        label: String(optionObj.label),
+        value: optionObj.value !== undefined ? optionObj.value : String(optionObj.label),
+      };
+    }
+    return {
+      label: String(opt),
+      value: String(opt),
+    };
+  });
+}
+
+
 function SelectField({
   fieldId,
   placeholder,
   disabled,
-  options = [],
+  options: rawOptions = [],
   value,
   onChange,
   className,
   wrapperProps,
 }: Readonly<FieldTypeComponentProps>) {
+  const options = normalizeOptions(rawOptions);
   const placeholderText = placeholder || "Select option";
   const stringifiedOptions = [
     { value: "", label: placeholderText },
@@ -202,12 +224,13 @@ function ComboboxField({
   fieldId,
   placeholder,
   disabled,
-  options = [],
+  options: rawOptions = [],
   value,
   onChange,
   className,
   wrapperProps,
 }: Readonly<FieldTypeComponentProps>) {
+  const options = normalizeOptions(rawOptions);
   const selectedOption = options.find((opt) => String(opt.value) === String(value)) || null;
 
   return (
@@ -246,17 +269,19 @@ function ComboboxMultiField({
   fieldId,
   placeholder,
   disabled,
-  options = [],
+  options: rawOptions = [],
   value,
   onChange,
   className,
   wrapperProps,
 }: Readonly<FieldTypeComponentProps>) {
+  const options = normalizeOptions(rawOptions);
   const anchorRef = useComboboxAnchor();
   const currentValues = Array.isArray(value) ? (value as unknown[]) : [];
   const selectedOptions = options.filter(
     (opt) => currentValues.includes(opt.value) || currentValues.includes(String(opt.value))
   );
+
 
   return (
     <FieldWrapper {...wrapperProps}>

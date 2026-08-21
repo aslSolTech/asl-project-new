@@ -78,9 +78,9 @@ export function GenderForm({ mode, initialData, onSuccess }: GenderFormProps) {
                       placeholder={field.placeholder}
                       required={field.required}
                     textTransform={"textTransform" in field ? (field.textTransform as "uppercase" | "lowercase" | "capitalize") : undefined}
-                    options={"options" in field ? field.options : undefined}
                       options={fieldOptions}
                       value={fieldState.state.value ?? ""}
+
                       onChange={(val) => fieldState.handleChange(val as Parameters<typeof fieldState.handleChange>[0])}
                       onBlur={fieldState.handleBlur}
                       error={fieldState.state.meta.errors.join(", ")}

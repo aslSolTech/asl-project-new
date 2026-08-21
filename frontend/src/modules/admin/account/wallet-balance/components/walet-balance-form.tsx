@@ -95,13 +95,13 @@ export function BalanceForm({ mode, initialData, onSuccess }: WalletBalanceFormP
               >
                 {(fieldState) => (
                   <FormField
+
                     name={field.key}
                     label={field.label}
                     type={field.type}
                     placeholder={"placeholder" in field ? field.placeholder : undefined}
                     required={field.required}
                     textTransform={"textTransform" in field ? (field.textTransform as "uppercase" | "lowercase" | "capitalize") : undefined}
-                    options={"options" in field ? field.options : undefined}
                     options={"options" in field ? field.options : undefined}
                     value={fieldState.state.value ?? ""}
                     onChange={(val) => fieldState.handleChange(val as Parameters<typeof fieldState.handleChange>[0])}

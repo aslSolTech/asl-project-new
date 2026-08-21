@@ -1,24 +1,33 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { ColumnDef, Column, Row } from "@tanstack/react-table";
 import { DataTable, DataTableColumnHeader, AppTableFeatures } from "@/components/shared/data-table";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useAmountListQuery } from "@/modules/admin/services/payout/amount/hooks";
+import { Switch } from "@/components/ui/switch";
+import {
+  useAmountListQuery,
+  useUpdateAmountMutation,
+} from "@/modules/admin/services/payout/amount/hooks";
 import { useAmountModalStore } from "@/modules/admin/services/payout/amount/stores/useAmountModalStore";
 import { AmountRecord } from "@/modules/admin/services/payout/amount/types";
 import { AmountModal } from "@/modules/admin/services/payout/amount/components/amount-modal";
 import { AmountDeleteDialog } from "@/modules/admin/services/payout/amount/components/amount-delete-dialog";
+import { StatusSecretKeyModal } from "@/modules/admin/services/service/shared/components/status-toggle-modal";
 import {
   Route,
   Plus,
   Edit2,
   Trash2,
   RefreshCw,
+  User as UserIcon,
+  Server,
+  Layers,
+  IndianRupee,
 } from "lucide-react";
 
-// Columns helper components
+// 1. ID Column
 function IdHeader({ column }: Readonly<{ column: Column<AppTableFeatures, AmountRecord, unknown> }>) {
   return <DataTableColumnHeader column={column} title="ID" />;
 }
@@ -26,75 +35,149 @@ function IdHeader({ column }: Readonly<{ column: Column<AppTableFeatures, Amount
 function IdCell({ row }: Readonly<{ row: Row<AppTableFeatures, AmountRecord> }>) {
   return (
     <span className="font-mono text-xs font-semibold px-2 py-0.5 rounded bg-muted/60 text-muted-foreground border border-border/50">
-      {String(row.getValue?.("id"))}
+      {String(row.getValue?.("id") ?? row.original.id)}
     </span>
   );
 }
 
-
-function AmountHeader({ column }: Readonly<{ column: Column<AppTableFeatures, AmountRecord, unknown> }>) {
-  return <DataTableColumnHeader column={column} title="Amount" />;
+// 2. User Type & Target User Column
+function UserTypeHeader({ column }: Readonly<{ column: Column<AppTableFeatures, AmountRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="User Type / Target User" />;
 }
 
-function AmountCell({ row }: Readonly<{ row: Row<AppTableFeatures, AmountRecord> }>) {
-  const val = row.original.amount;
-  if (val === "active" || val === "true") {
-    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">{val}</Badge>;
-  }
-  if (val === "inactive" || val === "false") {
-    return <Badge variant="outline" className="text-xs uppercase">{val}</Badge>;
-  }
-  return <span className="text-sm font-medium text-foreground">{val || "-"}</span>;
+function UserTypeCell({ row }: Readonly<{ row: Row<AppTableFeatures, AmountRecord> }>) {
+  const userTypeName = row.original.userTypeName || "All User Types";
+  const userName = row.original.userName || "All Users";
+  const isSpecificUser = Boolean(row.original.userId && row.original.userId !== "ALL");
+
+  return (
+    <div className="flex flex-col gap-0.5">
+      <div className="flex items-center gap-1.5 font-semibold text-sm text-foreground">
+        <Badge variant="outline" className="text-xs font-semibold bg-primary/10 text-primary border-primary/20">
+          {userTypeName}
+        </Badge>
+      </div>
+      <div className="flex items-center gap-1 text-xs text-muted-foreground mt-0.5">
+        <UserIcon className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+        <span className={isSpecificUser ? "font-medium text-foreground" : "italic"}>
+          {userName}
+        </span>
+      </div>
+    </div>
+  );
 }
 
-
-function ApiHeader({ column }: Readonly<{ column: Column<AppTableFeatures, AmountRecord, unknown> }>) {
-  return <DataTableColumnHeader column={column} title="API Partner" />;
+// 3. Amount Range Column
+function AmountRangeHeader({ column }: Readonly<{ column: Column<AppTableFeatures, AmountRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Amount Range (Min - Max)" />;
 }
 
-function ApiCell({ row }: Readonly<{ row: Row<AppTableFeatures, AmountRecord> }>) {
-  const val = row.original.api;
-  if (val === "active" || val === "true") {
-    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">{val}</Badge>;
-  }
-  if (val === "inactive" || val === "false") {
-    return <Badge variant="outline" className="text-xs uppercase">{val}</Badge>;
-  }
-  return <span className="text-sm font-medium text-foreground">{val || "-"}</span>;
+function AmountRangeCell({ row }: Readonly<{ row: Row<AppTableFeatures, AmountRecord> }>) {
+  const min = row.original.amountFrom ?? 0;
+  const max = row.original.amountTo ?? 0;
+
+  return (
+    <div className="flex items-center gap-1 font-mono text-xs font-semibold px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 w-fit">
+      <IndianRupee className="w-3.5 h-3.5" />
+      <span>{min.toLocaleString("en-IN")}</span>
+      <span className="text-muted-foreground font-normal mx-0.5">to</span>
+      <span>{max.toLocaleString("en-IN")}</span>
+    </div>
+  );
 }
 
+// 4. Provider Name Column
+function ProviderHeader({ column }: Readonly<{ column: Column<AppTableFeatures, AmountRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Provider Name" />;
+}
 
+function ProviderCell({ row }: Readonly<{ row: Row<AppTableFeatures, AmountRecord> }>) {
+  const provider = row.original.providerName || row.original.api || "-";
+  return (
+    <div className="flex items-center gap-1.5 font-medium text-sm text-foreground">
+      <Server className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+      <span>{provider}</span>
+    </div>
+  );
+}
+
+// 5. Fallback Provider Column
+function FallbackHeader({ column }: Readonly<{ column: Column<AppTableFeatures, AmountRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Fallback" />;
+}
+
+function FallbackCell({ row }: Readonly<{ row: Row<AppTableFeatures, AmountRecord> }>) {
+  const fallback = row.original.fallback;
+  if (!fallback || fallback === "None" || fallback === "") {
+    return <span className="text-xs text-muted-foreground italic">None</span>;
+  }
+  return (
+    <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+      <Layers className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
+      <span>{fallback}</span>
+    </div>
+  );
+}
+
+// 6. Status Column with interactive Switch
 function StatusHeader({ column }: Readonly<{ column: Column<AppTableFeatures, AmountRecord, unknown> }>) {
   return <DataTableColumnHeader column={column} title="Status" />;
 }
 
-function StatusCell({ row }: Readonly<{ row: Row<AppTableFeatures, AmountRecord> }>) {
-  const val = row.original.status;
-  if (val === "active" || val === "true") {
-    return <Badge variant="default" className="text-xs uppercase bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20">{val}</Badge>;
-  }
-  if (val === "inactive" || val === "false") {
-    return <Badge variant="outline" className="text-xs uppercase">{val}</Badge>;
-  }
-  return <span className="text-sm font-medium text-foreground">{val || "-"}</span>;
+function StatusCell({
+  row,
+  onToggleStatus,
+}: Readonly<{
+  row: Row<AppTableFeatures, AmountRecord>;
+  onToggleStatus: (record: AmountRecord) => void;
+}>) {
+  const record = row.original;
+  const isActive = record.status === "active";
+
+  return (
+    <div className="flex items-center gap-2">
+      <Switch
+        checked={isActive}
+        onCheckedChange={() => onToggleStatus(record)}
+        className="cursor-pointer data-[state=checked]:bg-emerald-500"
+      />
+      <Badge
+        variant={isActive ? "default" : "outline"}
+        className={`text-xs uppercase ${
+          isActive
+            ? "bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500/20 border-emerald-500/20"
+            : "text-muted-foreground"
+        }`}
+      >
+        {isActive ? "Active" : "Inactive"}
+      </Badge>
+    </div>
+  );
 }
 
-
+// 7. Actions Column
 function ActionsHeader() {
   return <span className="text-xs font-semibold">Actions</span>;
 }
 
-function ActionsCell({ row }: Readonly<{ row: Row<AppTableFeatures, AmountRecord> }>) {
-  const { openEdit, openDelete } = useAmountModalStore();
+function ActionsCell({
+  row,
+  onEdit,
+  onDelete,
+}: Readonly<{
+  row: Row<AppTableFeatures, AmountRecord>;
+  onEdit: (record: AmountRecord) => void;
+  onDelete: (id: string, name?: string) => void;
+}>) {
   const record = row.original;
   return (
     <div className="flex items-center gap-1.5">
       <Button
         variant="ghost"
         size="icon-sm"
-        onClick={() => openEdit(record.id, record)}
+        onClick={() => onEdit(record)}
         title="Edit"
-        className="h-8 w-8 text-muted-foreground hover:text-primary hover:bg-primary/10"
+        className="h-8 w-8 text-muted-foreground hover:text-primary hover:bg-primary/10 cursor-pointer"
       >
         <Edit2 className="w-3.5 h-3.5" />
         <span className="sr-only">Edit</span>
@@ -102,9 +185,9 @@ function ActionsCell({ row }: Readonly<{ row: Row<AppTableFeatures, AmountRecord
       <Button
         variant="ghost"
         size="icon-sm"
-        onClick={() => openDelete(record.id, record.amount || record.id)}
+        onClick={() => onDelete(record.id, `${record.userTypeName || "Amount Routing"} (₹${record.amountFrom} - ₹${record.amountTo})`)}
         title="Delete"
-        className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+        className="h-8 w-8 text-muted-foreground hover:text-destructive hover:bg-destructive/10 cursor-pointer"
       >
         <Trash2 className="w-3.5 h-3.5" />
         <span className="sr-only">Delete</span>
@@ -113,28 +196,28 @@ function ActionsCell({ row }: Readonly<{ row: Row<AppTableFeatures, AmountRecord
   );
 }
 
-export default function AmountPage() {
-  const { data: listData, isLoading, isError, refetch } = useAmountListQuery();
-  const { openCreate } = useAmountModalStore();
+function renderStatusCell(row: Row<AppTableFeatures, AmountRecord>, onToggleStatus: (record: AmountRecord) => void) {
+  return <StatusCell row={row} onToggleStatus={onToggleStatus} />;
+}
 
-  const displayData = useMemo<AmountRecord[]>(() => {
-    if (listData && listData.length > 0) {
-      return listData;
-    }
-    
-    // Fallback data
-    const mock = [
-      {
-        id: "REC-101",
-        amount: "Amount Val 1",
-        api: "API Partner Val 2",
-        status: "Status Val 3"
-      }
-    ];
-    return mock;
-  }, [listData]);
+function renderActionsCell(
+  row: Row<AppTableFeatures, AmountRecord>,
+  onEdit: (record: AmountRecord) => void,
+  onDelete: (id: string, name?: string) => void
+) {
+  return <ActionsCell row={row} onEdit={onEdit} onDelete={onDelete} />;
+}
 
-  const columns = useMemo<ColumnDef<AppTableFeatures, AmountRecord, unknown>[]>(
+function usePayoutAmountColumns({
+  onToggleStatus,
+  onEdit,
+  onDelete,
+}: {
+  onToggleStatus: (record: AmountRecord) => void;
+  onEdit: (record: AmountRecord) => void;
+  onDelete: (id: string, name?: string) => void;
+}): ColumnDef<AppTableFeatures, AmountRecord, unknown>[] {
+  return useMemo<ColumnDef<AppTableFeatures, AmountRecord, unknown>[]>(
     () => [
       {
         accessorKey: "id",
@@ -142,29 +225,117 @@ export default function AmountPage() {
         cell: IdCell,
       },
       {
-        accessorKey: "amount",
-        header: AmountHeader,
-        cell: AmountCell,
+        accessorKey: "userTypeName",
+        header: UserTypeHeader,
+        cell: UserTypeCell,
       },
       {
-        accessorKey: "api",
-        header: ApiHeader,
-        cell: ApiCell,
+        accessorKey: "amountFrom",
+        header: AmountRangeHeader,
+        cell: AmountRangeCell,
+      },
+      {
+        accessorKey: "providerName",
+        header: ProviderHeader,
+        cell: ProviderCell,
+      },
+      {
+        accessorKey: "fallback",
+        header: FallbackHeader,
+        cell: FallbackCell,
       },
       {
         accessorKey: "status",
         header: StatusHeader,
-        cell: StatusCell,
+        cell: ({ row }) => renderStatusCell(row, onToggleStatus),
       },
       {
         id: "actions",
         header: ActionsHeader,
-        cell: ActionsCell,
+        cell: ({ row }) => renderActionsCell(row, onEdit, onDelete),
         enableSorting: false,
       },
     ],
-    []
+    [onToggleStatus, onEdit, onDelete]
   );
+}
+
+export default function AmountPage() {
+  const { data: listData, isLoading, isError, refetch } = useAmountListQuery();
+  const { openCreate, openEdit, openDelete } = useAmountModalStore();
+  const updateMutation = useUpdateAmountMutation();
+
+  const [statusTarget, setStatusTarget] = useState<{
+    record: AmountRecord;
+    nextStatus: "active" | "inactive";
+  } | null>(null);
+
+  const displayData = useMemo<AmountRecord[]>(() => {
+    if (listData && listData.length > 0) {
+      return listData;
+    }
+
+    const mock: AmountRecord[] = [
+      {
+        id: "AMT-RT-101",
+        userTypeId: "USR-004",
+        userTypeName: "Retailer",
+        userId: "",
+        userName: "All Users",
+        amountFrom: 1,
+        amountTo: 25000,
+        amount: "1 - 25000",
+        providerName: "RazorpayX Direct",
+        api: "RazorpayX Direct",
+        fallback: "Cashfree AutoPayout",
+        status: "active",
+        createdAt: "2026-08-18T10:15:30.000Z",
+        updatedAt: "2026-08-20T14:30:00.000Z",
+      },
+      {
+        id: "AMT-RT-102",
+        userTypeId: "USR-004",
+        userTypeName: "Retailer",
+        userId: "USR-REC-001",
+        userName: "Rahul Sharma (Sharma Digital Pay)",
+        userCode: "REG-2024-001",
+        amountFrom: 25001,
+        amountTo: 100000,
+        amount: "25001 - 100000",
+        providerName: "Cashfree AutoPayout",
+        api: "Cashfree AutoPayout",
+        fallback: "Paytm Payout Gateway",
+        status: "active",
+        createdAt: "2026-08-19T09:00:00.000Z",
+        updatedAt: "2026-08-20T11:20:00.000Z",
+      },
+    ];
+    return mock;
+  }, [listData]);
+
+  const handleStatusToggleClick = (record: AmountRecord) => {
+    const isCurrentlyActive = record.status === "active";
+    const nextStatus: "active" | "inactive" = isCurrentlyActive ? "inactive" : "active";
+    setStatusTarget({ record, nextStatus });
+  };
+
+  const handleConfirmStatusChange = async (_secretKey: string) => {
+    if (!statusTarget) return;
+    const { record, nextStatus } = statusTarget;
+    const now = new Date().toISOString();
+
+    await updateMutation.mutateAsync({
+      ...record,
+      status: nextStatus,
+      updatedAt: now,
+    });
+  };
+
+  const columns = usePayoutAmountColumns({
+    onToggleStatus: handleStatusToggleClick,
+    onEdit: (rec) => openEdit(rec.id, rec),
+    onDelete: (id, name) => openDelete(id, name ?? ""),
+  });
 
   return (
     <div className="mx-auto w-full">
@@ -179,7 +350,7 @@ export default function AmountPage() {
               Amount Wise Routing
             </h1>
             <p className="text-xs sm:text-sm text-muted-foreground">
-              Manage all official amount wise routing configurations.
+              Manage User Type and Amount Range based Payout provider routing rules.
             </p>
           </div>
         </div>
@@ -190,7 +361,7 @@ export default function AmountPage() {
             size="sm"
             onClick={() => void refetch()}
             disabled={isLoading}
-            className="flex items-center gap-2"
+            className="flex items-center gap-2 cursor-pointer"
           >
             <RefreshCw className={`w-4 h-4 ${isLoading ? "animate-spin" : ""}`} />
             Refresh
@@ -219,7 +390,7 @@ export default function AmountPage() {
         columns={columns}
         data={displayData}
         loading={isLoading}
-        searchPlaceholder="Search..."
+        searchPlaceholder="Search by user type, user, or provider..."
         searchDebounceMs={300}
         containerHeight="580px"
       />
@@ -227,6 +398,18 @@ export default function AmountPage() {
       {/* CRUD Modals */}
       <AmountModal />
       <AmountDeleteDialog />
+
+      {/* Secret Key Modal for Active / Inactive Toggle */}
+      {statusTarget && (
+        <StatusSecretKeyModal
+          isOpen={Boolean(statusTarget)}
+          onClose={() => setStatusTarget(null)}
+          onConfirm={handleConfirmStatusChange}
+          targetStatus={statusTarget.nextStatus}
+          serviceName={`${statusTarget.record.userTypeName || "Amount Routing"} (₹${statusTarget.record.amountFrom} - ₹${statusTarget.record.amountTo})`}
+        />
+      )}
     </div>
   );
 }
+

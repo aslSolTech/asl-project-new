@@ -102,7 +102,36 @@ export function ServiceApiKeyCell({
   );
 }
 
-// 5. Change Date Time Column
+// 5. Allowed User Types Column
+export function ServiceApiUserTypesHeader({
+  column,
+}: Readonly<{ column: Column<AppTableFeatures, ServiceApiRecord, unknown> }>) {
+  return <DataTableColumnHeader column={column} title="Provider Routing User Type Wise" />;
+}
+
+export function ServiceApiUserTypesCell({
+  row,
+}: Readonly<{ row: Row<AppTableFeatures, ServiceApiRecord> }>) {
+  const types = row.original.userTypes || row.original.userTypeIds;
+  if (!types || types.length === 0) {
+    return <span className="text-xs text-muted-foreground italic">All / None</span>;
+  }
+  return (
+    <div className="flex flex-wrap items-center gap-1 max-w-[240px]">
+      {types.map((type) => (
+        <Badge
+          key={type}
+          variant="outline"
+          className="text-[11px] font-medium px-1.5 py-0 bg-primary/5 text-primary border-primary/20"
+        >
+          {type}
+        </Badge>
+      ))}
+    </div>
+  );
+}
+
+// 6. Change Date Time Column
 export function ServiceApiChangeDateHeader({
   column,
 }: Readonly<{ column: Column<AppTableFeatures, ServiceApiRecord, unknown> }>) {
@@ -126,7 +155,7 @@ export function ServiceApiChangeDateCell({
   );
 }
 
-// 6. Status Column
+// 7. Status Column
 export function ServiceApiStatusHeader({
   column,
 }: Readonly<{ column: Column<AppTableFeatures, ServiceApiRecord, unknown> }>) {
@@ -163,7 +192,7 @@ export function ServiceApiStatusCell({
   );
 }
 
-// 7. Actions Column
+// 8. Actions Column
 export function ServiceApiActionsHeader() {
   return <span className="text-xs font-semibold">Actions</span>;
 }
@@ -241,6 +270,11 @@ export function useServiceApiColumns({
         cell: ServiceApiKeyCell,
       },
       {
+        accessorKey: "userTypes",
+        header: ServiceApiUserTypesHeader,
+        cell: ServiceApiUserTypesCell,
+      },
+      {
         accessorKey: "updatedAt",
         header: ServiceApiChangeDateHeader,
         cell: ServiceApiChangeDateCell,
@@ -268,3 +302,4 @@ export function useServiceApiColumns({
     [providerTitle, onToggleStatus, onEdit, onDelete]
   );
 }
+

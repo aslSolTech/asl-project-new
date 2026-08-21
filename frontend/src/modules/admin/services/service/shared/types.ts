@@ -4,6 +4,8 @@ export interface ServiceApiRecord {
   apiName: string;
   apiType: string;
   apiKey: number | string;
+  userTypeIds?: string[];
+  userTypes?: string[];
   status: "active" | "inactive";
   updatedAt?: string;
   createdAt?: string;
@@ -15,3 +17,4 @@ export interface ServiceApiRecord {
 
 export type CreateServiceApiPayload = Omit<ServiceApiRecord, "id">;
 export type UpdateServiceApiPayload = ServiceApiRecord;
+

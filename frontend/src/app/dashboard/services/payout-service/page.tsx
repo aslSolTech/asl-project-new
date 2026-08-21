@@ -39,6 +39,8 @@ export default function PayoutPage() {
         apiName: "Instant IMPS/NEFT Engine",
         apiType: "Payout",
         apiKey: 88472910,
+        userTypeIds: ["USR-004", "USR-005"],
+        userTypes: ["Retailer", "API User / Merchant"],
         status: "active",
         createdAt: "2026-08-18T10:15:30.000Z",
         updatedAt: "2026-08-20T14:30:00.000Z",
@@ -49,6 +51,8 @@ export default function PayoutPage() {
         apiName: "Standard Settlement Route",
         apiType: "Payout",
         apiKey: 77291034,
+        userTypeIds: ["USR-002", "USR-003", "USR-004"],
+        userTypes: ["Master Distributor", "Distributor", "Retailer"],
         status: "inactive",
         createdAt: "2026-08-15T09:00:00.000Z",
         updatedAt: "2026-08-19T11:20:00.000Z",
@@ -57,8 +61,9 @@ export default function PayoutPage() {
     return mock;
   }, [listData]);
 
+
   const handleStatusToggleClick = (record: PayoutRecord) => {
-    const isCurrentlyActive = record.status === "active" || record.status === "true";
+    const isCurrentlyActive = record.status === "active";
     const nextStatus: "active" | "inactive" = isCurrentlyActive ? "inactive" : "active";
     setStatusTarget({ record, nextStatus });
   };
@@ -114,8 +119,7 @@ export default function PayoutPage() {
           </Button>
           <Button
             onClick={openCreate}
-            className="flex items-center gap-2 shadow-sm font-semibold cursor-pointer"
-          >
+            className="flex items-center gap-2 shadow-sm font-semibold cursor-pointer">
             <Plus className="w-4 h-4" />
             Add Payout API
           </Button>

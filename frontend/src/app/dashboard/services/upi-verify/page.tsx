@@ -58,10 +58,11 @@ export default function UpiVerifyPage() {
   }, [listData]);
 
   const handleStatusToggleClick = (record: UpiVerifyRecord) => {
-    const isCurrentlyActive = record.status === "active" || record.status === "true";
+    const isCurrentlyActive = record.status === "active";
     const nextStatus: "active" | "inactive" = isCurrentlyActive ? "inactive" : "active";
     setStatusTarget({ record, nextStatus });
   };
+
 
   const handleConfirmStatusChange = async (_secretKey: string) => {
     if (!statusTarget) return;

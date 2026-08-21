@@ -6,6 +6,8 @@ import { FormField, FieldOption } from "@/components/form_builder/fields/FormFie
 import { serviceApiSchema, ServiceApiFormInput } from "../validations";
 import { serviceApiFieldsConfig } from "../constants";
 import { useApiTypeListQuery } from "@/modules/admin/settings/api-type/hooks";
+import { useUserTypeListQuery } from "@/modules/admin/settings/user-type/hooks";
+import { DEFAULT_USER_TYPES } from "@/modules/admin/settings/user-type/constants";
 import { ServiceApiRecord } from "../types";
 import { Save } from "lucide-react";
 
@@ -15,7 +17,7 @@ export interface ServiceApiFormProps {
   readonly defaultApiType?: string;
   readonly providerLabel?: string;
   readonly providerPlaceholder?: string;
-  readonly onSubmit: (payload: ServiceApiFormInput & { id?: string; createdAt?: string; updatedAt?: string }) => Promise<void> | void;
+  readonly onSubmit: (payload: ServiceApiFormInput & { id?: string; userTypes?: string[]; createdAt?: string; updatedAt?: string }) => Promise<void> | void;
   readonly isPending?: boolean;
   readonly onSuccess?: () => void;
 }
@@ -31,6 +33,15 @@ export function ServiceApiSharedForm({
   onSuccess,
 }: ServiceApiFormProps) {
   const { data: apiTypesData } = useApiTypeListQuery();
+  const { data: userTypesData } = useUserTypeListQuery();
+
+  const userTypeOptions: readonly FieldOption[] = useMemo(() => {
+    const list = userTypesData && userTypesData.length > 0 ? userTypesData : DEFAULT_USER_TYPES;
+    return list.map((item) => ({
+      label: item.name,
+      value: item.id || item.slug,
+    }));
+  }, [userTypesData]);
 
   const apiTypeOptions: readonly FieldOption[] = useMemo(() => {
     if (apiTypesData && apiTypesData.length > 0) {
@@ -57,6 +68,7 @@ export function ServiceApiSharedForm({
       apiName: initialData?.apiName ?? initialData?.api ?? "",
       apiType: initialData?.apiType ?? defaultApiType,
       apiKey: initialData?.apiKey ? Number(initialData.apiKey) : ("" as unknown as number),
+      userTypeIds: initialData?.userTypeIds ?? initialData?.userTypes ?? [],
       status: (initialData?.status === "inactive" ? "inactive" : "active") as "active" | "inactive",
     } as ServiceApiFormInput,
     onSubmit: async ({ value }) => {
@@ -64,10 +76,15 @@ export function ServiceApiSharedForm({
       if (!parsed.success) return;
 
       const now = new Date().toISOString();
+      const resolvedUserTypeNames = parsed.data.userTypeIds.map((idOrSlug) => {
+        const found = userTypeOptions.find((opt) => String(opt.value) === String(idOrSlug));
+        return found ? found.label : idOrSlug;
+      });
 
       await onSubmit({
         ...parsed.data,
         id: initialData?.id,
+        userTypes: resolvedUserTypeNames,
         createdAt: mode === "create" ? now : initialData?.createdAt,
         updatedAt: now,
       });
@@ -91,9 +108,12 @@ export function ServiceApiSharedForm({
             let dynamicOptions: readonly FieldOption[] | undefined;
             if (field.key === "apiType") {
               dynamicOptions = apiTypeOptions;
+            } else if (field.key === "userTypeIds") {
+              dynamicOptions = userTypeOptions;
             } else if ("options" in field) {
               dynamicOptions = field.options;
             }
+
 
             const customLabel =
               field.key === "providerName" && providerLabel

@@ -310,23 +310,23 @@ export const menuItems: MenuItem[] = [
         items: [
           {
             title: "Operator Wise API",
-            href: "/dashboard/routing/recharge/operator",
+            href: "/dashboard/services/recharge/operator",
           },
           {
             title: "Package Wise API",
-            href: "/dashboard/routing/recharge/package",
+            href: "/dashboard/services/recharge/package",
           },
           {
             title: "User Wise API",
-            href: "/dashboard/routing/recharge/user",
+            href: "/dashboard/services/recharge/user",
           },
           {
             title: "Amount Wise API",
-            href: "/dashboard/routing/recharge/amount",
+            href: "/dashboard/services/recharge/amount",
           },
           {
             title: "Random API",
-            href: "/dashboard/routing/recharge/random",
+            href: "/dashboard/services/recharge/random",
           },
         ],
       },
@@ -355,25 +355,18 @@ export const menuItems: MenuItem[] = [
         title: "Payout",
         items: [
           {
-            title: "Provider Wise Routing",
-            href: "/dashboard/routing/payout/provider",
+            title: "User Wise",
+            href: "/dashboard/services/payout/user",
           },
           {
-            title: "User Wise Routing",
-            href: "/dashboard/routing/payout/user",
-          },
-          {
-            title: "Amount Wise Routing",
-            href: "/dashboard/routing/payout/amount",
-          },
-          {
-            title: "User Amount Wise Routing",
-            href: "/dashboard/routing/payout/user-amount",
+            title: "Amount Wise",
+            href: "/dashboard/services/payout/amount",
           },
         ],
       },
     ],
   },
+
   {
     title: "Merchant KYC",
     icon: Plug,

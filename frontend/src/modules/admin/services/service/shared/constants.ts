@@ -32,10 +32,18 @@ export const serviceApiFieldsConfig = [
   },
   {
     key: "apiKey",
-    label: "API Key (Number)",
-    type: "number",
-    placeholder: "Enter API Key as number (e.g. 10293847)...",
+    label: "API Key",
+    type: "text",
+    placeholder: "Enter API Key...",
     required: true,
+  },
+  {
+    key: "userTypeIds",
+    label: "Provider Routing User Type Wise",
+    type: "combobox-multi",
+    placeholder: "Select one or multiple User Types...",
+    required: true,
+    options: [],
   },
   {
     key: "status",
@@ -49,3 +57,4 @@ export const serviceApiFieldsConfig = [
     ],
   },
 ] as const;
+

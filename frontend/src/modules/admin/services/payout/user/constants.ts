@@ -1,23 +1,47 @@
 export const userFieldsConfig = [
   {
-    key: "user",
-    label: "User",
-    type: "text",
-    placeholder: "Enter user...",
-    required: true
+    key: "userTypeId",
+    label: "User Type",
+    type: "select",
+    placeholder: "Select User Type...",
+    required: true,
+    options: [],
   },
   {
-    key: "api",
-    label: "API Partner",
-    type: "text",
-    placeholder: "Enter api partner...",
-    required: true
+    key: "providerName",
+    label: "Provider Name (Payout Service)",
+    type: "select",
+    placeholder: "Select Payout Provider API...",
+    required: true,
+    options: [],
+  },
+  {
+    key: "userId",
+    label: "User",
+    type: "select",
+    placeholder: "Select User...",
+    required: true,
+    options: [],
+  },
+  {
+    key: "fallback",
+    label: "Fallback Provider",
+
+    type: "select",
+    placeholder: "Select Fallback Provider (Optional)...",
+    required: false,
+    options: [],
   },
   {
     key: "status",
     label: "Status",
-    type: "text",
-    placeholder: "Enter status...",
-    required: true
-  }
+    type: "select",
+    placeholder: "Select status...",
+    required: true,
+    options: [
+      { label: "Active", value: "active" },
+      { label: "Inactive", value: "inactive" },
+    ],
+  },
 ] as const;
+
