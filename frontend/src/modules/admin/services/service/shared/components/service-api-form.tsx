@@ -103,7 +103,7 @@ export function ServiceApiSharedForm({
         }}
         className="space-y-5"
       >
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           {serviceApiFieldsConfig.map((field) => {
             let dynamicOptions: readonly FieldOption[] | undefined;
             if (field.key === "apiType") {

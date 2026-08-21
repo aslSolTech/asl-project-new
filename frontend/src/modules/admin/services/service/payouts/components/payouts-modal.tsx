@@ -27,12 +27,11 @@ export function PayoutModal() {
   const createMutation = useCreatePayoutMutation();
   const updateMutation = useUpdatePayoutMutation();
   const isPending = createMutation.isPending || updateMutation.isPending;
-
   const activeData = selectedData ?? fetchedData;
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && close()}>
-      <DialogContent className="max-w-xl">
+      <DialogContent className="max-w-3xl">
         <DialogHeader className="border-b border-border pb-4">
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-xl bg-primary/10 text-primary">
