@@ -302,32 +302,25 @@ export const menuItems: MenuItem[] = [
     ],
   },
   {
-    title: "API Routing",
+    title: "APIs",
     icon: Route,
     items: [
       {
-        title: "Recharge",
+        title: "Routing APIs",
         items: [
           {
             title: "Operator Wise API",
-            href: "/dashboard/services/recharge/operator",
-          },
-          {
-            title: "Package Wise API",
-            href: "/dashboard/services/recharge/package",
+            href: "/dashboard/services/provider-routes/operator",
           },
           {
             title: "User Wise API",
-            href: "/dashboard/services/recharge/user",
+            href: "/dashboard/services/provider-routes/user",
           },
           {
             title: "Amount Wise API",
-            href: "/dashboard/services/recharge/amount",
+            href: "/dashboard/services/provider-routes/amount",
           },
-          {
-            title: "Random API",
-            href: "/dashboard/services/recharge/random",
-          },
+         
         ],
       },
       {
