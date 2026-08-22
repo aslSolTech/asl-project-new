@@ -81,22 +81,10 @@ export const menuItems: MenuItem[] = [
   {
     title: "Dashboard",
     icon: LayoutGrid,
+    href: "/dashboard",
     items: [
       {
-        title: "Overview",
-        items: [
-          { title: "Daily Summary", href: "/dashboard/overview/daily" },
-          { title: "Weekly Report", href: "/dashboard/overview/weekly" },
-          { title: "Monthly Analytics", href: "/dashboard/overview/monthly" },
-        ],
-      },
-      {
-        title: "Analytics",
-        items: [
-          { title: "Revenue Trends", href: "/dashboard/analytics/revenue" },
-          { title: "User Growth", href: "/dashboard/analytics/growth" },
-          { title: "Churn Analysis", href: "/dashboard/analytics/churn" },
-        ],
+        title: "Analytics",  href: "/dashboard/analytics"
       },
     ],
   },
@@ -120,7 +108,7 @@ export const menuItems: MenuItem[] = [
     icon: FileText,
     items: [
       {
-        title: "Financial Reports",
+        title: "Financial",
         items: [
           {
             title: "Recharge",
@@ -157,7 +145,7 @@ export const menuItems: MenuItem[] = [
         ],
       },
       {
-        title: "Wallet Reports",
+        title: "Wallets",
         items: [
           {
             title: "Wallet Ledger",
@@ -186,7 +174,7 @@ export const menuItems: MenuItem[] = [
         ],
       },
       {
-        title: "Fund Reports",
+        title: "Funds",
         items: [
           {
             title: "Fund Transfer",
@@ -211,7 +199,7 @@ export const menuItems: MenuItem[] = [
         ],
       },
       {
-        title: "User Reports",
+        title: "Users",
         items: [
           {
             title: "All Users",
@@ -244,7 +232,7 @@ export const menuItems: MenuItem[] = [
         ],
       },
       {
-        title: "Service Reports",
+        title: "Services",
         items: [
           {
             title: "AEPS Dashboard",
@@ -273,7 +261,7 @@ export const menuItems: MenuItem[] = [
         ],
       },
       {
-        title: "Compliance",
+        title: "Compliances",
         items: [
           {
             title: "TDS Statement",
@@ -288,7 +276,7 @@ export const menuItems: MenuItem[] = [
     ],
   },
   {
-    title: "Package",
+    title: "Packages",
     icon: Package,
     items: [
       {
@@ -345,7 +333,7 @@ export const menuItems: MenuItem[] = [
         ],
       },
       {
-        title: "Payout",
+        title: "Payouts",
         items: [
           {
             title: "User Wise",
@@ -454,7 +442,7 @@ export const menuItems: MenuItem[] = [
     ],
   },
   {
-    title: "Website",
+    title: "Websites",
     icon: Globe,
     items: [
       {
