@@ -1,0 +1,101 @@
+"use client";
+
+import { useAppForm } from "@/components/form_builder/form";
+import { FormField } from "@/components/form_builder/fields/FormFields";
+import { aboutSchema, AboutFormInput } from "../validations";
+import { aboutFieldsConfig } from "../constants";
+import { useCreateAboutMutation, useUpdateAboutMutation } from "../hooks";
+import { AboutRecord } from "../types";
+import { Save } from "lucide-react";
+
+export interface AboutFormProps {
+  readonly mode: "create" | "edit";
+  readonly initialData?: AboutRecord | null;
+  readonly onSuccess?: () => void;
+}
+
+export function AboutForm({ mode, initialData, onSuccess }: AboutFormProps) {
+  const createMutation = useCreateAboutMutation();
+  const updateMutation = useUpdateAboutMutation();
+  const isPending = createMutation.isPending || updateMutation.isPending;
+
+  const form = useAppForm({
+    defaultValues: {
+      content: initialData?.content ?? "",
+      status: initialData?.status ?? "",
+    } as AboutFormInput,
+    onSubmit: async ({ value }) => {
+      const parsed = aboutSchema.safeParse(value);
+      if (!parsed.success) return;
+
+      if (mode === "create") {
+        await createMutation.mutateAsync(parsed.data);
+      } else if (mode === "edit" && initialData?.id) {
+        await updateMutation.mutateAsync({
+          id: initialData.id,
+          ...parsed.data,
+        });
+      }
+      onSuccess?.();
+    },
+  });
+
+  return (
+    <form.AppForm>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          void form.handleSubmit();
+        }}
+        className="space-y-5"
+      >
+        <div className="grid grid-cols-1 gap-4">
+          {aboutFieldsConfig.map((field) => (
+            <div key={field.key}>
+              <form.AppField
+                name={field.key}
+                validators={{
+                  onChange: ({ value }) => {
+                    const shape = aboutSchema.shape[field.key as keyof typeof aboutSchema.shape];
+                    if (!shape) return undefined;
+                    const res = shape.safeParse(value);
+                    if (!res.success) {
+                      return res.error.issues[0]?.message;
+                    }
+                    return undefined;
+                  },
+                }}
+              >
+                {(fieldState) => (
+                  <FormField
+                    name={field.key}
+                    label={field.label}
+                    type={field.type}
+                    placeholder={field.placeholder}
+                    required={field.required}
+                    value={fieldState.state.value ?? ""}
+                    onChange={(val) => fieldState.handleChange(val as Parameters<typeof fieldState.handleChange>[0])}
+                    onBlur={fieldState.handleBlur}
+                    error={fieldState.state.meta.errors.join(", ")}
+                  />
+                )}
+              </form.AppField>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex items-center justify-end gap-3 pt-4 border-t border-border">
+          <form.SubscribeButton
+            icon={<Save className="w-5 h-5" />}
+            label={mode === "create" ? "Save" : "Save Changes"}
+            loadingLabel="Saving..."
+            isLoading={isPending}
+            disabled={isPending}
+            className={isPending ? "cursor-not-allowed" : "cursor-pointer"}
+          />
+        </div>
+      </form>
+    </form.AppForm>
+  );
+}

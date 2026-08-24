@@ -1,18 +1,27 @@
-import TopNav from "@/components/admin/navbar/TopNav";
-import SideNav from "@/components/admin/sidebar/SideNav";
+import type { Metadata } from "next";
+import { DashboardHeader } from "@/modules/admin/components/header/Header";
+import { DashboardSidebar } from "@/modules/admin/components/sidebar/Sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
- 
+export const metadata: Metadata = {
+  title: "Dashboard",
+  description: "Payzones Admin Dashboard",
+  icons: {
+    icon: "/logo/logo.png",
+    shortcut: "/logo/logo.png",
+    apple: "/logo/logo.png",
+  },
+};
+
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
-      <div className="w-full flex-none md:w-64">
-        <SideNav />
+    <SidebarProvider>
+      <DashboardSidebar />
+      <div className="flex flex-col flex-1 min-h-screen overflow-hidden">
+        <DashboardHeader />
+        <div className="grow p-6 md:overflow-y-auto">{children}</div>
       </div>
-      <div className="flex flex-col flex-1">
-        <TopNav />
-        <div className="grow p-6 md:overflow-y-auto md:p-12">{children}</div>
-      </div>
-    </div>
+    </SidebarProvider>
   );
 }
 

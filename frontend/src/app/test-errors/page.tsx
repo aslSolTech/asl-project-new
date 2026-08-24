@@ -4,14 +4,14 @@ import { useState, use } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import NotFound from "@/app/not-found";
-import Unauthorized from "@/app/unauthorized";
-import Forbidden from "@/app/forbidden";
+import Unauthorized from "@/app/unauthorized/page";
+import Forbidden from "@/app/forbidden/page";
 import ServerError from "@/app/error";
-import { OtpVerificationForm } from "@/components/auth/otp-verification-form";
+import { OtpVerificationForm } from "@/modules/auth/components/otp-verification-form";
 import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
-import { ForgotPasswordForm } from "@/components/auth/forgot-password-form";
-import { LoginForm } from "@/components/auth/login-form";
-import { CompanySignupForm } from "@/components/auth/company-signup-form";
+import { ForgotPasswordForm } from "@/modules/auth/components/forgot-password-form";
+import { LoginForm } from "@/modules/auth/components/login-form";
+import { CompanySignupForm } from "@/modules/auth/components/company-signup-form";
 
 
 interface TestErrorsPageProps {

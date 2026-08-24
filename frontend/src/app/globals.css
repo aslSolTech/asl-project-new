@@ -37,12 +37,12 @@
   --radius: 0.625rem;
   --sidebar: oklch(0.98 0.005 60);
   --sidebar-foreground: oklch(0.14 0.04 260);
-  --sidebar-primary: oklch(0.72 0.175 55);
+  --sidebar-primary: oklch(0.35 0.10 260);
   --sidebar-primary-foreground: oklch(0.99 0 0);
-  --sidebar-accent: oklch(0.93 0.04 55);
-  --sidebar-accent-foreground: oklch(0.14 0.04 260);
+  --sidebar-accent: oklch(0.94 0.03 250);
+  --sidebar-accent-foreground: oklch(0.35 0.10 260);
   --sidebar-border: oklch(0.90 0.015 60);
-  --sidebar-ring: oklch(0.72 0.175 55);
+  --sidebar-ring: oklch(0.35 0.10 260);
 }
 
 .dark {
@@ -74,12 +74,12 @@
   --chart-5: oklch(0.84 0.10 55);
   --sidebar: oklch(0.14 0.025 260);
   --sidebar-foreground: oklch(0.96 0.015 60);
-  --sidebar-primary: oklch(0.74 0.18 55);
-  --sidebar-primary-foreground: oklch(0.10 0.02 55);
-  --sidebar-accent: oklch(0.22 0.04 55);
+  --sidebar-primary: oklch(0.35 0.10 260);
+  --sidebar-primary-foreground: oklch(0.98 0 0);
+  --sidebar-accent: oklch(0.22 0.05 260);
   --sidebar-accent-foreground: oklch(0.96 0.015 60);
   --sidebar-border: oklch(0.22 0.02 260);
-  --sidebar-ring: oklch(0.74 0.18 55);
+  --sidebar-ring: oklch(0.35 0.10 260);
 }
 
 
@@ -141,6 +141,17 @@
   }
   html {
     @apply font-sans;
+    font-size: 14px;
+  }
+  @media (min-width: 768px) {
+    html {
+      font-size: 14.5px;
+    }
+  }
+  @media (min-width: 1280px) {
+    html {
+      font-size: 15px;
+    }
   }
   button,
   [role="button"],
@@ -154,4 +165,37 @@
   ::view-transition-old(root), ::view-transition-new(root) {
     animation: none;
     mix-blend-mode: normal;
+}
+
+/* ─── Custom Colored Scrollbar ─────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(30, 77, 140, 0.08);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #d3dff0 0%, #d7e1f3 100%);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #bacde7 0%, #b8c7e7 100%);
+}
+
+/* Dark mode scrollbar theme shift */
+.dark ::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.6);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #062350cb 0%, #051a55ce 100%);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #0c376b 0%, #051333c5 100%);
 }
