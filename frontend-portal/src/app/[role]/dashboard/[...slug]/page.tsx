@@ -10,7 +10,7 @@ interface CatchAllPageProps {
 
 export default async function CatchAllPage({ params }: CatchAllPageProps) {
   const resolvedParams = await params;
-  const role = resolvedParams?.role;
+  const role = resolvedParams?.role || "admin";
   const slugArray = resolvedParams?.slug || [];
   const fullPath = slugArray.join("/");
   const formattedTitle = slugArray.at(-1)?.replaceAll("-", " ") || "Page Not Found";
