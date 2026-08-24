@@ -1,7 +1,9 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, createJSONStorage } from "zustand/middleware";
 import { UserProfile } from "@/modules/admin/types";
 import { DEFAULT_USER_PROFILE } from "@/modules/admin/constants";
+import { secureZustandStorage } from "@/lib/secureStorage";
+import { formatISODate } from "@/lib/datefns";
 
 export interface LoginHistoryItem {
   id: string;
@@ -85,10 +87,13 @@ const initialProfile: AdminProfile = {
   loginHistory: initialLoginHistory,
 };
 
+const formatDate = formatISODate();
+
 export const useAdminProfileStore = create<AdminProfileStore>()(
   persist(
     (set) => ({
       profile: initialProfile,
+    
       updateProfile: (data) =>
         set((state) => ({
           profile: {
@@ -107,10 +112,10 @@ export const useAdminProfileStore = create<AdminProfileStore>()(
         set((state) => ({
           profile: {
             ...state.profile,
-            lastLogin: item.timestamp,
+            lastLogin: formatDate,
             loginHistory: [
               {
-                id: `LOG-${Date.now()}`,
+                id: `LOG-${formatDate}`,
                 ...item,
               },
               ...state.profile.loginHistory,
@@ -121,6 +126,7 @@ export const useAdminProfileStore = create<AdminProfileStore>()(
     }),
     {
       name: "admin-profile-store",
+      storage: createJSONStorage(() => secureZustandStorage),
     }
   )
 );

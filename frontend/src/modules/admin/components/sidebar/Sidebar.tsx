@@ -23,13 +23,35 @@ import { usePermissionStore } from "@/stores/usePermissionStore";
 
 export const DashboardSidebar = memo(function DashboardSidebar() {
   const pathname = usePathname();
-  const role = useAdminProfileStore((s) => s.profile.role) || "Admin";
+  const profileRole = useAdminProfileStore((s) => s?.profile?.role);
   const isRouteAllowed = usePermissionStore((s) => s.isRouteAllowed);
 
-  // Dynamically filter menu items for Employee role
+  // Extract role slug from current URL path (e.g. /admin/dashboard => 'admin') or fallback to profile
+  const roleSlug = useMemo(() => {
+    const segments = pathname.split("/").filter(Boolean);
+    if (segments.length > 0 && segments[1] === "dashboard") {
+      return segments[0];
+    }
+    return (profileRole).toLowerCase().replace(/\s+/g, "-");
+  }, [pathname, profileRole]);
+
+  // Helper to dynamically adjust links from /dashboard/... to /:role/dashboard/...
+  const getRoleHref = (href?: string) => {
+    if (!href) return "";
+    if (href.startsWith("/dashboard")) {
+      return `/${roleSlug}${href}`;
+    }
+    if (href.startsWith("/")) {
+      return `/${roleSlug}/dashboard${href}`;
+    }
+    return href;
+  };
+
+  // Dynamically filter menu items for Employee and Whitelabel roles
   const displayMenuItems = useMemo(() => {
-    const normalizedRole = role.toLowerCase();
-    if (normalizedRole !== "employee") {
+    const canonicalRole = (profileRole || "").toLowerCase().replace(/[\s_-]+/g, "");
+    // SuperAdmin gets full unrestricted menu
+    if (canonicalRole.includes("superadmin")) {
       return menuItems;
     }
 
@@ -37,7 +59,7 @@ export const DashboardSidebar = memo(function DashboardSidebar() {
       .map((item) => {
         // If single link with no sub-items
         if (!item.items || item.items.length === 0) {
-          if (item.href && isRouteAllowed(item.href, role)) {
+          if (item.href && isRouteAllowed(item.href, profileRole)) {
             return item;
           }
           return null;
@@ -47,7 +69,7 @@ export const DashboardSidebar = memo(function DashboardSidebar() {
         const filteredSubs = item.items
           .map((sub) => {
             if (!sub.items || sub.items.length === 0) {
-              if (sub.href && isRouteAllowed(sub.href, role)) {
+              if (sub.href && isRouteAllowed(sub.href, profileRole)) {
                 return sub;
               }
               return null;
@@ -55,7 +77,7 @@ export const DashboardSidebar = memo(function DashboardSidebar() {
 
             // Filter subSub items
             const filteredSubSubs = sub.items.filter(
-              (subSub) => !subSub.href || isRouteAllowed(subSub.href, role)
+              (subSub) => !subSub.href || isRouteAllowed(subSub.href, profileRole)
             );
 
             if (filteredSubSubs.length > 0) {
@@ -71,7 +93,7 @@ export const DashboardSidebar = memo(function DashboardSidebar() {
         return null;
       })
       .filter(Boolean) as typeof menuItems;
-  }, [role, isRouteAllowed]);
+  }, [profileRole, isRouteAllowed]);
 
   // Track open main menu item for accordion behavior (opening 2nd closes 1st)
   const initialMainOpen = displayMenuItems.find(item => pathname.includes(item.title.toLowerCase()))?.title || "Dashboard";
@@ -80,16 +102,13 @@ export const DashboardSidebar = memo(function DashboardSidebar() {
   // Track open sub menu items (sub-accordion)
   const initialSubOpen = displayMenuItems
     .flatMap(m => m.items || [])
-    .find(sub => sub.items?.some(subSub => subSub.href === pathname))?.title || null;
+    .find(sub => sub.items?.some(subSub => getRoleHref(subSub.href) === pathname || subSub.href === pathname))?.title || null;
   const [openSubMenu, setOpenSubMenu] = useState<string | null>(initialSubOpen);
-
 
   return (
     <Sidebar className="border-r-0 bg-white/60 dark:bg-slate-700/80 backdrop-blur-xl transition-colors">
       <SidebarHeader className="h-16 flex items-center px-6 border-b-0">
-        {/* <Link href="/" className="flex items-center gap-3"> */}
-          <NavbarLogo imgSrc='/logo/logo.png' altName='Logo' />
-        {/* </Link> */}
+        <NavbarLogo imgSrc='/logo/logo.png' altName='Logo' />
       </SidebarHeader>
 
       <SidebarContent className="px-0 py-4 overflow-y-auto">
@@ -101,11 +120,12 @@ export const DashboardSidebar = memo(function DashboardSidebar() {
                 const hasSubItems = Boolean(item.items && item.items.length > 0);
 
                 if (!hasSubItems && item.href) {
-                  const isActive = pathname === item.href;
+                  const dynamicHref = getRoleHref(item.href);
+                  const isActive = pathname === dynamicHref || pathname === item.href;
                   return (
                     <div key={item.title} className="group/menu-item relative">
                       <Link
-                        href={item.href}
+                        href={dynamicHref}
                         className={cn(
                           "w-full flex items-center justify-between hover:bg-blue-50/70 dark:hover:bg-slate-800/80 hover:shadow-sm transition-all duration-200 py-3 px-3 rounded-lg cursor-pointer",
                           isActive ? "bg-blue-50 dark:bg-slate-800/90 text-blue-600 dark:text-blue-400 font-semibold" : ""
@@ -145,12 +165,13 @@ export const DashboardSidebar = memo(function DashboardSidebar() {
                             const hasSubSubItems = Boolean(sub.items && sub.items.length > 0);
 
                             if (!hasSubSubItems && sub.href) {
-                              const isActive = pathname === sub.href;
+                              const dynamicSubHref = getRoleHref(sub.href);
+                              const isActive = pathname === dynamicSubHref || pathname === sub.href;
                               return (
                                 <div key={sub.title} className="group/menu-sub-item relative pl-4">
                                   <div className="absolute left-0 top-0 bottom-1/2 w-3 border-l-2 border-b-2 rounded-bl-lg border-blue-400/40 dark:border-blue-500/40 pointer-events-none" />
                                   <SidebarMenuSubButton
-                                    render={<Link href={sub.href} />}
+                                    render={<Link href={dynamicSubHref} />}
                                     isActive={isActive}
                                     className={cn(
                                       "w-full text-[11px] leading-tight py-1 px-2.5 rounded-md font-medium transition-all duration-200 flex items-center gap-1.5 mb-2",
@@ -194,13 +215,14 @@ export const DashboardSidebar = memo(function DashboardSidebar() {
                                   <CollapsibleContent>
                                     <div className="relative ml-2 pl-4 space-y-1 tracking-wide my-1">
                                       {sub.items?.map((subSub) => {
-                                        const isActive = pathname === subSub.href;
+                                        const dynamicSubSubHref = getRoleHref(subSub.href);
+                                        const isActive = pathname === dynamicSubSubHref || pathname === subSub.href;
                                         return (
                                           <div key={subSub.href} className="relative">
                                             {/* Curved L-connector line pointing to sub-sub-menu */}
                                             <div className="absolute -left-4 top-0 bottom-1/2 w-3.5 border-l-2 border-b-2 rounded-bl-md border-blue-400/35 dark:border-blue-500/35 pointer-events-none" />
                                             <SidebarMenuSubButton
-                                               render={<Link href={subSub.href} />}
+                                               render={<Link href={dynamicSubSubHref} />}
                                                isActive={isActive}
                                                className={cn(
                                                  "w-full text-[11px] leading-tight py-1 px-2.5 rounded-md font-medium transition-all duration-200 flex items-center gap-1.5 mb-2",

@@ -2,5 +2,6 @@
     "sonarlint.connectedMode.project": {
         "connectionId": "gaurav8757",
         "projectKey": "Gaurav8757_backend"
-    }
+    },
+    "git.ignoreLimitWarning": true
 }

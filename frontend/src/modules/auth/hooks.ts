@@ -1,4 +1,5 @@
 import { useAuthState } from "./stores/authState";
+import { secureZustandStorage } from "@/lib/secureStorage";
 import { useApiMutation } from "@/hooks/useTanstackApiHook";
 import { AUTH_API_ENDPOINTS } from "./endpoints";
 import {
@@ -22,7 +23,7 @@ export function useLoginMutation() {
         },
         onSuccess: (data) => {
           if (data.token) {
-            localStorage.setItem("auth_token", data.token);
+            secureZustandStorage.setItem("auth_token", data.token);
           }
           setAuthSuccess(data.user ?? null, data.token ?? null, data.message ?? "Login successful!");
         },

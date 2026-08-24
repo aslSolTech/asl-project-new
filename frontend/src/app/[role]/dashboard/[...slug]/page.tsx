@@ -3,12 +3,14 @@ import { AlertCircle, Home, LayoutDashboard, Search } from "lucide-react";
 
 interface CatchAllPageProps {
   readonly params: Promise<{
+    role: string;
     slug: string[];
   }>;
 }
 
 export default async function CatchAllPage({ params }: CatchAllPageProps) {
   const resolvedParams = await params;
+  const role = resolvedParams?.role || "admin";
   const slugArray = resolvedParams?.slug || [];
   const fullPath = slugArray.join("/");
   const formattedTitle = slugArray.at(-1)?.replaceAll("-", " ") || "Page Not Found";
@@ -31,7 +33,7 @@ export default async function CatchAllPage({ params }: CatchAllPageProps) {
           {formattedTitle}
         </h1>
         <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400">
-          The requested path <code className="px-2 py-1 font-mono text-xs rounded bg-slate-100 dark:bg-slate-800 text-amber-600 dark:text-amber-400 border border-slate-200 dark:border-slate-700">/dashboard/{fullPath}</code> does not exist or has been moved.
+          The requested path <code className="px-2 py-1 font-mono text-xs rounded bg-slate-100 dark:bg-slate-800 text-amber-600 dark:text-amber-400 border border-slate-200 dark:border-slate-700">/{role}/dashboard/{fullPath}</code> does not exist or has been moved.
         </p>
       </div>
 
@@ -51,7 +53,7 @@ export default async function CatchAllPage({ params }: CatchAllPageProps) {
       {/* Action Buttons */}
       <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
         <Link
-          href="/dashboard"
+          href={`/${role}/dashboard`}
           className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-secondary dark:bg-secondary/70 text-white font-medium text-sm hover:opacity-90 transition-opacity shadow-md hover:shadow-lg">
           <LayoutDashboard className="w-4 h-4" />
           Dashboard Overview

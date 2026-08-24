@@ -26,9 +26,11 @@ export function LoginForm() {
   const handleSubmit = ({ value }: { value: typeof defaultValues }) => {
     clearMessages();
     login(value, {
-      onSuccess: () => {
+      onSuccess: (data) => {
+        const userRole = data?.user?.role || "admin";
+        const roleSlug = userRole.toLowerCase().replace(/\s+/g, "-");
         setTimeout(() => {
-          router.push("/dashboard");
+          router.push(`/${roleSlug}/dashboard`);
         }, 1000);
       },
     });

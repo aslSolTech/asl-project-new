@@ -2,6 +2,11 @@
 
 import { QueryClient, QueryClientProvider, environmentManager } from "@tanstack/react-query";
 import { ReactNode } from "react";
+import { bindGlobalConsole } from "@/lib/logger";
+
+if (typeof window !== "undefined") {
+  bindGlobalConsole();
+}
 
 function makeQueryClient() {
   return new QueryClient({

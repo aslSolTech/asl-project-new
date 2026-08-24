@@ -11,14 +11,27 @@ import { BREADCRUMB_LABEL_MAP } from "../../constants";
 
 function generateBreadcrumbs(pathname: string) {
   const segments = pathname.split("/").filter(Boolean);
-  const crumbs = [{ label: "Dashboard", href: "/dashboard" }];
+  if (segments.length === 0) return [{ label: "Dashboard", href: "/admin/dashboard" }];
+
+  let role = "admin";
+  let pathSegments = segments;
+
+  if (segments.length > 1 && segments[1] === "dashboard") {
+    role = segments[0];
+    pathSegments = segments.slice(1); // ['dashboard', 'services', 'dmt']
+  } else if (segments[0] === "dashboard") {
+    pathSegments = segments;
+  }
+
+  const baseDashboardHref = `/${role}/dashboard`;
+  const crumbs = [{ label: "Dashboard", href: baseDashboardHref }];
 
   let currentPath = "";
-  segments.slice(1).forEach((seg) => {
+  pathSegments.slice(1).forEach((seg) => {
     currentPath += `/${seg}`;
     crumbs.push({
       label: BREADCRUMB_LABEL_MAP[seg] || seg.charAt(0).toUpperCase() + seg.slice(1),
-      href: `/dashboard${currentPath}`,
+      href: `${baseDashboardHref}${currentPath}`,
     });
   });
 

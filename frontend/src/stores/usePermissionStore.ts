@@ -1,9 +1,20 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, createJSONStorage } from "zustand/middleware";
 import { EmployeePermissionRecord } from "@/modules/admin/master/employeePermission/types";
+import { secureZustandStorage } from "@/lib/secureStorage";
+
+export type AllowedRole = "superadmin" | "employee" | "whitelabel" | "whitelevel";
+
+export const normalizeRoleSlug = (role?: string): "superadmin" | "employee" | "whitelabel" => {
+  const r = (role || "").toLowerCase().replace(/[\s_-]+/g, "");
+  if (r.includes("superadmin") || r.includes("admin")) return "superadmin";
+  if (r.includes("whitelevel") || r.includes("whitelabel")) return "whitelabel";
+  if (r.includes("employee")) return "employee";
+  return "superadmin";
+};
 
 export interface PermissionStoreState {
-  permissions: Record<string, EmployeePermissionRecord>; // keyed by employeeId
+  permissions: Record<string, EmployeePermissionRecord>; // keyed by employeeId or userId
   activeEmployeeId: string | null;
   setEmployeePermission: (permission: EmployeePermissionRecord) => void;
   removeEmployeePermission: (employeeId: string) => void;
@@ -52,6 +63,27 @@ const defaultInitialPermissions: Record<string, EmployeePermissionRecord> = {
     canDelete: false,
     status: "Active",
   },
+  "WL-001": {
+    id: "PERM-WL-001",
+    employeeId: "WL-001",
+    employeeName: "Apex Digital Solutions",
+    employeeEmail: "admin@apexdigital.in",
+    employeeMobile: "+91 9888123456",
+    allowedRoutes: [
+      "/dashboard",
+      "/dashboard/overview/daily",
+      "/dashboard/services/dmt",
+      "/dashboard/services/payout-service",
+      "/dashboard/reports/financial/recharge",
+      "/dashboard/packages/pricing-plan",
+      "/dashboard/account/wallet-balance",
+      "/dashboard/settings/profile",
+    ],
+    allowedModules: ["dashboard", "services", "reports", "packages", "account", "settings"],
+    canWrite: true,
+    canDelete: false,
+    status: "Active",
+  },
 };
 
 export const usePermissionStore = create<PermissionStoreState>()(
@@ -79,41 +111,52 @@ export const usePermissionStore = create<PermissionStoreState>()(
         set({ activeEmployeeId: employeeId }),
 
       isRouteAllowed: (pathname, role, employeeId) => {
-        // Admins, Super Admins, and standard general users have full access
-        const normalizedRole = role?.toLowerCase() || "admin";
-        if (normalizedRole === "admin" || normalizedRole === "super admin" || normalizedRole === "super administrator") {
+        const canonicalRole = normalizeRoleSlug(role);
+
+        // 1. SUPERADMIN has complete unrestricted master access
+        if (canonicalRole === "superadmin") {
           return true;
         }
 
-        // Only employee role is restricted
-        if (normalizedRole === "employee") {
-          const empId = employeeId || get().activeEmployeeId;
-          if (!empId) return true;
-
-          const empPerm = get().permissions[empId];
-          if (!empPerm) {
-            // If no explicit permission rule set, allow baseline common routes
-            const publicEmployeeRoutes = [
-              "/dashboard",
-              "/dashboard/overview/daily",
-              "/dashboard/account/wallet-balance",
-              "/dashboard/support/change-password",
-            ];
-            return publicEmployeeRoutes.includes(pathname);
-          }
-
-          // Check if exact path or parent path is in allowedRoutes
-          return (
-            empPerm.allowedRoutes.includes(pathname) ||
-            empPerm.allowedRoutes.some((route) => pathname.startsWith(route) && route !== "/dashboard")
-          );
+        // Normalize pathname: if /employee/dashboard/... or /whitelabel/dashboard/... convert to /dashboard/...
+        let normalizedPath = pathname;
+        const segments = pathname.split("/").filter(Boolean);
+        if (segments.length > 1 && segments[1] === "dashboard") {
+          normalizedPath = `/${segments.slice(1).join("/")}`;
         }
 
-        return true;
+        // Master routes (like employee permission setup itself) are strictly SUPERADMIN only
+        if (normalizedPath.startsWith("/dashboard/master/emp-permission")) {
+          return false;
+        }
+
+        // 2. EMPLOYEE & WHITELABEL (controlled & authorized by SuperAdmin)
+        const targetId = employeeId || get().activeEmployeeId;
+        if (!targetId) return true;
+
+        const rolePerm = get().permissions[targetId];
+        if (!rolePerm) {
+          // Default baseline routes if no custom permission assigned yet
+          const baselineRoutes = [
+            "/dashboard",
+            "/dashboard/overview/daily",
+            "/dashboard/account/wallet-balance",
+            "/dashboard/support/change-password",
+            "/dashboard/profile",
+          ];
+          return baselineRoutes.includes(normalizedPath);
+        }
+
+        // Check if exact path or parent path is in allowedRoutes configured by SuperAdmin
+        return (
+          rolePerm.allowedRoutes.includes(normalizedPath) ||
+          rolePerm.allowedRoutes.some((route) => normalizedPath.startsWith(route) && route !== "/dashboard")
+        );
       },
     }),
     {
-      name: "payzones-employee-permissions",
+      name: "payzones-role-permissions",
+      storage: createJSONStorage(() => secureZustandStorage),
     }
   )
 );

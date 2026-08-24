@@ -17,7 +17,7 @@ export const DEFAULT_USER_PROFILE: UserProfile = {
   email: "test@gmail.com",
   username: "testuser",
   avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Rolex",
-  role: "Admin",
+  role: "SuperAdmin",
 };
 
 export const AVATAR_OPTIONS = [

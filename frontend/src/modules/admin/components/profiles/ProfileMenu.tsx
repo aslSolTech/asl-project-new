@@ -75,7 +75,7 @@ export const ProfileMenu = memo(function ProfileMenu() {
           <DropdownMenuGroup>
             {/* My Profile */}
             <DropdownMenuItem className="rounded-xl px-3 py-2.5 cursor-pointer focus:bg-primary/10 focus:text-primary">
-              <Link href="/dashboard/profile" className="flex items-center gap-3 w-full">
+              <Link href={`/${(user.role).toLowerCase().replace(/\s+/g, "-")}/dashboard/profile`} className="flex items-center gap-3 w-full">
                 <User className="w-4 h-4 text-slate-400 dark:text-slate-500" />
                 <span className="text-sm font-medium text-slate-700 dark:text-slate-200">My Profile</span>
               </Link>
