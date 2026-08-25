@@ -26,7 +26,7 @@ function useIsMobile() {
 const Toaster = ({ position: positionProp, ...props }: ToasterProps) => {
   const { theme = "system" } = useTheme();
   const isMobile = useIsMobile();
-  const position = positionProp ?? (isMobile ? "top-center" : "bottom-right");
+  const position = positionProp ?? (isMobile ? "top-center" : "bottom-left");
 
   return (
     <Sonner
@@ -53,7 +53,7 @@ const Toaster = ({ position: positionProp, ...props }: ToasterProps) => {
           cancelButton:
             "bg-muted text-muted-foreground text-xs font-semibold rounded-xl px-3 py-1.5 transition-colors hover:bg-muted/80",
           closeButton:
-            "!bg-background/50 !border-border/40 !text-foreground hover:!bg-background/80 transition-all",
+            "!left-auto !right-2 !top-2 !transform-none !bg-background/80 !border-border/60 !text-foreground hover:!bg-background transition-all shadow-xs",
           default:
             "bg-card/85 text-card-foreground border-border/80 backdrop-blur-xl shadow-xl",
           error:

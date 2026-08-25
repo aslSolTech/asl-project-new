@@ -1,9 +1,11 @@
-import Link from "next/link";
+import Homepage from "@/modules/landing/components/main/Homepage";
 
-export default function Home() {
+const Home = () => {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <Link href={'/merchant'}> Merchant </Link>
+    <div className="container w-full mx-auto dark:bg-black">
+      <Homepage />
     </div>
   );
 }
+
+export default Home;

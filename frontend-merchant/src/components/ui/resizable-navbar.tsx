@@ -74,7 +74,7 @@ export const Navbar = ({ children, className }: NavbarProps) => {
       ref={ref}
       className={cn("fixed inset-x-0 top-0 z-40 w-full", className)}
     >
-      <div className="mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[1440px]">
         {React.Children.map(children, (child) =>
           React.isValidElement(child)
             ? React.cloneElement(
@@ -294,7 +294,7 @@ export const NavbarButton = ({
     secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80 shadow-none",
     dark: "bg-black text-white dark:bg-white dark:text-black shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset]",
     gradient:
-      "relative z-10 overflow-hidden bg-gradient-to-t from-blue-600 to-blue-500 text-white shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset] before:absolute before:inset-0 before:-z-10 before:bg-gradient-to-b before:from-blue-600 before:to-blue-500 before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300 before:ease-in-out",
+      "relative z-10 overflow-hidden bg-gradient-to-r from-primary via-primary/95 to-secondary text-white font-semibold shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 transition-all duration-300",
     outline:
       "border border-border bg-transparent text-foreground hover:bg-primary/5 dark:hover:bg-primary/10 shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset]",
     ghost:

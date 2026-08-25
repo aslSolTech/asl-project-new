@@ -1,21 +1,21 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useAdminProfileStore } from "@/stores/useAdminProfileStore";
+import { useMerchantProfileStore } from "@/stores/useMerchantProfileStore";
 import { usePermissionStore } from "@/stores/usePermissionStore"; 
 import { ErrorCard } from "@/components/shared/errors/ErrorCard";
+import { MERCHANT_ROLES } from "@/modules/auth/constants";
 
 export function RoutePermissionGuard({ children }: { readonly children: React.ReactNode }) {
   const pathname = usePathname();
-  const role = useAdminProfileStore((s) => s?.profile?.role);
+  const role = useMerchantProfileStore((s) => s?.profile?.role);
   const isRouteAllowed = usePermissionStore((s) => s.isRouteAllowed);
 
   const segments = pathname.split("/").filter(Boolean);
   const urlRole = segments.length > 1 && segments[1] === "dashboard" ? segments[0].toLowerCase() : null;
-  const VALID_ROLES = ["superadmin", "employee", "whitelabel", "whitelevel"];
 
   // 1. Strict Role Slug Validation: If URL has invalid role like '/dddd/dashboard'
-  const isInvalidUrlRole = urlRole !== null && !VALID_ROLES.includes(urlRole);
+  const isInvalidUrlRole = urlRole !== null && !MERCHANT_ROLES.some((r) => r.value === urlRole);
 
   // Check if current path is allowed
   const allowed = !isInvalidUrlRole && isRouteAllowed(pathname, role);
