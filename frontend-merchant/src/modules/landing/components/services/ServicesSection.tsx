@@ -7,8 +7,8 @@ import Link from 'next/link';
 
 export default function ServicesSection() {
   return (
-    <section className="py-20 bg-background">
-      <div className="mx-auto max-w-7xl">
+    <section className="py-20 bg-background relative">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6">
@@ -26,10 +26,10 @@ export default function ServicesSection() {
 
           <Link
             href="/signup"
-            className="inline-flex items-center gap-2 text-xs font-bold text-primary hover:text-primary/80 transition-colors shrink-0"
+            className="inline-flex items-center gap-2 text-xs font-bold text-primary hover:text-primary/80 transition-colors shrink-0 group cursor-pointer"
           >
             <span>View All Commission Slabs</span>
-            <ArrowUpRight className="w-4 h-4" />
+            <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
           </Link>
         </div>
 
@@ -45,7 +45,7 @@ export default function ServicesSection() {
                 whileHover={{ y: -6, scale: 1.015 }}
                 transition={{ duration: 0.3, delay: index * 0.04 }}
                 viewport={{ once: true }}
-                className="group p-6 rounded-2xl border border-border bg-card shadow-xs hover:border-primary/60 hover:shadow-xl hover:shadow-primary/5 transition-all flex flex-col justify-between cursor-pointer relative overflow-hidden"
+                className="group p-6 rounded-2xl border border-border/80 bg-card shadow-xs hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5 transition-all flex flex-col justify-between cursor-pointer relative overflow-hidden"
               >
                 {/* Subtle Decorative Geometric SVG in Card Corner */}
                 <div className="absolute -right-6 -bottom-6 w-24 h-24 text-foreground/[0.03] dark:text-foreground/[0.05] group-hover:text-primary/[0.08] group-hover:scale-125 group-hover:rotate-12 transition-all duration-500 pointer-events-none">

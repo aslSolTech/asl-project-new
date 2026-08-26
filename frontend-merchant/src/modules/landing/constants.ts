@@ -7,24 +7,23 @@ import {
   Phone,
   MapPin,
   Clock,
-  Calendar,
-  Monitor,
   Smartphone,
-  Tv2,
   Zap,
   Banknote,
   ShieldCheck,
-  Train,
-  ShoppingBag,
-  Ticket,
-  Wifi,
   CreditCard,
-  Building2,
   UserPlus,
   FileCheck,
   Rocket,
   TrendingUp,
-  Wallet
+  Wallet,
+  Plane,
+  Gift,
+  Car,
+  Fingerprint,
+  Store,
+  Network,
+  Building2
 } from "lucide-react";
 import {
   IconBrandFacebook,
@@ -188,13 +187,20 @@ export const CONTACT_DEFAULT_VALUES = {
 };
 
 export const CONTACT_SERVICES = [
-  "AEPS Service",
-  "Money Transfer (DMT)",
-  "BBPS Bill Payments",
-  "Mobile/DTH Recharge",
-  "PAN Card Services",
-  "Insurance",
-  "Travel Booking (IRCTC)",
+  "Book Flight Ticket",
+  "Card To Cash",
+  "Gift Card",
+  "Google Play",
+  "PAN INSPAY",
+  "AEPS (Yes Bank / Kotak Bank)",
+  "Mobile Prepaid & DTH Recharge",
+  "Electricity & BBPS Bill Pay",
+  "UPI Transfer & Money Transfer",
+  "PAN UTI & PAN NSDL",
+  "Fastag Recharge",
+  "Micro ATM (mATM)",
+  "Train Ticket Booking (IRCTC)",
+  "LIC Insurance",
   "Retailer Registration",
   "Distributor Registration",
   "Whitelabel Solution",
@@ -260,26 +266,26 @@ export const TESTIMONIALS = testimonials;
 
 // Stats Data
 export const stats = [
-  { icon: Calendar, value: 10, suffix: '+', label: 'Years of Experience', description: 'Serving since Feb 2019' },
-  { icon: Monitor, value: 180, suffix: '+', label: 'Successful Projects', description: 'Across India' },
-  { icon: Users, value: 50, suffix: '+', label: 'Team Members', description: 'Expert professionals' },
-  { icon: Handshake, value: 8000, suffix: '+', label: 'Happy Clients', description: 'Retailers & distributors' },
+  { icon: Store, value: 12000, suffix: '+', label: 'Active Retailers', description: 'Empowered merchant network' },
+  { icon: Network, value: 2500, suffix: '+', label: 'Sub-Distributors', description: 'Expanding local reach' },
+  { icon: Building2, value: 500, suffix: '+', label: 'Master Distributors', description: 'Driving regional growth' },
+  { icon: Users, value: 50000, suffix: '+', label: 'Happy Customers', description: 'Daily served across India' },
 ];
 
 export const services = [
   { 
-    icon: Banknote, 
-    title: 'AEPS Cash Withdrawal', 
-    desc: 'Aadhaar-enabled payment system for withdrawals, balance enquiry & mini statement with zero downtime.', 
-    color: 'from-amber-500/10 to-amber-600/5', 
-    border: 'border-border hover:border-amber-500/50',
+    icon: Fingerprint, 
+    title: 'AEPS (Yes Bank & Kotak)', 
+    desc: 'Aadhaar Enabled Payment System for biometric cash withdrawal, balance enquiry & mini statements.', 
+    color: 'from-teal-500/10 to-teal-600/5', 
+    border: 'border-border hover:border-teal-500/50',
     tag: 'Highest Margin',
-    tagColor: 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
+    tagColor: 'bg-teal-500/10 text-teal-600 dark:text-teal-400'
   },
   { 
-    icon: Building2, 
-    title: 'Money Transfer (DMT)', 
-    desc: 'Domestic money transfer to any bank account across India in seconds via IMPS & NEFT 24×7.', 
+    icon: Banknote, 
+    title: 'Money Transfer (DMT & UPI)', 
+    desc: 'Domestic 24x7 IMPS money transfer and instant UPI withdrawals to all Indian bank accounts.', 
     color: 'from-emerald-500/10 to-emerald-600/5', 
     border: 'border-border hover:border-emerald-500/50',
     tag: '24×7 IMPS',
@@ -287,8 +293,8 @@ export const services = [
   },
   { 
     icon: Zap, 
-    title: 'BBPS Bill Payments', 
-    desc: 'Bharat BillPay System — pay electricity, water, gas, FASTag & telecom bills instantly with receipts.', 
+    title: 'BBPS & Electricity Bill Pay', 
+    desc: 'Unified Bharat BillPay for 20,000+ electricity, gas, water, broadband and municipal billers.', 
     color: 'from-blue-500/10 to-blue-600/5', 
     border: 'border-border hover:border-blue-500/50',
     tag: 'NPCI Certified',
@@ -297,64 +303,241 @@ export const services = [
   { 
     icon: Smartphone, 
     title: 'Mobile & DTH Recharge', 
-    desc: 'Instant recharge for Jio, Airtel, Vi, BSNL, Tata Play, Sun Direct with auto-fetch plans.', 
-    color: 'from-orange-500/10 to-orange-600/5', 
-    border: 'border-border hover:border-orange-500/50',
-    tag: 'Instant Cashback',
-    tagColor: 'bg-orange-500/10 text-orange-600 dark:text-orange-400'
-  },
-  { 
-    icon: Tv2, 
-    title: 'Micro ATM Terminal', 
-    desc: 'Turn your counter into an ATM point for all Debit and Credit cards with low transaction fees.', 
-    color: 'from-purple-500/10 to-purple-600/5', 
-    border: 'border-border hover:border-purple-500/50',
-    tag: 'Card Swipe',
-    tagColor: 'bg-purple-500/10 text-purple-600 dark:text-purple-400'
-  },
-  { 
-    icon: FileText, 
-    title: 'PAN Card Center (NSDL/UTI)', 
-    desc: 'Instant Paperless e-KYC PAN Card creation and corrections within 2 hours delivery.', 
-    color: 'from-rose-500/10 to-rose-600/5', 
-    border: 'border-border hover:border-rose-500/50',
-    tag: 'e-KYC Fast',
-    tagColor: 'bg-rose-500/10 text-rose-600 dark:text-rose-400'
-  },
-  { 
-    icon: ShieldCheck, 
-    title: 'Insurance & General POSP', 
-    desc: 'Motor, health, life, and personal accident policies with instant policy generation.', 
-    color: 'from-teal-500/10 to-teal-600/5', 
-    border: 'border-border hover:border-teal-500/50',
-    tag: 'Instant Policy',
-    tagColor: 'bg-teal-500/10 text-teal-600 dark:text-teal-400'
+    desc: 'Instant recharge for Jio, Airtel, Vi, BSNL, Tata Play, Sun Direct & D2H with special offer fetch.', 
+    color: 'from-green-500/10 to-green-600/5', 
+    border: 'border-border hover:border-green-500/50',
+    tag: 'Auto-Cashback',
+    tagColor: 'bg-green-500/10 text-green-600 dark:text-green-400'
   },
   { 
     icon: CreditCard, 
-    title: 'Instant Merchant Payouts', 
-    desc: 'Bulk disbursement API and payout routes directly connected to banking switch.', 
+    title: 'Micro ATM & Card To Cash', 
+    desc: 'Debit card POS cash withdrawal and credit card cashout services with Bluetooth terminal.', 
+    color: 'from-rose-500/10 to-rose-600/5', 
+    border: 'border-border hover:border-rose-500/50',
+    tag: 'POS Terminal',
+    tagColor: 'bg-rose-500/10 text-rose-600 dark:text-rose-400'
+  },
+  { 
+    icon: FileText, 
+    title: 'PAN Card (INSPAY/NSDL/UTI)', 
+    desc: 'Paperless biometric e-KYC PAN Card creation, correction & 2-hour digital e-PAN delivery.', 
     color: 'from-indigo-500/10 to-indigo-600/5', 
     border: 'border-border hover:border-indigo-500/50',
-    tag: 'Bulk API',
+    tag: 'NSDL / UTI PSA',
     tagColor: 'bg-indigo-500/10 text-indigo-600 dark:text-indigo-400'
+  },
+  { 
+    icon: Plane, 
+    title: 'Book Flight & Train (IRCTC)', 
+    desc: 'Authorized IRCTC Rail ticketing & domestic/international flight ticket booking agent.', 
+    color: 'from-amber-500/10 to-amber-600/5', 
+    border: 'border-border hover:border-amber-500/50',
+    tag: 'IRCTC Agent',
+    tagColor: 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
+  },
+  { 
+    icon: ShieldCheck, 
+    title: 'LIC & General Insurance', 
+    desc: 'LIC premium collections, two/four wheeler motor, health and shopkeeper policies.', 
+    color: 'from-blue-500/10 to-indigo-600/5', 
+    border: 'border-border hover:border-blue-500/50',
+    tag: 'Instant Policy',
+    tagColor: 'bg-blue-500/10 text-blue-600 dark:text-blue-400'
+  },
+  { 
+    icon: Gift, 
+    title: 'Gift Card & Google Play', 
+    desc: 'Sell 100+ top brand digital shopping vouchers, Google Play codes & gaming credits.', 
+    color: 'from-purple-500/10 to-purple-600/5', 
+    border: 'border-border hover:border-purple-500/50',
+    tag: 'Brand Codes',
+    tagColor: 'bg-purple-500/10 text-purple-600 dark:text-purple-400'
+  },
+  { 
+    icon: Car, 
+    title: 'FASTag Highway Recharge', 
+    desc: 'Instant vehicle plate NETC FASTag toll recharge for all major issuing partner banks.', 
+    color: 'from-teal-500/10 to-emerald-600/5', 
+    border: 'border-border hover:border-teal-500/50',
+    tag: 'NETC Sync',
+    tagColor: 'bg-teal-500/10 text-teal-600 dark:text-teal-400'
   },
 ];
 
-// Providers Data
-export const providers = [
-  'Financial Services',
-  'Insurance',
-  'Travel Booking – IRCTC',
-  'Bill Payments (BBPS)',
-  'E-Commerce – Amazon',
-  'Vouchers & OTT',
-  'Mobile & DTH Recharges',
-  'PAN Card Services',
-  'Micro ATM',
-  'AEPS Withdrawals',
-  'Money Transfer (DMT)',
-  'Bank Account Opening',
+
+export const providerDetails = [
+  {
+    title: 'Book Flight Ticket',
+    description: 'Domestic and international airline flight booking with instant seat selection, automated PNR generation, cancellation support, and high commissions.',
+    tag: 'Flight API',
+    color: 'from-sky-500/20 via-blue-500/20 to-indigo-500/20',
+    accentColor: 'text-sky-500',
+    icon: 'Plane',
+    features: ['All Domestic & Global Airlines', 'Instant PNR & E-Ticket', 'Easy Rescheduling', 'Instant Commission']
+  },
+  {
+    title: 'Card To Cash',
+    description: 'Instant debit card and credit card POS cash payout services. Help customers withdraw urgent emergency cash right from your counter.',
+    tag: 'POS Cashout',
+    color: 'from-emerald-500/20 via-teal-500/20 to-cyan-500/20',
+    accentColor: 'text-emerald-500',
+    icon: 'CreditCard',
+    features: ['Debit / Credit Card Swipe', 'Instant Cash Settlement', 'High Per-Transaction Limits', 'Safe & Secure PIN']
+  },
+  {
+    title: 'Gift Card',
+    description: 'Instant digital gift card issuing for top retail brands, shopping portals, fashion outlets, and lifestyle stores with zero physical inventory.',
+    tag: 'Brand Vouchers',
+    color: 'from-amber-500/20 via-orange-500/20 to-red-500/20',
+    accentColor: 'text-amber-500',
+    icon: 'Gift',
+    features: ['100+ Top Shopping Brands', 'Instant Code SMS / Email', 'Zero Inventory Hassle', 'High Profit Margin']
+  },
+  {
+    title: 'Google Play',
+    description: 'Sell Google Play Store recharge codes and gaming credits for mobile game top-ups, subscriptions, and digital app purchases with instant code delivery.',
+    tag: 'Play Store Codes',
+    color: 'from-green-500/20 via-emerald-500/20 to-teal-500/20',
+    accentColor: 'text-green-500',
+    icon: 'Gamepad2',
+    features: ['Instant Voucher Codes', 'BGMI & FreeFire Top-ups', 'Direct SMS Delivery', 'Official Google Channel']
+  },
+  {
+    title: 'PAN INSPAY',
+    description: 'Instant PAN Card application and correction processing via INSPAY route with rapid biometric Aadhaar e-KYC and digital acknowledgement.',
+    tag: 'Instant PAN Gateway',
+    color: 'from-indigo-500/20 via-blue-500/20 to-cyan-500/20',
+    accentColor: 'text-indigo-500',
+    icon: 'FileText',
+    features: ['Biometric Paperless KYC', 'Digital Slip Generation', 'Fast-Track Processing', 'Direct Govt. Record']
+  },
+  {
+    title: 'AEPS (YES BANK)',
+    description: 'Aadhaar Enabled Payment System powered by Yes Bank gateway for instant cash withdrawal, balance enquiry, and Aadhaar mini statement.',
+    tag: 'Yes Bank Switch',
+    color: 'from-teal-500/20 via-cyan-500/20 to-blue-500/20',
+    accentColor: 'text-teal-500',
+    icon: 'Fingerprint',
+    features: ['Yes Bank Direct Switch', 'Fingerprint Biometric Auth', 'Mini Statement & Balance', '99.9% Route Uptime']
+  },
+  {
+    title: 'AEPS (KOTAK BANK)',
+    description: 'High-speed AePS banking channel integrated directly with Kotak Mahindra Bank for uninterrupted transaction processing and rapid settlement.',
+    tag: 'Kotak Bank Switch',
+    color: 'from-rose-500/20 via-red-500/20 to-orange-500/20',
+    accentColor: 'text-rose-500',
+    icon: 'Fingerprint',
+    features: ['Kotak Direct Gateway', 'Zero Transaction Fallback', 'Instant Aadhaar Cash Out', 'Real-time Commission']
+  },
+  {
+    title: 'Mobile Prepaid',
+    description: 'Instant prepaid mobile recharges across all telecom circles for Jio, Airtel, Vi, and BSNL with automated plan fetch and commission credit.',
+    tag: 'Telecom Gateway',
+    color: 'from-green-500/20 via-emerald-500/20 to-lime-500/20',
+    accentColor: 'text-green-500',
+    icon: 'Smartphone',
+    features: ['All Telecom Operators', 'Special Offer / R-Offer Fetch', 'Instant Recharge Status', 'Highest Commission']
+  },
+  {
+    title: 'DTH Recharge',
+    description: 'Instant recharge and pack activation for Tata Play, Airtel DTH, Dish TV, Sun Direct, and D2H with real-time customer info lookup.',
+    tag: 'DTH Gateway',
+    color: 'from-purple-500/20 via-fuchsia-500/20 to-pink-500/20',
+    accentColor: 'text-purple-500',
+    icon: 'Tv',
+    features: ['Customer Info / Name Fetch', 'Plan Refresh Support', 'All Major DTH Operators', 'Instant Balance Update']
+  },
+  {
+    title: 'Electricity',
+    description: 'Online electricity bill payments for 100+ state and private power distribution boards across India with instant BBPS digital receipts.',
+    tag: 'Power Utility',
+    color: 'from-yellow-500/20 via-amber-500/20 to-orange-500/20',
+    accentColor: 'text-yellow-500',
+    icon: 'Zap',
+    features: ['All State Electricity Boards', 'Automated Bill Fetch', 'Instant Official Receipt', 'Zero Surcharge Mode']
+  },
+  {
+    title: 'BBPS',
+    description: 'Bharat Bill Payment System unified platform for water, piped gas, broadband, municipal tax, landline, and recurring utility bill collections.',
+    tag: 'NPCI BBPS',
+    color: 'from-cyan-500/20 via-blue-500/20 to-indigo-500/20',
+    accentColor: 'text-cyan-500',
+    icon: 'ReceiptText',
+    features: ['20,000+ Verified Billers', 'Instant Bill Validation', 'Assured Cashbacks', 'NPCI Certified Switch']
+  },
+  {
+    title: 'UPI TRANSFER',
+    description: 'Instant P2P and P2M money transfers directly using UPI VPA ID or QR code with 24x7 instant credit and double encryption protection.',
+    tag: 'UPI Gateway',
+    color: 'from-blue-500/20 via-sky-500/20 to-teal-500/20',
+    accentColor: 'text-blue-500',
+    icon: 'Send',
+    features: ['Transfer via UPI ID / VPA', 'Real-Time Bank Settlement', '24x7 Instant Transfer', 'Encrypted Security']
+  },
+  {
+    title: 'Money Transfer',
+    description: 'Domestic Money Transfer (DMT) to any bank account in India 24x7 via IMPS / NEFT with instant beneficiary verification and SMS alerts.',
+    tag: 'Domestic Remittance',
+    color: 'from-indigo-500/20 via-purple-500/20 to-violet-500/20',
+    accentColor: 'text-indigo-500',
+    icon: 'Banknote',
+    features: ['Instant IMPS Route', 'Instant Name Verification', 'All National & Rural Banks', 'Lowest Surcharge']
+  },
+  {
+    title: 'PAN UTI',
+    description: 'Official UTI Infrastructure Technology and Services Limited (UTIITSL) PSA portal login and PAN card generation center.',
+    tag: 'UTI PSA Official',
+    color: 'from-orange-500/20 via-amber-500/20 to-yellow-500/20',
+    accentColor: 'text-orange-500',
+    icon: 'FileText',
+    features: ['Direct UTI PSA Access', 'Coupons & Token System', 'Minor & Major PAN Cards', 'Correction & Reprint']
+  },
+  {
+    title: 'PAN NSDL',
+    description: 'Official Protean (NSDL) e-Governance PAN card processing platform with biometric fingerprint and OTP based instant paperless approval.',
+    tag: 'NSDL Protean',
+    color: 'from-blue-500/20 via-indigo-500/20 to-cyan-500/20',
+    accentColor: 'text-blue-500',
+    icon: 'FileText',
+    features: ['Protean NSDL Integration', 'Paperless 2-Hour e-PAN', 'Biometric Thumb Approval', 'Physical Card Delivery']
+  },
+  {
+    title: 'Fastag Recharge',
+    description: 'Instant national highway FASTag recharge for all issuing banks (SBI, ICICI, HDFC, Axis, Paytm, IDFC) with vehicle number lookup.',
+    tag: 'Toll & FASTag',
+    color: 'from-emerald-500/20 via-green-500/20 to-teal-500/20',
+    accentColor: 'text-emerald-500',
+    icon: 'Car',
+    features: ['All Issuing Banks', 'Vehicle Plate Lookup', 'Instant NETC Toll Sync', 'Zero Failure Route']
+  },
+  {
+    title: 'mATM',
+    description: 'Micro ATM debit card cash withdrawal and PIN pad balance inquiry terminal with NPCI certification and bluetooth POS connectivity.',
+    tag: 'Micro ATM POS',
+    color: 'from-rose-500/20 via-pink-500/20 to-red-500/20',
+    accentColor: 'text-rose-500',
+    icon: 'Calculator',
+    features: ['All Indian Bank Debit Cards', 'High Transaction Limit', 'Bluetooth Device Sync', 'Instant Settlement']
+  },
+  {
+    title: 'Train Ticket Booking',
+    description: 'Official IRCTC Rail ticketing agent channel. Book Tatkal, General, and Premium train tickets with instant PNR and refund status.',
+    tag: 'IRCTC Authorized',
+    color: 'from-amber-500/20 via-orange-500/20 to-red-500/20',
+    accentColor: 'text-amber-500',
+    icon: 'TrainTrack',
+    features: ['Official IRCTC Rail Agent', 'Tatkal & General Booking', 'Instant PNR Confirmation', 'Automated Refund Policy']
+  },
+  {
+    title: 'LIC',
+    description: 'Life Insurance Corporation of India (LIC) premium collection service with automated policy status check and instant official receipt.',
+    tag: 'LIC Premium Pay',
+    color: 'from-blue-500/20 via-indigo-500/20 to-emerald-500/20',
+    accentColor: 'text-blue-500',
+    icon: 'ShieldCheck',
+    features: ['Direct LIC India Gateway', 'Policy Due Date & Info', 'Instant Premium Receipt', 'Zero Extra Surcharge']
+  }
 ];
 
 export const partnerTickers = [

@@ -8,7 +8,6 @@ import ServicesSection from '../services/ServicesSection';
 import JourneySection from '../journey/JourneySection';
 import PricingSection from '../pricing/PricingSection';
 import TestimonialsSection from '../testimonials/TestimonialsSection';
-import ProvidersSection from '../providers/ProvidersSection';
 import FaqsSection from '../faqs/Faqs';
 import ContactSection from '../contact/ContactSection';
 import CtaDownloadButton from '../ctadownloads/CtaDownloadButton';
@@ -45,9 +44,9 @@ function Homepage() {
       </div>
 
       {/* 6. Service Providers + Ecosystem */}
-      <div id="providers">
+      {/* <div id="providers">
         <ProvidersSection />
-      </div>
+      </div> */}
 
       {/* 7. Testimonials Marquee */}
       <div id="testimonials">

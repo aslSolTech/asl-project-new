@@ -20,7 +20,7 @@ const items = FAQS_ITEMS_CONSTANT;
 export default function FaqsSection() {
   return (
     <section id="faqs" className="py-20 bg-muted/20 border-t border-border">
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-16">

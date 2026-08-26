@@ -30,7 +30,7 @@ export default function Header() {
           <div className="flex items-center gap-4">
             <AnimatedThemeToggler variant="hexagon" duration={300} fromCenter className="z-10 cursor-pointer"/>
             <NavbarButton onClick={() => router.push("/login")} variant="outline">Login</NavbarButton>
-            <NavbarButton onClick={() => router.push("#download")} variant="gradient">Download App</NavbarButton>
+            <NavbarButton onClick={() => router.push("#download")} variant="primary">Download App</NavbarButton>
           </div>
         </NavBody>
 

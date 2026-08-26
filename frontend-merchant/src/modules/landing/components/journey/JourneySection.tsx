@@ -2,8 +2,8 @@
 
 import { motion } from 'framer-motion';
 import { steps } from '../../constants';
-import { ArrowRight, Check } from 'lucide-react';
-import Link from 'next/link';
+import { Check } from 'lucide-react';
+import Image from 'next/image';
 
 export default function JourneySection() {
   return (
@@ -15,7 +15,7 @@ export default function JourneySection() {
       />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[300px] bg-primary/5 rounded-full blur-3xl pointer-events-none -z-10" />
 
-      <div className="mx-auto max-w-7xl relative">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
         
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
@@ -39,10 +39,10 @@ export default function JourneySection() {
                 key={step.title}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                whileHover={{ y: -6, scale: 1.02 }}
+                whileHover={{ y: -6, scale: 1.015 }}
                 transition={{ duration: 0.3, delay: index * 0.08 }}
                 viewport={{ once: true }}
-                className="group p-6 rounded-2xl border border-border bg-card shadow-xs hover:border-primary/60 hover:shadow-xl hover:shadow-primary/5 transition-all flex flex-col justify-between cursor-pointer relative overflow-hidden"
+                className="group p-6 rounded-2xl border border-border/80 bg-card shadow-xs hover:border-primary/50 hover:shadow-xl hover:shadow-primary/5 transition-all flex flex-col justify-between cursor-pointer relative overflow-hidden"
               >
                 {/* Large Background Step Number Watermark */}
                 <span className="absolute -right-2 -top-3 text-7xl font-black text-foreground/[0.03] dark:text-foreground/[0.05] group-hover:text-primary/[0.08] font-mono select-none pointer-events-none transition-colors">
@@ -67,7 +67,7 @@ export default function JourneySection() {
                   </p>
                 </div>
 
-                <div className="flex items-center justify-between gap-1.5 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400 pt-4 border-t border-border relative z-10">
+                <div className="flex items-center justify-between gap-1.5 text-[11px] font-semibold text-secondary pt-4 border-t border-border relative z-10">
                   <div className="flex items-center gap-1.5">
                     <Check className="w-3.5 h-3.5" />
                     <span>Instant Verification</span>
@@ -79,7 +79,7 @@ export default function JourneySection() {
           })}
         </div>
 
-        {/* Ground Reality Network Showcase (Village & Town Market CSP Connection) */}
+        {/* Ground Reality Network Showcase */}
         <div className="mt-16 pt-12 border-t border-border">
           <div className="text-center max-w-xl mx-auto mb-8">
             <span className="text-xs font-bold uppercase tracking-wider text-primary mb-1 block">
@@ -101,18 +101,19 @@ export default function JourneySection() {
               className="rounded-2xl border border-border bg-card overflow-hidden shadow-md group cursor-pointer flex flex-col justify-between"
             >
               <div className="relative aspect-video w-full overflow-hidden bg-muted">
-                <img 
-                  src="/images/village-csp.jpg" 
-                  alt="Rural Village CSP Point in Rajasthan" 
-                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                <Image 
+                  src="/images/csp.png" 
+                  alt="Rural Village CSP Point" 
+                  fill
+                  className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
                 />
-                <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-background/90 backdrop-blur-md border border-border text-foreground text-[11px] font-bold shadow-xs">
+                <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-background/90 backdrop-blur-md border border-border text-foreground text-[11px] font-bold shadow-xs z-10">
                   Gramin Banking (Village CSP)
                 </div>
               </div>
               <div className="p-5 border-t border-border">
                 <h4 className="font-bold text-base text-foreground mb-1 group-hover:text-primary transition-colors">
-                  Aadhaar Cash Point • Rajasthan
+                  Aadhaar Cash Point
                 </h4>
                 <p className="text-xs text-muted-foreground leading-relaxed">
                   Bringing instant AePS cash withdrawals & pension disbursements to local villagers without needing a distant bank branch.
@@ -120,24 +121,25 @@ export default function JourneySection() {
               </div>
             </motion.div>
 
-            {/* Bihar ASL WALLETS Banking CSP Point Card */}
+            {/* ASL WALLETS Banking CSP Point Card */}
             <motion.div 
               whileHover={{ y: -5 }}
               className="rounded-2xl border border-border bg-card overflow-hidden shadow-md group cursor-pointer flex flex-col justify-between"
             >
               <div className="relative aspect-video w-full overflow-hidden bg-muted">
-                <img 
-                  src="/images/bihar-csp-point.jpg" 
-                  alt="ASL WALLETS Banking CSP Point in Bihar" 
-                  className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                <Image 
+                  src="/images/csp.png" 
+                  alt="ASL WALLETS Banking CSP Point" 
+                  fill
+                  className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
                 />
-                <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-primary text-primary-foreground text-[11px] font-bold shadow-xs">
-                  ASL WALLETS Official CSP (Bihar)
+                <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-primary text-primary-foreground text-[11px] font-bold shadow-xs z-10">
+                  ASL WALLETS Official CSP
                 </div>
               </div>
               <div className="p-5 border-t border-border">
                 <h4 className="font-bold text-base text-foreground mb-1 group-hover:text-primary transition-colors">
-                  ASL WALLETS Banking Center • Bihar
+                  ASL WALLETS Banking Center 
                 </h4>
                 <p className="text-xs text-muted-foreground leading-relaxed">
                   AePS cash withdrawal, money transfer, mobile recharge & instant account opening center serving the local market.
@@ -146,17 +148,6 @@ export default function JourneySection() {
             </motion.div>
 
           </div>
-        </div>
-
-        {/* CTA Bar */}
-        <div className="mt-14 text-center">
-          <Link
-            href="/signup"
-            className="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-primary text-primary-foreground font-bold text-xs shadow-lg shadow-primary/25 hover:bg-primary/90 hover:shadow-xl hover:shadow-primary/35 transition-all cursor-pointer"
-          >
-            <span>Start Free Merchant Registration</span>
-            <ArrowRight className="w-4 h-4" />
-          </Link>
         </div>
 
       </div>

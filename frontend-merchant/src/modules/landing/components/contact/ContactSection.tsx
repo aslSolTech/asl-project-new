@@ -104,7 +104,7 @@ export default function ContactSection() {
 
   return (
     <section id="contact" className="py-20 bg-background border-t border-border">
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-16">

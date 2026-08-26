@@ -44,7 +44,7 @@ export const DashboardHeader = memo(function DashboardHeader() {
   const breadcrumbs = useMemo(() => generateBreadcrumbs(pathname), [pathname]);
 
   return (
-    <header className="sticky top-0 z-40 backdrop-blur-xl bg-white/70 dark:bg-slate-900/80 border-b border-white/40 dark:border-slate-800 shadow-sm h-16 flex items-center justify-between px-4 md:px-6 transition-colors">
+    <header className="sticky top-0 z-40 backdrop-blur-xl bg-white/70 dark:bg-slate-900/80 shadow-sm h-16 flex items-center justify-between px-4 md:px-6 transition-colors">
       <div className="flex items-center gap-4">
         <SidebarTrigger className="lg:hidden text-slate-700 dark:text-slate-200">
           <PanelLeft className="w-5 h-5" />

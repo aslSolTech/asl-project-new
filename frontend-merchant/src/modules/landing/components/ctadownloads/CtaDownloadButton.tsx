@@ -7,7 +7,7 @@ import { Download, Star } from 'lucide-react';
 export default function CtaDownloadButton() {
   return (
     <section id="download" className="py-20 relative scroll-mt-20 overflow-hidden">
-      <div className="relative mx-auto max-w-7xl">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="rounded-3xl border border-border bg-card p-8 sm:p-12 lg:p-16 shadow-2xl overflow-hidden relative">
           
           {/* Subtle Fintech Illustration Matrix in Download Card */}

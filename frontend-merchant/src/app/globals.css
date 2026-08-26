@@ -88,10 +88,6 @@
   --sidebar-ring: oklch(0.70 0.21 42);
 }
 
-/* Make transparent logo text (WALLETS black text) pop with subtle white glow in dark mode */
-.dark img[src*="asl_logo"] {
-  filter: drop-shadow(0 0 1.5px rgba(255, 255, 255, 0.8)) drop-shadow(0 1px 4px rgba(255, 255, 255, 0.2));
-}
 
 
 @theme inline {

@@ -33,13 +33,17 @@ export default function Footer() {
   ];
 
   const quickServices = [
-    'AEPS Cash Withdrawal',
-    'Domestic Money Transfer',
-    'Bharat BillPay (BBPS)',
-    'Prepaid & Postpaid Recharge',
-    'Electricity & Gas Utility',
-    'Insurance & POSP Policies',
-    'Travel & IRCTC Booking',
+    'AEPS (Yes Bank & Kotak)',
+    'Domestic Money Transfer (DMT)',
+    'Book Flight & IRCTC Train Tickets',
+    'Bharat BillPay (BBPS) & Electricity',
+    'Mobile Prepaid & DTH Recharge',
+    'PAN Card (INSPAY, NSDL, UTI)',
+    'Card To Cash & Micro ATM',
+    'Gift Cards & Google Play Codes',
+    'LIC Premium & Insurance Policy',
+    'FASTag Highway Toll Recharge',
+    'UPI Transfer & Payout Gateway',
   ];
 
   return (
@@ -47,29 +51,29 @@ export default function Footer() {
 
       {/* Newsletter Section */}
       <div className="border-b border-border">
-        <div className="mx-auto max-w-7xl">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="relative rounded-2xl my-10 overflow-hidden bg-gradient-to-br from-primary via-primary/95 to-secondary p-8 sm:p-10 shadow-xl shadow-primary/20"
+            className="relative rounded-2xl my-10 overflow-hidden bg-card border border-border/80 dark:border-primary/20 p-8 sm:p-10 shadow-lg shadow-black/5 dark:shadow-black/20"
           >
-            {/* Decorative glow blobs */}
-            <div className="absolute -top-10 -right-10 h-40 w-40 rounded-full bg-white/10 blur-2xl pointer-events-none" />
-            <div className="absolute -bottom-8 -left-8 h-32 w-32 rounded-full bg-emerald-300/20 blur-2xl pointer-events-none" />
+            {/* Subtle gentle ambient aura (dark mode friendly, non-glaring) */}
+            <div className="absolute top-0 right-0 h-48 w-48 rounded-full bg-primary/5 dark:bg-primary/10 blur-3xl pointer-events-none" />
+            <div className="absolute bottom-0 left-0 h-40 w-40 rounded-full bg-secondary/5 dark:bg-secondary/10 blur-3xl pointer-events-none" />
 
             <div className="relative grid gap-8 md:grid-cols-2 items-center">
               {/* Left text */}
               <div>
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 border border-white/20 px-3 py-1 text-xs font-semibold text-white mb-3">
-                  <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" />{' '}
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 border border-primary/20 px-3 py-1 text-xs font-semibold text-primary mb-3">
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />{' '}
                   Our Newsletter
                 </span>
-                <h3 className="text-2xl sm:text-3xl font-extrabold text-white mb-2">
-                  Get the best of all worlds at one stop ASL WALLETS
+                <h3 className="text-2xl sm:text-3xl font-extrabold text-foreground mb-2">
+                  Get the best of all worlds at one stop <span className="text-primary">ASL WALLETS</span>
                 </h3>
-                <p className="text-white/85 text-sm leading-relaxed max-w-lg">
+                <p className="text-muted-foreground text-sm leading-relaxed max-w-lg">
                   Skim through our extensive range of services which make life effortless and hassle-free. Stay updated with commission alerts and new banking rollouts.
                 </p>
               </div>
@@ -80,18 +84,18 @@ export default function Footer() {
                   <input
                     type="email"
                     placeholder="Enter your email address"
-                    className="flex-1 px-4 py-3.5 rounded-xl border-0 bg-white/15 backdrop-blur-sm text-white placeholder-white/60 focus:outline-none focus:ring-2 focus:ring-white/40 text-sm"
+                    className="flex-1 px-4 py-3.5 rounded-xl border border-border bg-muted/40 text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50 text-sm"
                   />
                   <motion.button
-                    whileHover={{ scale: 1.04 }}
-                    whileTap={{ scale: 0.96 }}
-                    className="px-6 py-3.5 rounded-xl bg-white text-primary font-bold text-sm hover:bg-white/90 transition-all flex items-center justify-center gap-2 whitespace-nowrap shadow-lg cursor-pointer"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="px-6 py-3.5 rounded-xl bg-primary text-primary-foreground font-bold text-sm hover:bg-primary/90 transition-all flex items-center justify-center gap-2 whitespace-nowrap shadow-md shadow-primary/20 cursor-pointer"
                   >
                     Subscribe
                     <ArrowRight className="h-4 w-4" />
                   </motion.button>
                 </div>
-                <p className="text-white/60 text-xs mt-3">
+                <p className="text-muted-foreground text-xs mt-3">
                   No spam. Unsubscribe anytime. We respect your privacy.
                 </p>
               </div>
@@ -101,7 +105,7 @@ export default function Footer() {
       </div>
 
       {/* Main Footer Content */}
-      <div className="mx-auto max-w-7xl pt-14 pb-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-14 pb-8">
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -190,51 +194,59 @@ export default function Footer() {
             </ul>
           </motion.div>
 
-          {/* 60+ Aggregated Services (2 Cols) */}
-          <motion.div variants={itemVariants} className="lg:col-span-2">
-            <h4 className="font-bold text-foreground mb-4 text-xs uppercase tracking-wider">Key Services</h4>
-            <ul className="space-y-2.5">
+          {/* 60+ Aggregated Services (6 Cols - 2 column clean single-line layout) */}
+          <motion.div variants={itemVariants} className="lg:col-span-6">
+            <h4 className="font-bold text-foreground mb-4 text-xs uppercase tracking-wider">All Digital & Banking Services</h4>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2.5">
               {quickServices.map((service) => (
-                <li key={service} className="text-xs text-muted-foreground flex items-center gap-1.5">
-                  <span className="h-1 w-1 rounded-full bg-primary/60" />
-                  {service}
+                <li key={service} className="text-xs text-muted-foreground flex items-center gap-2 whitespace-nowrap overflow-hidden">
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary/60 shrink-0" />
+                  <span className="truncate hover:text-foreground transition-colors">{service}</span>
                 </li>
               ))}
             </ul>
           </motion.div>
+        </motion.div>
 
-          {/* Official Registered & Corporate Addresses (4 Cols) */}
-          <motion.div variants={itemVariants} className="lg:col-span-4 space-y-4">
-            <h4 className="font-bold text-foreground mb-3 text-xs uppercase tracking-wider flex items-center gap-2">
-              <Building className="w-4 h-4 text-primary" />
-              <span>Contact Us & Locations</span>
-            </h4>
+        {/* Contact Us & Office Locations (Bottom Row) */}
+        <motion.div
+          variants={itemVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="mb-12 p-6 rounded-2xl border border-border bg-card/50"
+        >
+          <h4 className="font-bold text-foreground mb-4 text-xs uppercase tracking-wider flex items-center gap-2">
+            <Building className="w-4 h-4 text-primary" />
+            <span>Official Registered & Corporate Office Locations</span>
+          </h4>
 
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Registered Office */}
-            <div className="p-3 rounded-xl border border-border bg-card text-xs space-y-1">
-              <span className="font-bold text-primary block">Registered Office:</span>
-              <p className="text-foreground/90 font-medium">ASL Solutions Tech Pvt. Ltd.</p>
+            <div className="p-4 rounded-xl border border-border bg-card text-xs space-y-1.5 shadow-xs">
+              <span className="font-bold text-primary block">Registered Office</span>
+              <p className="text-foreground font-semibold">ASL Solutions Tech Pvt. Ltd.</p>
               <p className="text-muted-foreground leading-relaxed text-[11px]">
                 12 Hachimpur, Baharu, Jaynagar, 24 South Parganas, West Bengal, India - 743372
               </p>
             </div>
 
             {/* Kolkata Corporate Office */}
-            <div className="p-3 rounded-xl border border-border bg-card text-xs space-y-1">
-              <span className="font-bold text-foreground block">Corporate Office (Kolkata):</span>
+            <div className="p-4 rounded-xl border border-border bg-card text-xs space-y-1.5 shadow-xs">
+              <span className="font-bold text-foreground block">Corporate Office (Kolkata)</span>
               <p className="text-muted-foreground leading-relaxed text-[11px]">
                 Katjunagar, Jadavpur, Near South City Mall, Kolkata - 700032
               </p>
             </div>
 
             {/* Noida Corporate Office */}
-            <div className="p-3 rounded-xl border border-border bg-card text-xs space-y-1">
-              <span className="font-bold text-foreground block">Corporate Office (Noida):</span>
+            <div className="p-4 rounded-xl border border-border bg-card text-xs space-y-1.5 shadow-xs">
+              <span className="font-bold text-foreground block">Corporate Office (Noida)</span>
               <p className="text-muted-foreground leading-relaxed text-[11px]">
                 Procapitus Business Park, D-247, 4A, D Block, Sector 63, Noida - 201309
               </p>
             </div>
-          </motion.div>
+          </div>
         </motion.div>
 
         {/* Divider */}

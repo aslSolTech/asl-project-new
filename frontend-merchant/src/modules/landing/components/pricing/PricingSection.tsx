@@ -8,7 +8,7 @@ import Link from 'next/link';
 export default function PricingSection() {
   return (
     <section id="pricing" className="py-20 md:py-24 bg-muted/20 border-t border-border relative overflow-hidden">
-      <div className="mx-auto max-w-7xl relative">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
         
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
@@ -23,7 +23,7 @@ export default function PricingSection() {
           </p>
         </div>
 
-        {/* Pricing Cards Grid (Balanced 4-Col Grid with No Overflow) */}
+        {/* Pricing Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
           {plans.map((plan, index) => {
             const isPopular = Boolean(plan.popular);
@@ -76,7 +76,7 @@ export default function PricingSection() {
                     <ul className="space-y-2.5">
                       {plan.features.map((feat) => (
                         <li key={feat} className="flex items-center gap-2.5 text-xs text-foreground/90">
-                          <div className="w-4 h-4 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                          <div className="w-4 h-4 rounded-full bg-secondary/10 text-secondary flex items-center justify-center shrink-0">
                             <Check className="w-2.5 h-2.5" />
                           </div>
                           <span className="leading-tight">{feat}</span>
@@ -107,7 +107,7 @@ export default function PricingSection() {
 
         {/* Bottom Trust Note */}
         <div className="text-center mt-12 flex flex-col sm:flex-row items-center justify-center gap-2 text-xs text-muted-foreground">
-          <div className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-bold">
+          <div className="flex items-center gap-1 text-secondary font-bold">
             <ShieldCheck className="w-4 h-4" />
             <span>Zero Annual Renewal Fee</span>
           </div>

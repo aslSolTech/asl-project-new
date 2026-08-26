@@ -6,25 +6,25 @@ import { NoticeBoard } from "@/modules/merchant/components/notice-board/NoticeBo
 
 const stats = [
   {
-    title: "Total Sent",
+    title: "Total Volume Settled",
     value: "₹10,58,450.00",
-    change: "+8.2%",
+    change: "+8.2% today",
     icon: ArrowUpRight,
-    color: "emerald",
+    isPositive: true,
   },
   {
     title: "Success Rate",
     value: "1,247 Transfers",
-    change: "98.5%",
+    change: "99.8% uptime",
     icon: CheckCircle2,
-    color: "indigo",
+    isPositive: true,
   },
   {
-    title: "In Progress",
+    title: "In Progress / Processing",
     value: "18 Transfers",
-    change: "Pending",
+    change: "Auto-clearing",
     icon: Clock,
-    color: "amber",
+    isPositive: false,
   },
 ];
 
@@ -45,7 +45,7 @@ const transactions = [
     email: "priya@example.com",
     initials: "PP",
     amount: "₹1,25,000.00",
-    status: "Pending",
+    status: "Processing",
     date: "Aug 1, 2026",
     method: "NEFT / RTGS",
   },
@@ -57,7 +57,7 @@ const transactions = [
     amount: "₹32,000.00",
     status: "Completed",
     date: "Jul 30, 2026",
-    method: "UPI",
+    method: "AEPS Cashout",
   },
 ];
 
@@ -65,89 +65,97 @@ export default function DashboardPage() {
   return (
     <div className="space-y-8">
       <NoticeBoard />
-      <div>
-        <h1 className="text-3xl font-bold text-slate-800 dark:text-slate-100 mb-2">Transactions & Transfer Overview</h1>
-        <p className="text-slate-500 dark:text-slate-400">Manage and track your domestic UPI & NEFT/IMPS transactions securely with ASL Wallets.</p>
+      
+      {/* Header Overview Banner */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
+            Transactions & Terminal Overview
+          </h1>
+          <p className="text-sm text-muted-foreground mt-1">
+            Real-time telemetry and instant multi-pipe settlement logs for your CSP retail node.
+          </p>
+        </div>
+
+        <div className="flex items-center gap-2.5">
+          <Button variant="outline" size="sm" className="text-xs font-semibold">
+            Export Logs
+          </Button>
+          <Button size="sm" className="bg-primary text-primary-foreground font-semibold shadow-xs">
+            + Quick Transfer
+          </Button>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* Stats Cards Row */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         {stats.map((stat) => (
           <Card
             key={stat.title}
-            className="bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border-white/50 dark:border-slate-800 shadow-sm hover:shadow-md transition-all"
+            className="bg-card/90 backdrop-blur-xl border-border/80 shadow-xs hover:shadow-md transition-all hover:border-primary/40"
           >
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <div
-                className="w-12 h-12 rounded-xl bg-blue-50 dark:bg-blue-950/50 flex items-center justify-center"
-              >
-                <stat.icon className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+              <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+                <stat.icon className="w-5 h-5" />
               </div>
               <Badge
                 variant="secondary"
-                className="bg-orange-50 dark:bg-orange-950/60 text-orange-600 dark:text-orange-300 hover:bg-orange-100"
+                className="bg-secondary/10 text-secondary border border-secondary/20 text-[11px] font-bold"
               >
                 {stat.change}
               </Badge>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-slate-500 dark:text-slate-400 mb-1">{stat.title}</p>
-              <p className="text-2xl font-bold text-slate-800 dark:text-slate-100">{stat.value}</p>
+              <p className="text-xs font-medium text-muted-foreground mb-1">{stat.title}</p>
+              <p className="text-2xl font-black text-foreground tracking-tight">{stat.value}</p>
             </CardContent>
           </Card>
         ))}
       </div>
 
-      <Card className="bg-white/70 dark:bg-slate-900/70 backdrop-blur-xl border-white/50 dark:border-slate-800 shadow-sm overflow-hidden">
-        <CardHeader className="border-b border-slate-100 dark:border-slate-800 flex flex-row items-center justify-between">
-          <CardTitle className="text-base font-semibold text-slate-800 dark:text-slate-100">Recent Transfers</CardTitle>
-          <Button variant="link" className="hover:no-underline text-sm text-secondary dark:text-blue-400 hover:text-secondary font-medium transition-colors">
-            View All
-          </Button>
+      {/* Recent Live Transactions Card */}
+      <Card className="bg-card/90 backdrop-blur-xl border-border/80 shadow-xs overflow-hidden">
+        <CardHeader className="flex flex-row items-center justify-between border-b border-border/60 py-4 px-6">
+          <div>
+            <CardTitle className="text-base font-bold text-foreground">Recent Live Settlement Feed</CardTitle>
+            <p className="text-xs text-muted-foreground mt-0.5">Real-time multi-pipe transactions across retail nodes</p>
+          </div>
+          <Badge variant="outline" className="text-[11px] font-semibold border-border bg-muted/40">
+            Auto-Sync 10s
+          </Badge>
         </CardHeader>
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">
-                <th className="px-6 py-3">Recipient</th>
-                <th className="px-6 py-3">Amount</th>
-                <th className="px-6 py-3">Status</th>
-                <th className="px-6 py-3">Date</th>
-                <th className="px-6 py-3">Method</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-              {transactions.map((tx) => (
-                <tr key={tx.id} className="hover:bg-white/50 dark:hover:bg-slate-800/40 transition-colors">
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-600 to-slate-800 flex items-center justify-center text-white text-xs font-bold border border-orange-500/30">
-                        {tx.initials}
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium text-slate-800 dark:text-slate-200">{tx.recipient}</p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">{tx.email}</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-sm font-medium text-slate-800 dark:text-slate-200">{tx.amount}</td>
-                  <td className="px-6 py-4">
-                    <Badge
-                      variant="secondary"
-                      className={
-                        tx.status === "Completed"
-                          ? "bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 hover:bg-emerald-100"
-                          : "bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 hover:bg-amber-100"
-                      }>
-                      {tx.status}
-                    </Badge>
-                  </td>
-                  <td className="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">{tx.date}</td>
-                  <td className="px-6 py-4 text-sm text-slate-500 dark:text-slate-400">{tx.method}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+
+        <CardContent className="p-0">
+          <div className="divide-y divide-border/60">
+            {transactions.map((txn) => (
+              <div
+                key={txn.id}
+                className="flex items-center justify-between p-4 px-6 hover:bg-muted/40 transition-colors text-xs sm:text-sm"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-primary/10 text-primary font-bold flex items-center justify-center text-xs">
+                    {txn.initials}
+                  </div>
+                  <div>
+                    <span className="font-bold text-foreground block">{txn.recipient}</span>
+                    <span className="text-xs text-muted-foreground">{txn.email} • {txn.method}</span>
+                  </div>
+                </div>
+
+                <div className="text-right">
+                  <span className="font-black text-foreground block">{txn.amount}</span>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full inline-block mt-0.5 ${
+                    txn.status === 'Completed' 
+                      ? 'bg-secondary/10 text-secondary' 
+                      : 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
+                  }`}>
+                    {txn.status}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
       </Card>
     </div>
   );
