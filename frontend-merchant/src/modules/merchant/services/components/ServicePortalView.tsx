@@ -76,7 +76,7 @@ const SERVICE_META: Record<
     reportRoute: "/dashboard/reports/mobile-recharge",
   },
   "aeps-yes-bank": {
-    title: "AEPS - Yes Bank Pipe",
+    title: "AEPS - Yes Bank",
     category: "Banking & AEPS",
     icon: Fingerprint,
     badge: "YES BANK GATEWAY",
@@ -84,7 +84,7 @@ const SERVICE_META: Record<
     reportRoute: "/dashboard/reports/aeps",
   },
   "aeps-kotak-bank": {
-    title: "AEPS - Kotak Bank Pipe",
+    title: "AEPS - Kotak Bank",
     category: "Banking & AEPS",
     icon: Fingerprint,
     badge: "KOTAK 2-FACTOR",

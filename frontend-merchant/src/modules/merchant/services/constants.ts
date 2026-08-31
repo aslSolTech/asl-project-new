@@ -38,7 +38,7 @@ export const SERVICES_CONFIG: ServiceItem[] = [
     badge: "KOTAK",
     status: "ACTIVE",
     route: "/dashboard/services/aeps-kotak-bank",
-    description: "Aadhaar Enabled Payment System with Kotak Mahindra Bank pipe.",
+    description: "Aadhaar Enabled Payment System with Kotak Mahindra Bank gateway.",
   },
   {
     id: "mobile-prepaid",
