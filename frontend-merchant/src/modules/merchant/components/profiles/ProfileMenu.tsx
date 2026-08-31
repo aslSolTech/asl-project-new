@@ -22,6 +22,7 @@ export const ProfileMenu = memo(function ProfileMenu() {
     ? formatISODate({ date: user.lastLogin, formatType: "short" })
     : null;
 
+  const role = user.role.slice(0, 1).toUpperCase() + user.role.slice(1);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="flex items-center gap-3 px-1.5 py-1 rounded-xl hover:bg-white/60 dark:hover:bg-slate-800/60 transition-all duration-200 group outline-none cursor-pointer">
@@ -55,7 +56,7 @@ export const ProfileMenu = memo(function ProfileMenu() {
                 <Sparkles className="w-3.5 h-3.5 text-amber-500" />
               </div>
               <p className="text-xs text-slate-500 dark:text-slate-400 truncate">{user.email}</p>
-              <p className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold mt-1">● {user.role}</p>
+              <p className="text-xs text-emerald-600 dark:text-emerald-400 font-semibold mt-1">● {role}</p>
             </div>
           </div>
 

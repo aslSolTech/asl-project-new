@@ -30,8 +30,13 @@ function generateBreadcrumbs(pathname: string) {
   let currentPath = "";
   pathSegments.slice(1).forEach((seg) => {
     currentPath += `/${seg}`;
+    const fallbackLabel = seg
+      .split(/[-_]/)
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+
     crumbs.push({
-      label: BREADCRUMB_LABEL_MAP[seg] || seg.charAt(0).toUpperCase() + seg.slice(1),
+      label: BREADCRUMB_LABEL_MAP[seg] || fallbackLabel,
       href: `${baseDashboardHref}${currentPath}`,
     });
   });
