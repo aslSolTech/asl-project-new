@@ -1,23 +1,25 @@
+export const TRANSACTION_TYPE_OPTIONS = [
+  { label: "Service", value: "service" },
+  { label: "Fund", value: "fund" },
+  { label: "Website", value: "website" },
+  { label: "Others", value: "others" },
+] as const;
+
 export const messagesFieldsConfig = [
   {
-    key: "name",
-    label: "Name",
-    type: "text",
-    placeholder: "Enter name...",
-    required: true
+    key: "transactionType",
+    label: "Transaction Type",
+    type: "select",
+    placeholder: "Select transaction type...",
+    required: true,
+    options: TRANSACTION_TYPE_OPTIONS,
   },
   {
     key: "message",
     label: "Message",
-    type: "text",
-    placeholder: "Enter message...",
-    required: true
+    type: "textarea",
+    placeholder: "Write your message here...",
+    required: true,
+    rows: 4,
   },
-  {
-    key: "status",
-    label: "Status",
-    type: "text",
-    placeholder: "Enter status...",
-    required: true
-  }
 ] as const;

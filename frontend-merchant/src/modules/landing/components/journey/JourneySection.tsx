@@ -105,6 +105,7 @@ export default function JourneySection() {
                   src="/images/csp.png" 
                   alt="Rural Village CSP Point" 
                   fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-background/90 backdrop-blur-md border border-border text-foreground text-[11px] font-bold shadow-xs z-10">
@@ -131,6 +132,7 @@ export default function JourneySection() {
                   src="/images/csp.png" 
                   alt="ASL WALLETS Banking CSP Point" 
                   fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
                   className="object-cover object-center group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-primary text-primary-foreground text-[11px] font-bold shadow-xs z-10">

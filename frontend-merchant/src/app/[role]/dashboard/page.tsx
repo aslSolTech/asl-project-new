@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { NoticeBoard } from "@/modules/merchant/components/notice-board/NoticeBoard";
+import { DashboardCharts } from "@/modules/merchant/components/dashboard/DashboardCharts";
 
 const stats = [
   {
@@ -112,6 +113,9 @@ export default function DashboardPage() {
           </Card>
         ))}
       </div>
+
+      {/* Analytics & Volume Charts (Recharts with Shadcn/UI Tooltip) */}
+      <DashboardCharts />
 
       {/* Recent Live Transactions Card */}
       <Card className="bg-card/90 backdrop-blur-xl border-border/80 shadow-xs overflow-hidden">

@@ -21,8 +21,9 @@ export function MessagesForm({ mode, initialData, onSuccess }: MessagesFormProps
 
   const form = useAppForm({
     defaultValues: {
-      name: initialData?.name ?? "",
+      transactionType: initialData?.transactionType ?? "",
       message: initialData?.message ?? "",
+      name: initialData?.name ?? "",
       status: initialData?.status ?? "",
     } as MessagesFormInput,
     onSubmit: async ({ value }) => {
@@ -77,6 +78,7 @@ export function MessagesForm({ mode, initialData, onSuccess }: MessagesFormProps
                     required={field.required}
                     textTransform={"textTransform" in field ? (field.textTransform as "uppercase" | "lowercase" | "capitalize") : undefined}
                     options={"options" in field ? field.options : undefined}
+                    rows={"rows" in field ? field.rows : undefined}
                     value={fieldState.state.value ?? ""}
                     onChange={(val) => fieldState.handleChange(val as Parameters<typeof fieldState.handleChange>[0])}
                     onBlur={fieldState.handleBlur}

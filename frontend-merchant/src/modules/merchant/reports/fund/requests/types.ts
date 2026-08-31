@@ -1,7 +1,13 @@
 export interface RequestsRecord {
   id: string;
-  requestId: string;
-  amount: string;
+  requestId?: string;
+  requestAmount: number | string;
+  requestFrom: string;
+  bankName: string;
+  transactionId: string;
+  paymentBy: string;
+  depositDate: string;
+  remarks?: string;
   status: string;
 }
 

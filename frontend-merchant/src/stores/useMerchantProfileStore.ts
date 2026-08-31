@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import { UserProfile } from "@/modules/merchant/types";
-import { DEFAULT_USER_PROFILE } from "@/modules/merchant/constants";
+import { UserProfile, MerchantKycData } from "@/modules/merchant/types";
+import { DEFAULT_USER_PROFILE, DEFAULT_MERCHANT_KYC } from "@/modules/merchant/constants";
 import { secureZustandStorage } from "@/lib/secureStorage";
 import { formatISODate } from "@/lib/datefns";
 
@@ -26,11 +26,13 @@ export interface MerchantProfile extends UserProfile {
   lastLogin: string; // ISO string
   loginHistory: LoginHistoryItem[];
   walletBalance: number;
+  kyc?: MerchantKycData;
 }
 
 interface MerchantProfileStore {
   profile: MerchantProfile;
   updateProfile: (data: Partial<MerchantProfile>) => void;
+  updateKyc: (kycData: Partial<MerchantKycData>) => void;
   updateAvatar: (avatarUrl: string) => void;
   addLoginHistory: (item: Omit<LoginHistoryItem, "id">) => void;
   addMoneyToWallet: (amount: number) => void;
@@ -88,6 +90,7 @@ const initialProfile: MerchantProfile = {
   status: "Active",
   loginHistory: initialLoginHistory,
   walletBalance: 45280.50,
+  kyc: DEFAULT_MERCHANT_KYC,
 };
 
 const formatDate = formatISODate();
@@ -102,6 +105,15 @@ export const useMerchantProfileStore = create<MerchantProfileStore>()(
           profile: {
             ...state.profile,
             ...data,
+          },
+        })),
+      updateKyc: (kycData) =>
+        set((state) => ({
+          profile: {
+            ...state.profile,
+            kyc: state.profile.kyc
+              ? { ...state.profile.kyc, ...kycData }
+              : ({ ...DEFAULT_MERCHANT_KYC, ...kycData } as MerchantKycData),
           },
         })),
       updateAvatar: (avatarUrl) =>

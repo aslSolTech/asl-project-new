@@ -1,6 +1,8 @@
 "use client";
 
-import { memo, useState } from "react";
+import { memo, useState, useMemo } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Wallet, Plus, CheckCircle2, Building2, QrCode, Smartphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -19,8 +21,18 @@ import { useMerchantProfileStore } from "@/stores/useMerchantProfileStore";
 const QUICK_AMOUNTS = [500, 1000, 2000, 5000, 10000];
 
 export const HeaderWalletWidget = memo(function HeaderWalletWidget() {
+  const pathname = usePathname();
+  const profileRole = useMerchantProfileStore((s) => s?.profile?.role);
   const walletBalance = useMerchantProfileStore((s) => s.profile.walletBalance ?? 45280.50);
   const addMoneyToWallet = useMerchantProfileStore((s) => s.addMoneyToWallet);
+
+  const roleSlug = useMemo(() => {
+    const segments = pathname.split("/").filter(Boolean);
+    if (segments.length > 0 && segments[1] === "dashboard") {
+      return segments[0];
+    }
+    return (profileRole || "distributor").toLowerCase().replace(/\s+/g, "-");
+  }, [pathname, profileRole]);
 
   const [open, setOpen] = useState(false);
   const [amount, setAmount] = useState<string>("");
@@ -56,8 +68,12 @@ export const HeaderWalletWidget = memo(function HeaderWalletWidget() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <div className="flex items-center gap-1.5 bg-gradient-to-r from-blue-50/90 via-slate-50/90 to-amber-50/90 dark:from-slate-800/90 dark:via-slate-800/60 dark:to-slate-900/90 border border-blue-200/60 dark:border-slate-700/80 rounded-xl px-2.5 py-1.5 shadow-xs backdrop-blur-md">
-        {/* Wallet Balance Display */}
-        <div className="flex items-center gap-2 pr-1">
+        {/* Wallet Balance Display (clickable link to Wallets page) */}
+        <Link
+          href={`/${roleSlug}/dashboard/wallets`}
+          className="flex items-center gap-2 pr-1 hover:opacity-80 transition-opacity cursor-pointer"
+          title="Open Wallets & Banking Dashboard"
+        >
           <div className="w-7 h-7 rounded-lg bg-blue-600 dark:bg-blue-500 text-white flex items-center justify-center shadow-xs">
             <Wallet className="w-3.5 h-3.5" />
           </div>
@@ -69,7 +85,7 @@ export const HeaderWalletWidget = memo(function HeaderWalletWidget() {
               ₹{(walletBalance || 0).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </span>
           </div>
-        </div>
+        </Link>
 
         {/* Add Money Popup Button */}
         <DialogTrigger

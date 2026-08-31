@@ -1,23 +1,51 @@
 export const requestsFieldsConfig = [
   {
-    key: "requestId",
-    label: "Request ID",
-    type: "text",
-    placeholder: "Enter request id...",
-    required: true
+    key: "requestAmount",
+    label: "Request Amount *",
+    type: "number",
+    placeholder: "Enter request amount...",
+    required: true,
   },
   {
-    key: "amount",
-    label: "Amount",
+    key: "requestFrom",
+    label: "Request From *",
     type: "text",
-    placeholder: "Enter amount...",
-    required: true
+    placeholder: "Admin",
+    required: true,
   },
   {
-    key: "status",
-    label: "Status",
+    key: "bankName",
+    label: "Bank Name (Beneficiary) *",
     type: "text",
-    placeholder: "Enter status...",
-    required: true
-  }
+    placeholder: "Select or enter beneficiary bank...",
+    required: true,
+  },
+  {
+    key: "transactionId",
+    label: "Transaction ID / Ref No. *",
+    type: "text",
+    placeholder: "Enter Google Pay / UPI transaction ID...",
+    required: true,
+  },
+  {
+    key: "paymentBy",
+    label: "Payment By (App Name) *",
+    type: "text",
+    placeholder: "Google Pay, PhonePe, Paytm, etc...",
+    required: true,
+  },
+  {
+    key: "depositDate",
+    label: "Deposit Date *",
+    type: "date",
+    placeholder: "Select date of payment...",
+    required: true,
+  },
+  {
+    key: "remarks",
+    label: "Remarks / Message",
+    type: "text",
+    placeholder: "Enter fund request notes or remarks...",
+    required: false,
+  },
 ] as const;

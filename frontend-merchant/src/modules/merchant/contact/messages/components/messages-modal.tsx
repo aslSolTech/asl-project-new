@@ -32,10 +32,10 @@ export function MessagesModal() {
             </div>
             <div>
               <DialogTitle className="text-xl font-bold">
-                {mode === "create" ? "Add New Contact Messages" : "Edit Contact Messages"}
+                {mode === "create" ? "Contact Support" : "Edit Support Message"}
               </DialogTitle>
               <DialogDescription className="text-xs">
-                {mode === "create" ? "Enter details to create a new contact messages." : "Update details for the selected contact messages."}
+                {mode === "create" ? "Select transaction type and enter your message for support." : "Update details for the selected message."}
               </DialogDescription>
             </div>
           </div>

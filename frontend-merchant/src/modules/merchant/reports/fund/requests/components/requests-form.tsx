@@ -22,8 +22,14 @@ export function RequestsForm({ mode, initialData, onSuccess }: RequestsFormProps
   const form = useAppForm({
     defaultValues: {
       requestId: initialData?.requestId ?? "",
-      amount: initialData?.amount ?? "",
-      status: initialData?.status ?? "",
+      requestAmount: initialData?.requestAmount ?? "",
+      requestFrom: initialData?.requestFrom ?? "Admin",
+      bankName: initialData?.bankName ?? "",
+      transactionId: initialData?.transactionId ?? "",
+      paymentBy: initialData?.paymentBy ?? "Google Pay",
+      depositDate: initialData?.depositDate ?? new Date().toISOString().split("T")[0],
+      remarks: initialData?.remarks ?? "",
+      status: initialData?.status ?? "Pending",
     } as RequestsFormInput,
     onSubmit: async ({ value }) => {
       const parsed = requestsSchema.safeParse(value);
