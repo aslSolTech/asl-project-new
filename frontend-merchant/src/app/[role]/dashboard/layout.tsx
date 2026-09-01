@@ -17,16 +17,15 @@ export const metadata: Metadata = {
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     // <RoutePermissionGuard>
-      <SidebarProvider>
-        <DashboardSidebar />
-        <div className="flex flex-col flex-1 min-h-screen overflow-hidden">
-          <DashboardHeader />
-          <div className="grow px-8 pt-4 pb-8 space-y-4 md:overflow-y-auto">
-            
-            {children}
-          </div>
-        </div>
-      </SidebarProvider>
+    <SidebarProvider>
+      <DashboardSidebar />
+      <div className="flex flex-col flex-1 min-h-screen w-full min-w-0">
+        <DashboardHeader />
+        <main className="flex-1 px-4 pt-4 pb-8 space-y-4">
+          {children}
+        </main>
+      </div>
+    </SidebarProvider>
     // </RoutePermissionGuard>
   );
 };

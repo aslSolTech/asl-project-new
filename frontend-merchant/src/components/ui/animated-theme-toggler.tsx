@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { Moon, Sun } from "lucide-react"
 import { flushSync } from "react-dom"
+import { useTheme } from "next-themes"
 
 import { cn } from "@/lib/utils"
 
@@ -140,15 +141,20 @@ export const AnimatedThemeToggler = ({
   duration = 400,
   variant,
   fromCenter = false,
-  theme,
+  theme: controlledTheme,
   onThemeChange,
   ...props
 }: AnimatedThemeTogglerProps) => {
   const shape = variant ?? "circle"
-  const isControlled = theme !== undefined
+  const { resolvedTheme, setTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const isControlled = controlledTheme !== undefined
   const [internalIsDark, setInternalIsDark] = useState(false)
-  const isDark = isControlled ? theme === "dark" : internalIsDark
-  const buttonRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     if (isControlled) return
@@ -168,6 +174,14 @@ export const AnimatedThemeToggler = ({
     return () => observer.disconnect()
   }, [isControlled])
 
+  let isDark = false;
+  if (isControlled) {
+    isDark = controlledTheme === "dark";
+  } else if (mounted) {
+    isDark = resolvedTheme === "dark" || internalIsDark;
+  }
+
+  const buttonRef = useRef<HTMLButtonElement>(null)
   const isTransitioningRef = useRef(false)
   const lastCallRef = useRef<number>(0)
 
@@ -203,14 +217,15 @@ export const AnimatedThemeToggler = ({
 
     const applyTheme = () => {
       const newTheme = !isDark
+      const newThemeStr = newTheme ? "dark" : "light"
       // Always toggle the class synchronously so the View Transitions API
       // snapshots the new theme inside the startViewTransition callback.
-      document.documentElement.classList.toggle("dark")
+      document.documentElement.classList.toggle("dark", newTheme)
       if (isControlled) {
-        onThemeChange?.(newTheme ? "dark" : "light")
+        onThemeChange?.(newThemeStr)
       } else {
         setInternalIsDark(newTheme)
-        localStorage.setItem("theme", newTheme ? "dark" : "light")
+        setTheme(newThemeStr)
       }
     }
 

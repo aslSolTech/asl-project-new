@@ -3,6 +3,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ModalProvider } from "@/providers/ModalProvider";
 import { QueryProvider } from "@/providers/QueryProvider";
+import { ThemeProvider } from "@/providers/ThemeProvider";
 import { geistSans, geistMono, inter, figtreeHeading, museoModerno } from "@/components/ui/fonts";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -41,7 +42,6 @@ export const metadata: Metadata = {
   },
 };
 
-
 export default function RootLayout({
   children
 }: Readonly<{
@@ -50,13 +50,16 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={cn("h-full", "antialiased", museoModerno.variable, geistSans.variable, geistMono.variable, "font-sans", inter.variable, figtreeHeading.variable)}>
       <body className="min-h-full flex flex-col">
-        <QueryProvider>
-          {children}
-          <ModalProvider />
-          <Toaster />
-        </QueryProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <QueryProvider>
+            {children}
+            <ModalProvider />
+            <Toaster />
+          </QueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

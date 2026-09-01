@@ -5,6 +5,7 @@ import { ModalProvider } from "@/providers/ModalProvider";
 import { QueryProvider } from "@/providers/QueryProvider";
 import { geistSans, geistMono, inter, figtreeHeading, museoModerno } from "@/components/ui/fonts";
 import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "@/providers/ThemeProvider";
 
 export const metadata: Metadata = {
   title: {
@@ -52,11 +53,13 @@ export default function RootLayout({
       lang="en"
       className={cn("h-full", "antialiased", museoModerno.variable, geistSans.variable, geistMono.variable, "font-sans", inter.variable, figtreeHeading.variable)}>
       <body className="min-h-full flex flex-col">
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
         <QueryProvider>
           {children}
           <ModalProvider />
           <Toaster />
         </QueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
